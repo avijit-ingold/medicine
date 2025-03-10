@@ -37,8 +37,7 @@ const ProductDetailsPage = () => {
                     decryptedData && (
                         <>
                             <ProductDetailsComponent loading={context.loading} id={decryptedData} />
-                            {/* <AddReviewComponent id={decryptedData}/>
-                            <RelatedProductComponent id={decryptedData} /> */}
+                            {/* <AddReviewComponent id={decryptedData}/> */}
                         </>
                     )
                 }

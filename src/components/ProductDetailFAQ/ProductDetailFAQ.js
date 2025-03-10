@@ -10,7 +10,7 @@ const AccordionItem = ({ title, content, content2, isList }) => {
   return (
     <div className="">
       <div
-        className={styles.acordianTitle + " w-full text-left p-2 font-semibold flex justify-between items-center"}
+        className={styles.acordianTitle + " w-full text-left p-2 pt-3 pb-3 font-semibold flex justify-between items-center"}
         onClick={() => setIsOpen(!isOpen)} style={{ cursor: 'pointer' }}
       >
         {title}

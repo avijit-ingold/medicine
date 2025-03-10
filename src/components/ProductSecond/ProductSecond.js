@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import ProductImage from '../../assets/images/Medical/Layer 13.png'
 import styles from './ProductSecond.module.css';
 import { Heart, Eye, HeartFill } from 'react-bootstrap-icons';
@@ -6,13 +6,14 @@ import { GenericApiContext } from '../../context/GenericApiContext';
 import { encryptData, decryptData } from "../../utils/CryptoUtils";
 import { useNavigate } from 'react-router-dom';
 
-const ProductSecond = ({ productObject }) => {
+const ProductSecond = ({ productObject, parent }) => {
   const [wishlistState, setWishListState] = useState(false);
   const [loggedinData, setLoggedInData] = useState();
   const [productId, setProductId] = useState('');
 
   const context = useContext(GenericApiContext);
   const navigate = useNavigate();
+  const childRef = useRef(null);
 
   const handleWishList = (id) => {
 
@@ -44,9 +45,19 @@ const ProductSecond = ({ productObject }) => {
     handleEncrypt();
   }, [productObject])
 
+  useEffect(() => {
+    if (childRef.current) {
+      const parent = childRef.current.parentElement;
+      if (parent) {
+        parent.style.display = "flex";
+        parent.style.justifyContent = "center";
+      }
+    }
+  }, []);
+
 
   return (
-    <div className={styles.card}>
+    <div className={parent == 'related' ? styles.minWidthCard : styles.card} ref={childRef}>
       <div className={styles.card_image}>
         <div className={styles.card_header}>
           <button className={styles.wishlist_button + ' ' + (wishlistState ? styles.is_active : '')} onClick={() => handleWishList(productObject.id)}>{wishlistState ? (<HeartFill color='#e64141' />) : (<Heart />)}</button>
