@@ -1,0 +1,266 @@
+.navbar_icon_container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.header {
+    background-color: rgb(58, 70, 179);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar_socialMedia_container {
+    height: 30px;
+}
+
+.navbar_navigation_container {
+    background-color: white;
+}
+
+.navbar_socialMedia_icon {
+    color: #ffffffc9;
+}
+
+.navbar_adress_details_container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 18px;
+}
+
+.navbar_adress_text {
+    font-size: 12px;
+    color: #ffffffc9;
+    margin-left: 5px;
+}
+
+.navbar_Navigator_container {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.navbar_pofile_search_section_container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    width: 40%;
+    justify-content: flex-end;
+}
+
+.homePage_banner_selector_text {
+    cursor: pointer;
+}
+
+.homePage_banner_selector_text:hover {
+    color: rgb(24, 24, 196);
+}
+
+.navbar_Navigator_menu_container {
+    display: flex;
+    gap: 17px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    font-weight: 400;
+    position: relative;
+}
+
+.navbar_headLogo_text_container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.navbar_headLogo {
+    height: 44px;
+    width: 46px;
+}
+
+.navbar_head_text {
+    font-size: 20px;
+    font-weight: 700;
+    color: rgb(25, 183, 251);
+}
+
+.navbar_search_bar {
+    position: relative;
+    top: 0%;
+    left: 0%;
+    transform: translate(0%, 0%);
+    transition: all 1s;
+    width: 40px;
+    height: 40px;
+    background: white;
+    box-sizing: border-box;
+    border-radius: 25px;
+    padding: 5px;
+}
+
+.navbar_searchbarinput_box {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    outline: 0;
+    border: 0;
+    display: none;
+    font-size: 1em;
+    border-radius: 20px;
+    padding: 0 20px;
+    border: 1px solid grey;
+}
+
+.navbar_search_icon {
+    box-sizing: border-box;
+    padding: 10px;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    border-radius: 50%;
+    color: grey;
+    text-align: center;
+    font-size: 1.2em;
+    transition: all 1s;
+    bottom: 0px;
+    right: 0px;
+}
+
+.navbar_search_bar:hover {
+    width: 300px;
+    cursor: pointer;
+}
+
+.navbar_search_bar:hover .navbar_searchbarinput_box {
+    display: block;
+}
+
+
+.navbar_search_bar:hover .navbar_search_icon {
+    background: grey;
+    color: white;
+}
+
+.navbar_profile_icons {
+    margin-bottom: 6px;
+    color: grey;
+    cursor: pointer;
+    position: relative;
+}
+
+.navbar_profile_container {
+    border-radius: 50px;
+    border: 1px solid grey;
+    height: 24px;
+    width: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0;
+    cursor: pointer;
+}
+
+
+.navBar_menu_selected {
+    color: rgb(0, 149, 255);
+    text-shadow: 6px 6px 5px rgba(0, 0, 0, 0.17);
+    transition: all 0.2s ease-in;
+}
+
+.navbar_profile_name {
+    cursor: pointer;
+}
+
+.categriesDropDown {
+    position: absolute;
+    right: -40px;
+    top: 40px;
+    background: white;
+    display: flex;
+}
+
+.categriesDropDown div {
+    list-style-type: none;
+    width: 150px;
+}
+
+.categriesDropDown p {
+    margin: 0;
+    padding: 0;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 30px;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.categriesDropDown p:hover {
+    background-color: rgb(58, 70, 179);
+    color: white;
+    font-weight: 500;
+    scale: 1.1;
+    transition: all 0.2s ease-in-out;
+}
+
+.brandsDropDown {
+    position: absolute;
+    right: 55px;
+    top: 40px;
+    background: white;
+    display: flex;
+}
+
+.brandsDropDown div {
+    list-style-type: none;
+    width: 150px;
+}
+
+.brandsDropDown p {
+    margin: 0;
+    padding: 0;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 30px;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.brandsDropDown p:hover {
+    background-color: rgb(58, 70, 179);
+    color: white;
+    font-weight: 500;
+    scale: 1.1;
+    transition: all 0.2s ease-in-out;
+}
+
+.navbar_cart_amount {
+    left: 14px;
+    position: absolute;
+    top: 14px;
+    font-size: 9px;
+    font-weight: 700;
+    background: red;
+    color: white;
+    height: 14px;
+    width: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.header_profile_image {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+}

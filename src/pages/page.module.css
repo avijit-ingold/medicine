@@ -1,0 +1,152 @@
+.sidebar {
+    width: 22%;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 0;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 110px
+}
+
+.sidebar_menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu_item {
+    padding: 12px 20px;
+    font-size: 14px;
+    color: #333;
+    border-bottom: 1px solid #eaeaea;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.active {
+    background-color: rgb(58, 70, 179) !important;
+    color: #fff;
+    font-weight: bold;
+    transition: all 0.3s ease-in;
+}
+
+.menu_item:hover {
+    background-color: #f1f1f1;
+}
+
+.profile_container {
+    display: flex;
+}
+
+.page_content {
+    width: 78%;
+    margin-top: 110px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    height: 100vh;
+    overflow: scroll;
+}
+
+
+.page_content::-webkit-scrollbar {
+    display: none;
+}
+
+
+/* blogs CSS */
+
+.privacy_policy_container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: white;
+}
+
+.privacy_header {
+    text-align: center;
+    padding: 20px;
+    background-color: #0073b1;
+    color: white;
+}
+
+.privacy_header h1 {
+    margin: 0;
+    font-size: 2.5em;
+}
+
+.privacy_header p {
+    margin: 10px 0 0;
+    font-size: 1.1em;
+}
+
+.privacy_header a {
+    color: #cce7ff;
+    text-decoration: underline;
+}
+
+.privacy_main {
+    display: flex;
+    margin-top: 20px;
+}
+
+.privacy_content {
+    flex: 3;
+    padding-right: 20px;
+}
+
+.effective_date {
+    color: gray;
+    margin-bottom: 20px;
+}
+
+.privacy_content h2 {
+    font-size: 1.8em;
+    margin: 20px 0;
+}
+
+.privacy_content p {
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.privacy_content a {
+    color: #0073b1;
+    text-decoration: underline;
+}
+
+.privacy_video_link {
+    font-weight: bold;
+}
+
+.privacy_sidebar {
+    flex: 1;
+    background-color: #f5f5f5;
+    padding: 15px;
+    border-left: 1px solid #ddd;
+}
+
+.privacy_sidebar h3 {
+    font-size: 1.2em;
+    margin-bottom: 15px;
+}
+
+.privacy_sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.privacy_sidebar li {
+    margin-bottom: 10px;
+}
+
+.privacy_sidebar a {
+    color: #0073b1;
+    text-decoration: none;
+}
+
+.privacy_sidebar a:hover {
+    text-decoration: underline;
+}

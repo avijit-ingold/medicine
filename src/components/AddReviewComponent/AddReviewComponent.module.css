@@ -1,0 +1,48 @@
+.add_review {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.rating_section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+
+.review_textBox {
+    border: 1px solid;
+    border-radius: 10px;
+    padding: 10px;
+    width: 100%;
+}
+
+.submit_button {
+    font-weight: 500;
+    border-radius: 10px;
+    background: #19c274;
+    width: 140px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    color: white;
+    position: relative;
+    cursor: pointer;
+}
+
+.add_review label{
+    font-weight: 600;
+}
+
+.submit_button:hover{
+    background: #0c6b3f;
+}

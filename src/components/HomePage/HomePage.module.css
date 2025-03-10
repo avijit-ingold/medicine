@@ -1,0 +1,346 @@
+.homePage_banner_container_image {
+    width: 100%;
+}
+
+.homePage_categories_container {
+    display: flex;
+    width: 70%;
+    height: 200px;
+    gap: 40px;
+}
+
+.homePage_categories_container_main {
+    display: flex;
+    justify-content: center;
+    height: 310px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.category_icon {
+    height: 50px;
+    width: 50px;
+}
+
+.homepage_category {
+    display: flex;
+    flex-direction: column;
+    border-radius: 30px;
+    padding: 20px;
+    width: auto;
+    border: 1px solid #626262;
+    color: #626262;
+    justify-content: space-around;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    height: fit-content;
+}
+
+.homepage_category:hover {
+    scale: 1.1;
+    transition: all 0.3s ease-in-out;
+
+}
+
+.homePage_container_main {
+    background-color: #f5f5f5;
+}
+
+.homepage_category_active {
+    display: flex;
+    flex-direction: column;
+    border-radius: 30px;
+    padding: 20px;
+    width: auto;
+    background-color: #13eef1;
+    color: white;
+    justify-content: space-around;
+    align-items: center;
+    cursor: pointer;
+    scale: 1.2;
+    transition: all 0.3s ease-in-out;
+    height: fit-content;
+}
+
+.category_text_container {
+    font-size: 83%;
+    text-align: center;
+}
+
+.category_heading_container {
+    font-size: 20px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.category_description_container {
+    display: flex;
+    line-height: 15px;
+}
+
+.homePage_offerBanner_container_main {
+    display: flex;
+    width: 100%;
+    gap: 13px;
+}
+
+.homePage_singleOffer_image {
+    width: 100%;
+}
+
+.homePage_singleOffer_textContainer_first {
+    margin-top: 50px;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 95%;
+}
+
+.homePage_singleOffer_button_container {
+    margin-top: 150px;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 10px;
+}
+
+.heading_main {
+    font-size: 4vw;
+    font-weight: 600;
+    color: rgb(44 44 147);
+}
+
+.heading_Button:hover {
+    color: rgb(92, 92, 195);
+    background-color: white;
+    transition: all 0.4s ease;
+}
+
+.heading_subHeading {
+    font-size: 35px;
+    font-weight: 300;
+    color: rgb(44 44 147);
+}
+
+.heading_Button {
+    margin-top: 50px;
+    background: rgb(92, 92, 195);
+    padding: 10px 30px;
+    border-radius: 50px;
+    color: white;
+    font-size: 10px;
+    cursor: pointer;
+    letter-spacing: 1px;
+}
+
+.homePage_speciality_section_main {
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.homePage_speciality_section_container {
+    height: 90px;
+    width: 70%;
+    display: flex;
+    gap: 28px;
+    align-items: center;
+}
+
+.eachSpecial_image_container {
+    background-color: #09bdbd;
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.eachSpecial_container {
+    display: flex;
+    gap: 8px;
+}
+
+.eachSpecial_text_container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.eachSpecial_image {
+    height: 40px;
+    width: 40px;
+}
+
+.eachSpecial_mainText {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.eachSpecial_desc {
+    font-size: 10px;
+}
+
+.homePage_singleOffer_container {
+    position: relative;
+}
+
+@media only screen and (max-width: 768px) {
+    .homePage_offerBanner_container_main {
+        flex-direction: column;
+    }
+
+    .heading_main {
+        font-size: 6vw;
+        font-weight: 600;
+        color: rgb(44 44 147);
+    }
+
+    .homePage_categories_container {
+        padding: 30px;
+        display: grid;
+        grid-template-columns: repeat(2, 50%);
+        grid-template-rows: repeat(2, 220px);
+        height: 100%;
+        width: 100%;
+        gap: 20px;
+        justify-items: stretch;
+        align-items: stretch;
+    }
+
+    .homePage_singleOffer_button_container {
+        align-items: flex-end;
+        width: 90%;
+    }
+
+    .homePage_speciality_section_container {
+        height: auto;
+        width: 70%;
+        display: grid;
+        align-items: center;
+        grid: auto / auto auto auto;
+        padding: 30px 0;
+    }
+
+    .homePage_speciality_section_main {
+        height: auto;
+    }
+
+    .eachSpecial_image_container {
+        background-color: #09bdbd;
+        height: auto;
+        width: auto;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 6px;
+    }
+
+    .homePage_categories_container_main {
+        display: flex;
+        justify-content: center;
+        height: auto;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .homepage_category_active {
+        scale: 1.1;
+        transition: all 0.3s ease-in-out;
+        height: auto;
+    }
+
+    .homepage_category {
+        height: auto;
+    }
+
+}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+    .eachSpecial_image_container {
+        background-color: #09bdbd;
+        height: 61px;
+        width: 61px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 15px;
+    }
+
+    .homePage_categories_container {
+        display: flex;
+        height: 200px;
+        gap: 40px;
+        width: 100%;
+    }
+
+    .homepage_category {
+        width: 100%;
+    }
+
+    .homepage_category_active {
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 426px) {
+    /* .homePage_speciality_section_container {
+        height: auto;
+        width: 70%;
+        display: grid;
+        align-items: center;
+        grid: auto / auto auto;
+        padding: 30px 0;
+    } */
+
+    .slick_Arrow_left {
+        left: -15px;
+    }
+
+    .homePage_banner_container_image {
+        height: 43vh;
+        width: auto;
+    }
+}
+
+@media only screen and (max-width: 370px) {
+    .OfferBanner_heading_text {
+        font-size: 170% !important;
+    }
+}
+
+@media only screen and (min-width: 769px) {
+    .homePage_banner_container {
+        margin-top: 70px;
+    }
+
+}
+
+
+
+
+@media (min-width: 595px) and (max-width: 769px) {
+    /* .homePage_categories_container {
+        grid: 200px / 200px 200px !important;
+        width: 100%;
+    } */
+
+    /* .homepage_category {
+        height: 220px;
+        width: 130% !important;
+    } */
+/* 
+    .homepage_category_active {
+        width: 130% !important;
+        height: 220px !important;
+    } */
+
+}

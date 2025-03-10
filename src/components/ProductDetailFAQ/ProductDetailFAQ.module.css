@@ -1,0 +1,27 @@
+.acordianTitle {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 3px solid #9995;
+    font-size: large;
+    font-weight: 600;
+}
+
+.productFaq:last-of-type {
+    border-bottom: 3px solid #9995;
+}
+
+.faq_para{
+    font-size: 13px;
+}
+
+.faq_list{
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.faq_list::marker {
+    color: #0088ed;
+    font-size: 1.2em; /* Make it bigger */
+  }

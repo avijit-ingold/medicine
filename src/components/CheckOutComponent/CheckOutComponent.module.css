@@ -1,0 +1,62 @@
+.checkout_container {
+    display: flex;
+    padding: 20px;
+    background-color: #fff;
+    margin-top: 116px;
+}
+
+.form_section,
+.summary_section {
+    padding: 20px;
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    margin: 10px;
+    flex: 1;
+}
+
+.input_field {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.checkbox_group label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.shipping_info .input-field {
+    margin-bottom: 5px;
+}
+
+.payment_methods {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.cards img {
+    width: 40px;
+    margin-right: 5px;
+}
+
+.gift_option {
+    margin: 10px 0;
+}
+
+.summary_section {
+    flex: 0.4;
+    padding: 20px;
+    background-color: #fff;
+}
+
+.summary_section h2 {
+    margin-bottom: 10px;
+}
+
+.summary_section ul {
+    list-style-type: disc;
+    padding-left: 20px;
+}

@@ -1,0 +1,383 @@
+import React, { useEffect, useState } from "react";
+import { GenericApiContext } from "./GenericApiContext";
+import axios from "axios";
+import { Spinner } from 'react-bootstrap';
+import GenericLoader from "../components/GenericLoader/GenericLoader";
+import { ToastContainer, toast } from "react-toastify";
+
+const GenericApiProvider = ({ children }) => {
+    const [loading, setLoading] = useState(false);
+    const [postResultData, setPostResultData] = useState(null);
+    const [getHomeData, setGetHomeData] = useState(null);
+    const [getCategoryData, setGetCategoryData] = useState(null);
+    const [ifLoggedin, setIfLoggedIn] = useState(false);
+    const [getHeaderdata, setGetHeaderData] = useState(null);
+    const [getBrandData, setGetBrandData] = useState(null);
+    const [getTodayDealData, setGetTodayDealData] = useState(null);
+    const [getBlogList, setGetBlogList] = useState(null);
+    const [getFaqList, setFaqList] = useState(null);
+    const [getProductDetails, setProductDetails] = useState(null);
+    const [getRelatedProducts, setRelatedProducts] = useState(null);
+    const [getProductReview, setGetProductReview] = useState(null);
+    const [getCategoryDetails, setGetCategoryDetails] = useState(null);
+    const [loggedinData, setLoggedInData] = useState([]);
+    const [ifWishListed, setIfWishListed] = useState(false);
+    const [cartCount, setCartCount] = useState(0);
+    const [filterData, setFilterData] = useState();
+    const [cartList, setCartList] = useState(null);
+    const [wishList, setWishList] = useState(null);
+    const [userAddress, setUserAddress] = useState(null);
+    const [countries, setCountries] = useState(null);
+    const [cities, setCities] = useState(null);
+    const [states, setStates] = useState(null);
+    const [profileImage, setProfileImage] = useState(null);
+    const [purchaseHistory, setPurchaseHistory] = useState(null);
+    const [ returnData, setReturnData] = useState(null);
+    const [addToCartSuccess, setAddToCartSuccess] = useState(false)
+
+    const getPostData = async (url, requestBody) => {
+        setLoading(true);
+
+        const headers = {
+            "Content-Type": "application/json",
+            "System-Key": "12345"
+        };
+
+        axios({
+            method: 'POST',
+            url: process.env.REACT_APP_API_URL + url,
+            data: JSON.stringify(requestBody),
+            headers: headers
+        }).then((res) => {
+            setPostResultData(res)
+            sessionStorage.setItem('loginDetails', JSON.stringify(res.data));
+        }).finally(() => {
+            const timer = setTimeout(() => {
+                setLoading(false);
+            }, 1500);
+            return () => {
+                clearTimeout(timer)
+            };
+        });
+
+    }
+
+    const getPostDataWithAuth = async (url, requestBody, parent) => {
+        checkIfLoggedIn();
+        const headers = {
+            "Content-Type": "application/json",
+            "System-Key": "12345",
+            "Authorization": `Bearer ${loggedinData.access_token}`
+        };
+
+        axios({
+            method: 'POST',
+            url: process.env.REACT_APP_API_URL + url,
+            data: JSON.stringify(requestBody),
+            headers: headers
+        }).then((res) => {
+            if (res.data.result) {
+                toast.success(res.data.message, {
+                    autoClose: 1100
+                });
+            } else {
+                toast.error("Something Went Wrong!", {
+                    autoClose: 1100
+                });
+            }
+            if (parent === 'addToCart') {
+                handleCart();
+                setAddToCartSuccess(true)
+            }
+            if (parent === 'imageUpload') {
+                setProfileImage(res.data.path);
+                sessionStorage.setItem('uploadedImage', res.data.path);
+            }
+        }).catch((err) => {
+            toast.error(`Error: ${err.message || "Something went wrong!"}`);
+            console.error(err);
+            setAddToCartSuccess(false)
+        }).finally(() => {
+
+        });
+
+    }
+
+    const getGetData = async (url, type) => {
+        setLoading(true);
+        let headers;
+        checkIfLoggedIn();
+
+        if (loggedinData) {
+            headers = {
+                "Content-Type": "application/json",
+                "X-Requested-With": "XMLHttpRequest",
+                "System-Key": "12345",
+                "Authorization": `Bearer ${loggedinData.access_token}`,
+            };
+
+        } else {
+            headers = {
+                "Content-Type": "application/json",
+                "X-Requested-With": "XMLHttpRequest",
+                "System-Key": "12345",
+                // "Authorization": `Bearer ${(JSON.parse(loggedinData)).access_token}`
+            };
+
+        }
+
+        axios({
+            method: 'GET',
+            url: process.env.REACT_APP_API_URL + url,
+            headers: headers
+        }).then((res) => {
+            if (type === 'homeBanner') {
+                setGetHomeData(res)
+            }
+            else if (type === 'categories') {
+                setGetCategoryData(res)
+            }
+            else if (type === 'headerMenu') {
+                setGetHeaderData(res)
+            }
+            else if (type === 'brandData') {
+                setGetBrandData(res)
+            }
+            else if (type === 'todaysDeal') {
+                setGetTodayDealData(res)
+            }
+            else if (type === 'bloglist') {
+                setGetBlogList(res)
+            }
+            else if (type === 'faqlist') {
+                setFaqList(res)
+            }
+            else if (type === 'productDetails') {
+                setProductDetails(res)
+            }
+            else if (type === 'relatedProducts') {
+                setRelatedProducts(res)
+            }
+            else if (type === 'productReviewDetails') {
+                setGetProductReview(res)
+            }
+            else if (type === 'categoryDetails') {
+                setGetCategoryDetails(res)
+            }
+            else if (type === 'getWishList') {
+                setIfWishListed(res.data.is_in_wishlist)
+            }
+            else if (type === 'filter') {
+                setFilterData(res)
+            }
+            else if (type === 'cartData') {
+                setCartList(res)
+            }
+            else if (type === 'cities') {
+                setCities(res)
+            }
+            else if (type === 'countries') {
+                setCountries(res)
+            }
+            else if (type === 'states') {
+                setStates(res)
+            }
+            else if (type === 'purchaseHistory') {
+                setPurchaseHistory(res);
+            }
+            else if (type === 'return') {
+                setReturnData(res)
+            }
+        }).finally(() => {
+            const timer = setTimeout(() => {
+                setLoading(false);
+            }, 1500);
+            return () => {
+                clearTimeout(timer)
+            };
+        });
+
+    }
+
+    const getGetDataQuick = async (url, type) => {
+        checkIfLoggedIn();
+        const headers = {
+            "Content-Type": "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+            "System-Key": "12345",
+            "Authorization": `Bearer ${loggedinData.access_token}`
+        };
+
+        axios({
+            method: 'GET',
+            url: process.env.REACT_APP_API_URL + url,
+            headers: headers
+        }).then((res) => {
+            if (type === 'sad') {
+                toast.error(`${res.data.message}` + "! 😔", {
+                    icon: "😢",
+                    autoClose: 1100,
+                    style: {
+                        backgroundColor: "#f8d7da",
+                        color: "#721c24",
+                        border: "1px solid #f5c6cb",
+                    },
+                });
+            } else if (type === 'wishList') {
+                setWishList(res)
+            } else if (type === 'userAddress') {
+                setUserAddress(res)
+            } else {
+                toast.success(res.data.message, {
+                    autoClose: 1100
+                });
+            }
+        }).catch((err) => {
+            toast.error(`Error: ${err.message || "Something went wrong!"}`);
+            console.error(err);
+        }).finally(() => {
+        });
+    }
+
+    const handleCart = () => {
+        checkIfLoggedIn();
+        if (ifLoggedin) {
+            const headers = {
+                "Content-Type": "application/json",
+                "System-Key": "12345",
+                "Authorization": `Bearer ${loggedinData.access_token}`
+            };
+
+            axios({
+                method: 'GET',
+                url: process.env.REACT_APP_API_URL + 'cart-count',
+                headers: headers
+            }).then((res) => {
+                if (res.data.status) {
+                    setCartCount(res.data.count)
+                } else {
+                    toast.error("Something Went Wrong!", {
+                        autoClose: 1500
+                    });
+                }
+            }).catch((err) => {
+                toast.error(`Error: ${err.message || "Something went wrong!"}`);
+                console.error(err);
+            }).finally(() => {
+
+            });
+        }
+    }
+
+    const handleDeleteCart = async (url, type) => {
+        checkIfLoggedIn();
+        const headers = {
+            "Content-Type": "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+            "System-Key": "12345",
+            "Authorization": `Bearer ${loggedinData.access_token}`
+        };
+
+        axios({
+            method: 'DELETE',
+            url: process.env.REACT_APP_API_URL + url,
+            headers: headers
+        }).then((res) => {
+            handleCart();
+            if (type === 'sad') {
+                toast.error(`${res.data.message}` + "! 😔", {
+                    icon: "😢",
+                    autoClose: 1000,
+                    style: {
+                        backgroundColor: "#f8d7da",
+                        color: "#721c24",
+                        border: "1px solid #f5c6cb",
+                    },
+                });
+            } else {
+                toast.success(res.data.message, {
+                    autoClose: 1500
+                });
+            }
+        }).catch((err) => {
+            toast.error(`Error: ${err.message || "Something went wrong!"}`);
+            console.error(err);
+        }).finally(() => {
+        });
+    }
+
+
+    const checkIfLoggedIn = () => {
+        setIfLoggedIn(sessionStorage.getItem('loginDetails') ? true : false);
+        setLoggedInData(JSON.parse(sessionStorage.getItem('loginDetails')));
+    }
+
+    const values = {
+        getPostData,
+        getPostDataWithAuth,
+        postResultData,
+        checkIfLoggedIn,
+        loggedinData,
+        ifLoggedin,
+        loading,
+        getGetData,
+        getGetDataQuick,
+        handleDeleteCart,
+        handleCart,
+        getHomeData,
+        getCategoryData,
+        getHeaderdata,
+        getBrandData,
+        getTodayDealData,
+        getBlogList,
+        getFaqList,
+        getProductDetails,
+        getRelatedProducts,
+        getProductReview,
+        getCategoryDetails,
+        ifWishListed,
+        cartCount,
+        filterData,
+        cartList,
+        wishList,
+        userAddress,
+        cities,
+        countries,
+        states,
+        profileImage,
+        purchaseHistory,
+        returnData,
+        addToCartSuccess
+    }
+
+    useEffect(() => {
+        checkIfLoggedIn();
+        return handleCart()
+    }, [ifLoggedin])
+
+    return (
+        <GenericApiContext.Provider value={values}>
+            <div style={{ position: 'relative' }}>
+                {loading && (
+                    <div style={{
+                        position: 'fixed',
+                        height: '100vh',
+                        width: '100%',
+                        background: '#0000006b',
+                        zIndex: '99999',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundImage: 'radial-gradient(circle farthest-corner at center, #3C4B57 0%, #1c262b82 100%)'
+                    }}>
+                        <GenericLoader />
+                    </div>)
+                }
+                <ToastContainer />
+                <div>{children}</div>
+            </div>
+        </GenericApiContext.Provider >
+    )
+}
+
+export default GenericApiProvider;

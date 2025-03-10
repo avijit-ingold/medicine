@@ -1,0 +1,78 @@
+.user_table_container {
+    width: 90%;
+    margin: 10px 20px auto;
+    font-family: Arial, sans-serif;
+}
+
+.new_user_button {
+    background-color: #f1c40f;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.new_user_button:hover {
+    background-color: #d4ac0d;
+}
+
+.user_table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.user_table th,
+.user_table td {
+    border: 1px solid #ddd;
+    text-align: left;
+    padding: 8px;
+}
+
+.user_table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.user_table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.user_table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.actions a {
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+.actions .edit {
+    color: blue;
+}
+
+.actions .inactive {
+    color: orange;
+}
+
+.actions .delete {
+    color: red;
+}
+
+.pagination {
+    margin-top: 10px;
+}
+
+.pagination select {
+    padding: 5px;
+    margin-left: 5px;
+}
+
+/*Modal Overwritting pre-defined styles*/
+
+.custom_modal_width > div {
+    max-width: 85% !important;
+}

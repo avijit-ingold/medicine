@@ -1,0 +1,124 @@
+.newArrivalSection_container{
+    margin-bottom: 86px;
+}
+
+.slick-track {
+    display: flex;
+}
+
+.slick-slider {
+    display: flex;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.slick-slide {
+    padding-right: 10px;
+}
+
+.slick-slide:last-child {
+    padding-right: 0;
+}
+
+.slick-slide img {
+    display: block;
+}
+
+.slick-list {
+    margin: 0 15px;
+}
+
+.slick-prev {
+    width: 50px;
+    left: 0;
+    top: 20%;
+    position: absolute;
+    height: 50px;
+    background: tomato;
+    z-index: 1;
+    border-radius: 50%;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
+
+.slick-next {
+    width: 50px;
+    right: 0;
+    top: 20%;
+    position: absolute;
+    height: 50px;
+    background: tomato;
+    z-index: 1;
+    border-radius: 50%;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
+
+.slick-prev:focus,
+.slick-prev:hover,
+.slick-next:hover,
+.slick-next:focus {
+    color: transparent;
+    outline: none;
+    background: tomato;
+}
+
+.product-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.slick_Arrow_right {
+    font-size: 0;
+    line-height: 0;
+    position: absolute;
+    top: 50%;
+    display: block;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    transform: translate(0, -50%);
+    cursor: pointer;
+    color: transparent;
+    border: none;
+    outline: none;
+    background: transparent;
+    right: -35px;
+}
+
+.slick_Arrow_left {
+    left: -35px;
+    font-size: 0;
+    line-height: 0;
+    position: absolute;
+    top: 50%;
+    display: block;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    transform: translate(0, -50%);
+    cursor: pointer;
+    color: transparent;
+    border: none;
+    outline: none;
+    background: transparent;
+}
+
+.newArrivalSection_heading_container {
+    padding: 50px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.newArrival_heading_text {
+    font-size: 34px;
+    color: #184f99cc;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+@media only screen and (max-width: 580px) {
+    .slick_Arrow_left {
+        left: -15px;
+    }
+}

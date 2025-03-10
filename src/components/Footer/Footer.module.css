@@ -1,0 +1,186 @@
+.footer {
+    background-color: #003399;
+    color: #fff;
+}
+
+.footer_container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 40px 0px 70px;
+}
+
+.footer_brand {
+    flex: 1 1 340px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-around;
+}
+
+.footer_brand h1 {
+    font-size: 24px;
+}
+
+.footer_brand p {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.footer_contact {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer_contact p {
+    margin: 5px 0;
+}
+
+.footer_socials {
+    display: flex;
+    gap: 10px;
+}
+
+.footer_socials a {
+    color: #fff;
+    margin-right: 10px;
+    font-size: 18px;
+    text-decoration: none;
+}
+
+.footer_links {
+    display: flex;
+    flex: 2 1 600px;
+    gap: 18%;
+}
+
+.footer_links div {}
+
+.footer_links h3 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+}
+
+.footer_links ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: 13px;
+}
+
+.footer_links ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.footer_newsletter {
+    flex: 1 1 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 13px;
+}
+
+.footer_newsletter h3 {
+    font-size: 16px;
+}
+
+.footer_newsletter p {
+    font-size: 14px;
+}
+
+.footer_newsletter form {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0;
+    position: relative;
+}
+
+.footer_newsletter input {
+    padding: 5px;
+    flex: 1;
+}
+
+.footer_newsletter input::placeholder {
+    font-size: 12px;
+    letter-spacing: 1px;
+    padding: 5px;
+}
+
+.footer_newsletter button {
+    padding: 5px 10px;
+    background: transparent;
+    border: none;
+    position: absolute;
+    right: 0;
+}
+
+.footer_bottom {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+    font-size: 14px;
+}
+
+.cookie_banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cookie_banner button {
+    background: #fff;
+    color: #003399;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.cookie_banner button:hover {
+    background: #ccc;
+}
+
+.footer_availability_conatiner {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.footer_availability_conatiner div {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer_availability_conatiner p {
+    font-size: 12px;
+    margin: 0;
+}
+
+.footer_availibility_days {
+    font-size: 15px !important;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .footer_container {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .footer_bottom {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer_links {
+        display: flex;
+        flex: 2 1 90px;
+        gap: 18%;
+    }
+}

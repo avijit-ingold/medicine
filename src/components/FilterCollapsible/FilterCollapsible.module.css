@@ -1,0 +1,21 @@
+.header_text {
+    font-weight: 600;
+    border-bottom: 2px solid #99999969;
+    width: max-content;
+    padding: 10px 0;
+}
+
+.filter_option {
+    width: max-content;
+    font-size: 14px;
+    color: #999;
+    margin: 20px 0;
+    gap: 10px;
+    display: flex;
+}
+
+.list {
+    list-style: none;
+    padding: 0;
+    width: max-content;
+}

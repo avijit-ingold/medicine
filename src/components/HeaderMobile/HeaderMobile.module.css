@@ -1,0 +1,393 @@
+header {
+    position: relative;
+}
+
+.hamburger_menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 14px 13px;
+    height: 53px;
+    cursor: pointer;
+    z-index: 9998;
+    background: white;
+    width: 100%;
+    margin-top: 33px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.bar {
+    width: 30px;
+    height: 3px;
+    background: black;
+    position: relative;
+    transform: translateY(10px);
+    transition: all 300ms;
+}
+
+.animate {
+    background: transparent;
+}
+
+.bar:before,
+.bar:after {
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 3px;
+    background: black;
+    transition: transform 300ms, top 300ms, bottom 300ms;
+}
+
+.bar:before {
+    top: -10px;
+}
+
+.bar:after {
+    top: 10px;
+}
+
+.animate:before {
+    transform: rotate(45deg);
+    top: 0;
+    background-color: wblackhite;
+}
+
+.animate:after {
+    transform: rotate(-45deg);
+    top: 0;
+    background-color: black
+}
+
+/* Mobile Menu */
+.mobile_menu {
+    top: 0;
+    max-width: 250px;
+    left: -100%;
+    width: 100%;
+    background: transparent;
+    height: 100%;
+    position: fixed;
+    z-index: 9997;
+    overflow-y: auto;
+    transition: left 500ms ease-in-out;
+    backdrop-filter: blur(21px);
+}
+
+.active {
+    left: 0;
+}
+
+.mobile_menu ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+
+}
+
+.mobile_menu li {
+    font-size: 20px;
+    padding: 15px;
+    text-transform: uppercase;
+    color: white;
+    border-bottom: 1px solid white;
+}
+
+.mobile_menu li:hover {}
+
+.mobile_menu li a {
+    text-decoration: none;
+    color: white;
+}
+
+.mobile_menu_list {
+    margin-top: 86px !important
+}
+
+/* Submenu */
+.icon_arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: transform 300ms;
+    left: 90%;
+}
+
+.open {
+    transform: translateY(-50%) rotate(-180deg);
+}
+
+.children {
+    margin-left: 15px;
+    max-height: 0px;
+    transition: max-height 0.3s ease-in;
+    overflow: hidden;
+}
+
+.children.active {
+    max-height: 200px;
+    overflow: hidden;
+}
+
+.li_about {
+    position: relative;
+    width: 100%;
+    display: block;
+}
+
+.blurBackground {
+    height: 100%;
+    width: 100%;
+    background: #00000045;
+    position: fixed;
+    z-index: 99;
+}
+
+.hamburger_menu_container {
+    position: fixed;
+    height: 33px;
+    cursor: pointer;
+    z-index: 99999;
+    background: rgb(58, 70, 179);
+    width: 100%;
+
+}
+
+.navbar_adress_details_container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 10px;
+    color: white;
+    padding: 0 10px;
+}
+
+.navbar_adress_details_container_main {
+    height: 100%;
+}
+
+
+.navbar_icon_container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.header {
+    background-color: rgb(58, 70, 179);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar_socialMedia_container {
+    height: 30px;
+}
+
+.navbar_navigation_container {
+    background-color: white;
+}
+
+.navbar_socialMedia_icon {
+    color: #ffffffc9;
+}
+
+.navbar_Navigator_container {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.navbar_pofile_search_section_container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    justify-content: flex-end;
+}
+
+.homePage_banner_selector_text {
+    cursor: pointer;
+}
+
+.homePage_banner_selector_text:hover {
+    color: rgb(24, 24, 196);
+}
+
+.navbar_Navigator_menu_container {
+    display: flex;
+    gap: 17px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    font-weight: 400;
+}
+
+.navbar_headLogo_text_container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.navbar_headLogo {
+    height: 20px;
+    width: 20px;
+}
+
+.navbar_head_text {
+    font-size: 12px;
+    font-weight: 700;
+    color: rgb(25, 183, 251);
+}
+
+.navbar_searchbarinput_box {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    outline: 0;
+    border: 0;
+    display: none;
+    font-size: 1em;
+    border-radius: 20px;
+    padding: 0 20px;
+    border: 1px solid grey;
+}
+
+.navbar_search_bar:hover .navbar_searchbarinput_box {
+    display: block;
+}
+
+
+.navbar_search_bar:hover .navbar_search_icon {
+    background: grey;
+    color: white;
+}
+
+
+
+.navbar_search_icon {
+    box-sizing: border-box;
+    padding: 10px;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    border-radius: 50%;
+    color: grey;
+    text-align: center;
+    font-size: 1.2em;
+    transition: all 1s;
+    bottom: 0px;
+    right: 0px;
+}
+
+
+
+.navbar_profile_icons {
+    margin-bottom: 6px;
+    color: grey;
+}
+
+.navbar_profile_container {
+    border-radius: 50px;
+    border: 1px solid grey;
+    height: 24px;
+    width: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0;
+}
+
+
+.navBar_menu_selected {
+    color: rgb(0, 149, 255);
+    text-shadow: 6px 6px 5px rgba(0, 0, 0, 0.17);
+    transition: all 0.2s ease-in;
+}
+
+.navbar_searchbarinput_box {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    outline: 0;
+    border: 0;
+    display: none;
+    font-size: 1em;
+    border-radius: 20px;
+    padding: 0 20px;
+    border: 1px solid grey;
+}
+
+
+@media only screen and (max-width: 600px) {
+    .navbar_search_bar {
+        position: relative;
+        top: 0%;
+        left: 0%;
+        transform: translate(0%, 0%);
+        transition: all 1s;
+        width: 40px;
+        height: 40px;
+        background: white;
+        box-sizing: border-box;
+        border-radius: 25px;
+        padding: 5px;
+    }
+
+    .navbar_search_bar:hover {
+        width: 150px;
+        cursor: pointer;
+    }
+
+    .navbar_search_bar:hover .navbar_searchbarinput_box {
+        display: block;
+    }
+
+
+    .navbar_search_bar:hover .navbar_search_icon {
+        background: grey;
+        color: white;
+    }
+}
+
+
+@media (min-width: 600px) and (max-width: 768px) {
+    .navbar_search_bar {
+        position: relative;
+        top: 0%;
+        left: 0%;
+        transform: translate(0%, 0%);
+        transition: all 1s;
+        width: 40px;
+        height: 40px;
+        background: white;
+        box-sizing: border-box;
+        border-radius: 25px;
+        padding: 5px;
+    }
+
+    .navbar_search_bar:hover {
+        width: 200px !important;
+        cursor: pointer;
+    }
+
+    .navbar_headLogo {
+        height: 44px !important;
+        width: 40px !important;
+    }
+
+    .navbar_head_text {
+        font-size: 18px !important;
+        font-weight: 700 !important;
+        color: rgb(25, 183, 251);
+    }
+
+}

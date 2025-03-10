@@ -1,0 +1,130 @@
+.product_page {
+    font-family: Arial, sans-serif;
+    /* padding: 20px; */
+    margin-top: 116px
+}
+
+.productList_header {
+    height: 250px;
+    background: linear-gradient(344deg, rgba(255, 255, 255, 1) 0%, rgba(180, 172, 172, 1) 100%);
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.header_image_container {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+.header_image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: right;
+}
+
+.header_text_container {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.header_main_text {
+    color: #047bd9;
+    font-weight: 600;
+    font-size: 37px;
+}
+
+.header_text_description {
+    width: 35%;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.breadCrumb_section {
+    width: 100%;
+    display: block;
+    margin-bottom: 50px;
+    font-size: 15px;
+}
+
+.filterSection_container {
+    margin-top: 50px;
+}
+
+.filter_icon_container {
+    display: flex;
+    width: 100%;
+    margin-bottom: 15px;
+    font-size: 15px;
+    justify-content: space-between;
+}
+
+.filter_container {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 50px;
+}
+
+.single_filter {
+    color: #999;
+    width: 140px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    border-radius: 50px;
+    font-size: 13px;
+    align-items: center;
+    border: 1px solid #999;
+    cursor: pointer;
+}
+
+.single_selected_filter {
+    width: 140px;
+    background: #047bd9;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    border-radius: 50px;
+    align-items: center;
+    color: white;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.3s ease-in;
+}
+
+.productFilter_Section {
+    margin: 0 40px;
+    display: flex;
+}
+
+.productFilter_list_container {
+    width: 16%;
+}
+
+.product_list_container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    width: 84%;
+}
+
+.showMore_container {
+    color: white;
+    font-size: 14px;
+    display: flex;
+    width: 150px;
+    background: #007bff;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50px;
+    margin: 20px 0;
+    height: 45px;
+    cursor: pointer;
+}
