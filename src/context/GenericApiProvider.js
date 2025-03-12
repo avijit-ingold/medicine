@@ -8,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 const GenericApiProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
     const [postResultData, setPostResultData] = useState(null);
+    const [registrationData, setRegistrationData] = useState(null);
     const [getHomeData, setGetHomeData] = useState(null);
     const [getCategoryData, setGetCategoryData] = useState(null);
     const [ifLoggedin, setIfLoggedIn] = useState(false);
@@ -32,15 +33,19 @@ const GenericApiProvider = ({ children }) => {
     const [states, setStates] = useState(null);
     const [profileImage, setProfileImage] = useState(null);
     const [purchaseHistory, setPurchaseHistory] = useState(null);
-    const [ returnData, setReturnData] = useState(null);
+    const [returnData, setReturnData] = useState(null);
     const [addToCartSuccess, setAddToCartSuccess] = useState(false)
+    const [customerData, setCustomerData] = useState(null);
+    const [adminToken, setAdminToken] = useState();
 
-    const getPostData = async (url, requestBody) => {
+    const getAdminPostData = async (url, requestBody, parent) => {
         setLoading(true);
+        getAdminToken();
 
         const headers = {
             "Content-Type": "application/json",
-            "System-Key": "12345"
+            "System-Key": "12345",
+            "Authorization": `Bearer ${sessionStorage.getItem('AdminToken')}`
         };
 
         axios({
@@ -49,8 +54,30 @@ const GenericApiProvider = ({ children }) => {
             data: JSON.stringify(requestBody),
             headers: headers
         }).then((res) => {
-            setPostResultData(res)
-            sessionStorage.setItem('loginDetails', JSON.stringify(res.data));
+            if (parent == 'registration') {
+                toast.success('Successfully Registered!', {
+                    autoClose: 1100
+                });
+                setRegistrationData(res)
+            } else if (parent == 'login') {
+                setPostResultData(res)
+            }
+        }).catch((err) => {
+            if (err.response) {
+                if (err.response.status === 400) {
+                    toast.error(`Bad Request: ${err.response.data.message || 'Invalid request'}`, {
+                        autoClose: 1100
+                    });
+                } else {
+                    toast.error(`Error ${err.response.status}: ${err.response.data.message || 'Something went wrong'}`, {
+                        autoClose: 1100
+                    });
+                }
+            } else {
+                toast.error(`Network Error: ${err.message}`, {
+                    autoClose: 1100
+                });
+            }
         }).finally(() => {
             const timer = setTimeout(() => {
                 setLoading(false);
@@ -58,6 +85,55 @@ const GenericApiProvider = ({ children }) => {
             return () => {
                 clearTimeout(timer)
             };
+        });
+
+    }
+
+    const getCustomerData = async (url) => {
+        setLoading(true);
+        const headers = {
+            "Content-Type": "application/json",
+            "System-Key": "12345",
+            "Authorization": `Bearer ${sessionStorage.getItem('CustomerToken')}`
+        };
+
+        axios({
+            method: 'GET',
+            url: process.env.REACT_APP_API_URL + url,
+            headers: headers
+        }).then((res) => {
+            setCustomerData(res)
+        }).finally(() => {
+            const timer = setTimeout(() => {
+                setLoading(false);
+            }, 1500);
+            return () => {
+                clearTimeout(timer)
+            };
+        });
+
+    }
+
+    const getAdminToken = async () => {
+        const headers = {
+            "Content-Type": "application/json",
+            "System-Key": "12345"
+        };
+
+        const requestBody = {
+            "username": "admin",
+            "password": "option123@"
+        };
+
+        axios({
+            method: 'POST',
+            url: process.env.REACT_APP_API_URL + 'integration/admin/token',
+            data: JSON.stringify(requestBody),
+            headers: headers
+        }).then((res) => {
+            setAdminToken(res.data);
+            sessionStorage.setItem('AdminToken', res.data);
+        }).finally(() => {
         });
 
     }
@@ -108,23 +184,23 @@ const GenericApiProvider = ({ children }) => {
         let headers;
         checkIfLoggedIn();
 
-        if (loggedinData) {
-            headers = {
-                "Content-Type": "application/json",
-                "X-Requested-With": "XMLHttpRequest",
-                "System-Key": "12345",
-                "Authorization": `Bearer ${loggedinData.access_token}`,
-            };
+        // if (loggedinData) {
+        headers = {
+            "Content-Type": "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+            "System-Key": "12345",
+            "Authorization": `Bearer ${sessionStorage.getItem('AdminToken')}`,
+        };
 
-        } else {
-            headers = {
-                "Content-Type": "application/json",
-                "X-Requested-With": "XMLHttpRequest",
-                "System-Key": "12345",
-                // "Authorization": `Bearer ${(JSON.parse(loggedinData)).access_token}`
-            };
+        // } else {
+        //     headers = {
+        //         "Content-Type": "application/json",
+        //         "X-Requested-With": "XMLHttpRequest",
+        //         "System-Key": "12345",
+        //         // "Authorization": `Bearer ${(JSON.parse(loggedinData)).access_token}`
+        //     };
 
-        }
+        // }
 
         axios({
             method: 'GET',
@@ -199,19 +275,19 @@ const GenericApiProvider = ({ children }) => {
 
     }
 
-    const getGetDataQuick = async (url, type) => {
+    const getGetDataQuick = async (url, type, reqBody) => {
         checkIfLoggedIn();
         const headers = {
             "Content-Type": "application/json",
             "X-Requested-With": "XMLHttpRequest",
-            "System-Key": "12345",
-            "Authorization": `Bearer ${loggedinData.access_token}`
+            "Authorization": `Bearer ${sessionStorage.getItem('CustomerToken')}`,
         };
 
         axios({
-            method: 'GET',
+            method: 'POST',
             url: process.env.REACT_APP_API_URL + url,
-            headers: headers
+            headers: headers,
+            data: JSON.stringify(reqBody)
         }).then((res) => {
             if (type === 'sad') {
                 toast.error(`${res.data.message}` + "! 😔", {
@@ -227,10 +303,12 @@ const GenericApiProvider = ({ children }) => {
                 setWishList(res)
             } else if (type === 'userAddress') {
                 setUserAddress(res)
-            } else {
-                toast.success(res.data.message, {
-                    autoClose: 1100
-                });
+            } else if(type == 'addWishList'){
+                if(res){
+                    toast.success('Successfully Added to Wishlist', {
+                        autoClose: 1100
+                    });
+                }
             }
         }).catch((err) => {
             toast.error(`Error: ${err.message || "Something went wrong!"}`);
@@ -309,13 +387,20 @@ const GenericApiProvider = ({ children }) => {
 
     const checkIfLoggedIn = () => {
         setIfLoggedIn(sessionStorage.getItem('loginDetails') ? true : false);
-        setLoggedInData(JSON.parse(sessionStorage.getItem('loginDetails')));
+        setLoggedInData(sessionStorage.getItem('loginDetails'));
     }
 
+    useEffect(() => {
+        getAdminToken()
+    }, [])
+
     const values = {
-        getPostData,
+        getAdminPostData,
         getPostDataWithAuth,
+        getCustomerData,
+        customerData,
         postResultData,
+        registrationData,
         checkIfLoggedIn,
         loggedinData,
         ifLoggedin,
@@ -354,6 +439,10 @@ const GenericApiProvider = ({ children }) => {
         checkIfLoggedIn();
         return handleCart()
     }, [ifLoggedin])
+
+    useEffect(() => {
+        checkIfLoggedIn();
+    }, [])
 
     return (
         <GenericApiContext.Provider value={values}>

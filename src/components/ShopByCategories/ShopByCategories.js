@@ -3,56 +3,31 @@ import styles from './ShopByCategories.module.css';
 import { Eye } from 'react-bootstrap-icons';
 import { GenericApiContext } from '../../context/GenericApiContext';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { encryptData, decryptData } from "../../utils/CryptoUtils";
+import { useNavigate } from 'react-router-dom';
 
 const ShopByCategories = () => {
 
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [categories, setCategories] = useState([]);
+  const [categoryEncryptedArray, setCategoryEncryptedArray] = useState([]);
+  
   const context = useContext(GenericApiContext)
+  const navigate = useNavigate();
 
-  // const categories = [
-  //   {
-  //     name: "Lorem Ipsum",
-  //     img: Layer1,
-  //     scaleReq: false
-  //   }, {
-  //     name: "Lorem Ipsum",
-  //     img: Layer2,
-  //     scaleReq: false
-  //   }, {
-  //     name: "Lorem Ipsum",
-  //     img: Layer3,
-  //     scaleReq: false
-  //   }, {
-  //     name: "Lorem Ipsum",
-  //     img: Layer4,
-  //     scaleReq: true
-  //   }, {
-  //     name: "Lorem Ipsum",
-  //     img: Layer5,
-  //     scaleReq: false
-  //   }, {
-  //     name: "Lorem Ipsum",
-  //     img: Layer6,
-  //     scaleReq: true
-  //   }, {
-  //     name: "Lorem Ipsum",
-  //     img: Layer7,
-  //     scaleReq: false
-  //   }, {
-  //     name: "Lorem Ipsum",
-  //     img: Layer8,
-  //     scaleReq: true
-  //   },
-  // ]
+  const handleCategoryClick = (param, id) => {
+    setSelectedCategory(param);
+    redirect(id);
+  }
 
-  const handleCategoryClick = (param) => {
-    setSelectedCategory(param)
+  const redirect = (id) => {
+    navigate(`/category/${categoryEncryptedArray[id - 1]}`);
+    // setShowCategories(false)
   }
 
   useEffect(() => {
     const categoriesImage = () => {
-      const url = 'categories/top'
+      const url = 'getCategory'
 
       context.getGetData(url, 'categories');
     }
@@ -62,10 +37,26 @@ const ShopByCategories = () => {
 
   useEffect(() => {
     if (context.getCategoryData) {
-      if (context.getCategoryData.data.data) {
-        setCategories(context.getCategoryData.data.data)
+      if (context.getCategoryData.data) {
+        setCategories(context.getCategoryData.data)
       }
     }
+  }, [context.getCategoryData])
+
+  useEffect(() => {
+    if (context.getCategoryData) {
+      var tempArray = []
+      if (context.getCategoryData.data) {
+        if (context.getCategoryData.data.length > 0) {
+          context.getCategoryData.data.map((ele) => {
+            const encrypted = encryptData(ele.id);
+            tempArray.push(encrypted);
+          })
+        }
+      }
+      setCategoryEncryptedArray(tempArray);
+    }
+
   }, [context.getCategoryData])
 
 
@@ -79,9 +70,9 @@ const ShopByCategories = () => {
           {
             categories && categories.map((category, ind) => {
               return (
-                <div className={styles.categories_grid_item_container} key={ind}>
-                  <div className={styles.categories_grid_image_container} onClick={() => handleCategoryClick(ind)}>
-                    <LazyLoadImage effect="blur" src={category.banner} wrapperProps={{
+                <div className={styles.categories_grid_item_container} key={ind} onClick={() => handleCategoryClick(ind, category.id)}>
+                  <div className={styles.categories_grid_image_container}>
+                    <LazyLoadImage effect="blur" src={category.image_url} wrapperProps={{
                       style: { transitionDelay: "1s" },
                     }} alt='categories' loading="lazy"
                       className={styles.categories_img + ' ' + (category.scaleReq ? styles.categories_cale_property : '')}

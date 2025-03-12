@@ -106,3 +106,48 @@
         transform: scale(1);
     }
 }
+
+.eyeButton {
+    /* background-color: blue; */
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.eyeButton :hover {
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+
+    70% {
+        transform: none;
+        animation-timing-function: ease-in;
+    }
+
+    80% {
+        transform: translateY(3px) scaleY(0.3)
+    }
+    85%{
+        transform: none;
+        animation-timing-function: ease-in;
+    }
+    90% {
+        transform: translateY(3px) scaleY(0.3)
+    }
+    97%{
+        transform: none;
+        animation-timing-function: ease-in;
+    }
+    100% {
+        animation-timing-function: ease-out;
+    }
+    
+}

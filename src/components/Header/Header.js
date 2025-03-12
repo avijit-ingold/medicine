@@ -30,6 +30,7 @@ const Header = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [searchText, setSearchText] = useState('')
   const [custName, setCustName] = useState();
+  const [customerDetails, setCustomerDetails] = useState(null);
   const [headerData, setHeaderData] = useState();
   const [showCategories, setShowCategories] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -75,22 +76,20 @@ const Header = () => {
     }
   };
 
-  var loginDetails = []
+  const getInitials = (firstName, lastName) => {
+    if (!firstName || !lastName) return '';
+    return `${firstName.charAt(0).toUpperCase()}${lastName.charAt(0).toUpperCase()}`;
+  };
 
   const handleAfterLogin = (param) => {
-    setCustName(getInitials(param.user.name));
-    setProfileImage(param.user.avatar_original);
+    setCustName(getInitials(param.firstname, param.lastname));
+    // setProfileImage(param.user.avatar_original);
   }
 
-  const getInitials = (name) => {
-    var parts = name.split(' ')
-    var initials = ''
-    for (var i = 0; i < parts.length; i++) {
-      if (parts[i].length > 0 && parts[i] !== '') {
-        initials += parts[i][0]
-      }
-    }
-    return initials
+  const getCustomerDetails = async () => {
+    const url = 'customers/me'
+
+    context.getCustomerData(url);
   }
 
   const handleProfile = () => {
@@ -108,28 +107,16 @@ const Header = () => {
   }
 
   const navigateCart = () => {
-    if(context.ifLoggedin){
+    if (context.ifLoggedin) {
       navigate('/myProfile/cart')
-    }else{
+    } else {
       navigate('/login')
     }
   }
 
-
   useEffect(() => {
     setUserCartCount(context.cartCount)
   }, [context.cartCount])
-
-
-  useEffect(() => {
-    const getBannerImage = () => {
-      const url = 'business-settings'
-
-      context.getGetData(url, 'headerMenu');
-    }
-
-    getBannerImage();
-  }, [])
 
   useEffect(() => {
     if (context.getHeaderdata) {
@@ -137,24 +124,19 @@ const Header = () => {
     }
   }, [context.getHeaderdata])
 
+  useEffect(() => {
+    if (context.customerData) {
+      setCustomerDetails(context.customerData.data)
+    }
+  }, [context.customerData])
+
 
   useEffect(() => {
-    context.checkIfLoggedIn();
-    loginDetails = JSON.parse(sessionStorage.getItem('loginDetails'));
-    if (loginDetails) {
-      handleAfterLogin(loginDetails);
+    if (customerDetails) {
+      sessionStorage.setItem('loginDetails', JSON.stringify(customerDetails))
+      handleAfterLogin(customerDetails);
     }
-  }, [])
-
-  useEffect(() => {
-    const categoriesImage = () => {
-      const url = 'categories/top'
-
-      context.getGetData(url, 'categories');
-    }
-
-    categoriesImage();
-  }, [])
+  }, [customerDetails])
 
   useEffect(() => {
     if (context.getCategoryData) {
@@ -174,16 +156,6 @@ const Header = () => {
   }, [context.getCategoryData])
 
   useEffect(() => {
-    const getBrandNames = () => {
-      const url = 'brands'
-
-      context.getGetData(url, 'brandData');
-    }
-
-    getBrandNames();
-  }, [])
-
-  useEffect(() => {
     if (context.getBrandData) {
       var tempArray = []
       if (context.getBrandData.data.data) {
@@ -199,6 +171,31 @@ const Header = () => {
     }
   }, [context.getBrandData])
 
+  useEffect(() => {
+    const getBannerImage = () => {
+      const url = 'business-settings'
+      context.getGetData(url, 'headerMenu');
+    }
+
+    const getBrandNames = () => {
+      const url = 'brands'
+      context.getGetData(url, 'brandData');
+    }
+
+    const categoriesImage = () => {
+      const url = 'categories/top'
+
+      context.getGetData(url, 'categories');
+    }
+
+    categoriesImage();
+    getBrandNames();
+    getBannerImage();
+  }, [])
+
+  useEffect(() => {
+    getCustomerDetails();
+  }, [])
 
   return (
     <>
@@ -317,7 +314,7 @@ const Header = () => {
 
               <span className={styles.navbar_profile_icons}>
                 {
-                  context.ifLoggedin && context.ifLoggedin ? (
+                 customerDetails && customerDetails ? (
                     <>
                       <span className={styles.navbar_profile_name}>{custName + ' '}</span>
                       <span><ChevronDown size={13} /></span>

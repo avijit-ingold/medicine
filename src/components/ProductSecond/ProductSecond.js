@@ -16,14 +16,19 @@ const ProductSecond = ({ productObject, parent }) => {
   const childRef = useRef(null);
 
   const handleWishList = (id) => {
+    const loginDetail = JSON.parse(sessionStorage.getItem('loginDetails'))
 
-    if (!wishlistState) {
-      const url = `wishlists-add-product?product_id=${id}&user_id=${loggedinData.user.id}`
-      context.getGetDataQuick(url, '');
-    } else {
-      const url = `wishlists-remove-product?product_id=${id}&user_id=${loggedinData.user.id}`
-      context.getGetDataQuick(url, 'sad');
+    // if (!wishlistState) {
+      const url = `wishlist/add`
+      const reqBody = {
+        "customerId": loginDetail.id,
+        "productId": productObject.id
     }
+      context.getGetDataQuick(url, 'addWishList', reqBody);
+    // } else {
+    //   const url = `wishlists-remove-product?product_id=${id}&user_id=${loggedinData.user.id}`
+    //   context.getGetDataQuick(url, 'sad');
+    // }
 
     setWishListState(!wishlistState);
   }
@@ -46,7 +51,7 @@ const ProductSecond = ({ productObject, parent }) => {
   }, [productObject])
 
   useEffect(() => {
-    if (childRef.current) {
+    if (childRef.current && parent != 'CategoryPage') {
       const parent = childRef.current.parentElement;
       if (parent) {
         parent.style.display = "flex";
@@ -62,16 +67,18 @@ const ProductSecond = ({ productObject, parent }) => {
         <div className={styles.card_header}>
           <button className={styles.wishlist_button + ' ' + (wishlistState ? styles.is_active : '')} onClick={() => handleWishList(productObject.id)}>{wishlistState ? (<HeartFill color='#e64141' />) : (<Heart />)}</button>
         </div>
-        <img src={productObject.thumbnail_image} alt="Product" />
+        <img src={productObject.image_url} alt="Product" />
         <div className={styles.cart_button}>
-          <button onClick={() => redirect(productId)}><Eye /></button>
+          <button className={styles.eyeButton} onClick={() => redirect(productId)}><Eye /></button>
         </div>
       </div>
       <div className={styles.card_content}>
         <p className={styles.product_title}>{productObject.name}</p>
         <p className={styles.product_price}>
-          <span className={styles.old_price}>{productObject.stroked_price}</span>
-          <span className={styles.new_price}>{productObject.main_price}</span>
+          {productObject.special_price && (
+            <span className={styles.old_price}>{"€" + ' ' + parseInt(productObject.price).toFixed(2)}</span>
+          )}
+          <span className={styles.new_price}>{productObject.special_price ? "€" + ' ' +  parseInt(productObject.special_price).toFixed(2) :"€" + ' ' + parseInt(productObject.price).toFixed(2)}</span>
         </p>
       </div>
     </div>

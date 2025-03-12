@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import styles from './ProductDetailsComponent.module.css';
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -32,8 +32,12 @@ import cylinderBlue from '../../assets/images/Medical/oxygen-tank-blue.svg';
 import cylinderWhite from '../../assets/images/Medical/oxygen-tank-white.svg';
 import DetailsSlider1 from '../../assets/images/Medical/details-slider-1.png';
 import DetailsSlider2 from '../../assets/images/Medical/details-slider-2.png';
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 
 
+gsap.registerPlugin(ScrollTrigger);
 
 const ProductDetailsComponent = ({ id, loading }) => {
 
@@ -46,7 +50,6 @@ const ProductDetailsComponent = ({ id, loading }) => {
   const [cartSuccess, setCartSuccess] = useState(false)
   const [hovEffect, setHovEffect] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState();
-
 
   const variantArray = [ProductVariant1, ProductVariant2, ProductVariant3, ProductVariant4];
 
@@ -80,6 +83,11 @@ const ProductDetailsComponent = ({ id, loading }) => {
   const context = useContext(GenericApiContext);
   const navigate = useNavigate()
   const location = useLocation();
+
+  const leftRef = useRef(null);
+  const rightRef = useRef(null);
+  const leftTopRef = useRef(null);
+  const rightTopRef = useRef(null)
 
   const handleCategoryClick = (index) => {
     setSelectedIndex(index);
@@ -175,6 +183,87 @@ const ProductDetailsComponent = ({ id, loading }) => {
     }
   }, [productDetail])
 
+  useGSAP(() => {
+    if (!leftRef.current || !rightRef.current || !leftTopRef.current || !rightTopRef.current) {
+      return;
+    }
+
+    gsap.killTweensOf("*");
+    ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+
+    gsap.set([leftRef.current, rightRef.current, leftTopRef.current, rightTopRef.current], {
+      x: 0,
+      opacity: 1
+    });
+
+    const animations = [
+      gsap.fromTo(leftRef.current,
+        { x: -150, opacity: 0 },
+        {
+          x: 0,
+          opacity: 1,
+          duration: 1,
+          scrollTrigger: {
+            trigger: leftRef.current,
+            start: "top 80%",
+            toggleActions: "restart none none reverse"
+          },
+          ease: "power1.inOut",
+        }
+      ),
+
+      gsap.fromTo(rightRef.current,
+        { x: 150, opacity: 0 },
+        {
+          x: 0,
+          opacity: 1,
+          duration: 1,
+          scrollTrigger: {
+            trigger: rightRef.current,
+            start: "top 80%",
+            toggleActions: "restart none none reverse"
+          },
+          ease: "power1.inOut",
+        }
+      ),
+
+      gsap.fromTo(leftTopRef.current,
+        { x: -150, opacity: 0 },
+        {
+          x: 0,
+          opacity: 1,
+          duration: 1,
+          scrollTrigger: {
+            trigger: leftTopRef.current,
+            start: "top 80%",
+            toggleActions: "restart none none reverse"
+          },
+          ease: "power1.inOut",
+        }
+      ),
+
+      gsap.fromTo(rightTopRef.current,
+        { x: 150, opacity: 0 },
+        {
+          x: 0,
+          opacity: 1,
+          duration: 1,
+          scrollTrigger: {
+            trigger: rightTopRef.current,
+            start: "top 80%",
+            toggleActions: "restart none none reverse"
+          },
+          ease: "power1.inOut",
+        }
+      ),
+    ];
+
+    return () => {
+      animations.forEach(animation => animation.kill());
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    };
+
+  }, [productDetail]);
 
   return (
     <>
@@ -374,7 +463,7 @@ const ProductDetailsComponent = ({ id, loading }) => {
               <div className="p-1">
                 <div className="row">
                   <div className={"col-md-6 d-flex align-items-center p-5 " + styles.testifyTxt_container}>
-                    <div>
+                    <div className='left-item' ref={leftTopRef}>
                       <h2 className="fw-bold mb-3 fs-3">Lorem ipsum odor amet, consectetur adipiscing elit. Torquent fermentum ipsum.</h2>
                       <p>
                         Ac gravida facilisi quis aptent iaculis aliquet. Ut mollis elit congue, fames habitant ex?
@@ -393,13 +482,14 @@ const ProductDetailsComponent = ({ id, loading }) => {
                     <img
                       src={DetailsSlider1}
                       alt="Product Image"
-                      className={"img-fluid w-100 " + styles.testifyImg_container}
+                      className={"img-fluid w-100 right-item " + styles.testifyImg_container}
+                      ref={rightTopRef}
                     />
                   </div>
                 </div>
                 <div className="row flex-md-row-reverse">
                   <div className={"col-md-6 d-flex align-items-center p-5 " + styles.testifyTxt_container}>
-                    <div>
+                    <div className='left-item' ref={rightRef}>
                       <h2 className="fw-bold mb-3 fs-3">Lorem ipsum odor amet, consectetur adipiscing elit. Torquent fermentum ipsum.</h2>
                       <p>
                         Ac gravida facilisi quis aptent iaculis aliquet. Ut mollis elit congue, fames habitant ex?
@@ -418,7 +508,8 @@ const ProductDetailsComponent = ({ id, loading }) => {
                     <img
                       src={DetailsSlider2}
                       alt="Product Image"
-                      className={"img-fluid w-100 " + styles.testifyImg_container}
+                      className={"img-fluid w-100 right-item" + styles.testifyImg_container}
+                      ref={leftRef}
                     />
                   </div>
                 </div>

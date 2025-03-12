@@ -24,7 +24,6 @@ const LoginSignup = () => {
   const [showPassToast, setShowPassToast] = useState(false);
   const [showFailToast, setShowFailToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
-  const [apiLoading, setApiLoading] = useState(false)
 
 
   const context = useContext(GenericApiContext);
@@ -34,47 +33,84 @@ const LoginSignup = () => {
   const loginUser = (e) => {
     e.preventDefault();
     const requestBody = {
-      email: loginEmail,
-      password: loginPassword,
-      login_by: "email",
-      user_type: "customer",
+      username: loginEmail,
+      password: loginPassword
     };
 
-    const url = 'auth/login'
+    const url = 'integration/customer/token'
 
-    context.getPostData(url, requestBody);
+    context.getAdminPostData(url, requestBody, 'login');
+  };
+
+  const splitFullName = (fullName) => {
+    if (!fullName || typeof fullName !== 'string') return { firstName: '', lastName: '' };
+
+    const firstSpaceIndex = fullName.indexOf(' ');
+
+    if (firstSpaceIndex === -1) {
+      return { firstName: fullName, lastName: '' };
+    }
+
+    const firstName = fullName.substring(0, firstSpaceIndex);
+    const lastName = fullName.substring(firstSpaceIndex + 1).trim();
+
+    return { firstName, lastName };
   };
 
 
   const signUpUser = (e) => {
     e.preventDefault();
+
+    const SplittedName = splitFullName(signUpName);
     const requestBody = {
-      name: signUpName,
-      email_or_phone: signUpEmail,
-      password: signUpPassword,
-      passowrd_confirmation: signUpReEnterPassword,
-      register_by: "email"
+      "customer": {
+        "email": signUpEmail,
+        "firstname": SplittedName.firstName,
+        "lastname": SplittedName.lastName,
+        "group_id": 1,
+        "dob": "1/05/2025",
+        "taxvat": "",
+        "addresses": [
+          {
+            "default_billing": true,
+            "default_shipping": true,
+            "firstname": "Jane",
+            "lastname": "Doe",
+            "street": ["123 Main St"],
+            "city": "New York",
+            "region": {
+              "region_code": "NY",
+              "region": "New York",
+              "region_id": 43
+            },
+            "postcode": "10001",
+            "country_id": "US",
+            "telephone": "1234567890"
+          }
+        ]
+      },
+      "password": signUpPassword
     }
 
-    const url = 'auth/signup'
+    const url = 'customers'
 
-    context.getPostData(url, requestBody);
+    context.getAdminPostData(url, requestBody, 'registration');
   };
 
   const handleLogin = (param) => {
-    if (param.data.result) {
-      sessionStorage.setItem('loginDetails', JSON.stringify(param.data));
-      setToastMessage(param.data.message)
+    if (param.data) {
+      sessionStorage.setItem('CustomerToken', param.data);
+      setToastMessage('Logged In Successfully!')
       setShowPassToast(true);
       const timer = setTimeout(() => {
         navigate(from, { replace: true });
       }, 1000);
 
       return () => clearTimeout(timer);
-    }else{
-      if(param.data.message[0]){
-        setToastMessage(param.data.message[0])
-      }else{
+    } else {
+      if (param.data.message) {
+        setToastMessage(param.data.message)
+      } else {
         setToastMessage(param.data.message)
       }
       setShowFailToast(true);
@@ -106,6 +142,7 @@ const LoginSignup = () => {
       setError('');
     }
   };
+
   const handleReEnterPasswordChange = (e) => {
     const value = e.target.value;
     setSignUpReEnterPassword(value);
@@ -123,6 +160,13 @@ const LoginSignup = () => {
       handleLogin(context.postResultData)
     }
   }, [context.postResultData])
+
+  useEffect(() => {
+    if (context.registrationData) {
+      setToastMessage('Successfully Registered!')
+      setIsLogin(true);
+    }
+  }, [context.registrationData])
 
   useEffect(() => {
     context.checkIfLoggedIn();

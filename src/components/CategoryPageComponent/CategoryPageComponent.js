@@ -62,7 +62,7 @@ const CategoryPageComponent = ({ id, loading, parent }) => {
   useEffect(() => {
     if (parent === 'category') {
       const getCategoryProducts = () => {
-        const url = `products/category/${id}?page=1&name=`
+        const url = `b2c/getProductsByCategory?categoryId=${id}&pagesize=10&pagenum=1`
         context.getGetData(url, `categoryDetails`);
 
         const categoriesFilterUrl = 'filter/categories'
@@ -92,8 +92,8 @@ const CategoryPageComponent = ({ id, loading, parent }) => {
 
   useEffect(() => {
     if (context.getCategoryDetails) {
-      if (context.getCategoryDetails.data.data) {
-        setCategoryDetails(context.getCategoryDetails.data.data)
+      if (context.getCategoryDetails.data) {
+        setCategoryDetails(context.getCategoryDetails.data)
       }
     }
   }, [context.getCategoryDetails])
