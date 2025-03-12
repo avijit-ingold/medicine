@@ -21,6 +21,7 @@ import BlogSection from '../BlogSection/BlogSection'
 import NewsletterSection from '../NewsletterSection/NewsletterSection'
 import { GenericApiContext } from '../../context/GenericApiContext';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import banner from '../../assets/images/Medical/banner.png'
 
 
 const HomePage = () => {
@@ -63,29 +64,30 @@ const HomePage = () => {
 
  
 
-  useEffect(() => {
-    const getBannerImage = () => {
-      const url = 'sliders'
+  // useEffect(() => {
+  //   const getBannerImage = () => {
+  //     const url = 'sliders'
   
-      context.getGetData(url,'homeBanner');
-    }
+  //     context.getGetData(url,'homeBanner');
+  //   }
 
-    getBannerImage();
-  }, [])
+  //   getBannerImage();
+  // }, [])
 
-  useEffect(() => {
-    if (context.getHomeData) {
-      if(context.getHomeData.data.data[0].photo){
-        setBannerImage(context.getHomeData.data.data[0].photo)
-      }
-    }
-  }, [context.getHomeData])
+  // useEffect(() => {
+  //   if (context.getHomeData) {
+  //     if(context.getHomeData.data.data[0].photo){
+  //       setBannerImage(context.getHomeData.data.data[0].photo)
+  //     }
+  //   }
+  // }, [context.getHomeData])
 
 
   return (
     <>
       <div className={styles.homePage_banner_container} style={{marginTop:'86px'}}>
-        {bannerImage && (<LazyLoadImage src={bannerImage} alt='home banner' className={styles.homePage_banner_container_image} loading='lazy' />)}
+        {/* {bannerImage && (<LazyLoadImage src={bannerImage} alt='home banner' className={styles.homePage_banner_container_image} loading='lazy' />)} */}
+        {banner && (<LazyLoadImage src={banner} alt='home banner' className={styles.homePage_banner_container_image} loading='lazy' />)}
 
       </div>
       <div className={`${styles.homePage_container_main}`}>

@@ -8,6 +8,64 @@ import { ArrowLeftCircle } from 'react-bootstrap-icons';
 import Product from '../Product/Product';
 import { GenericApiContext } from '../../context/GenericApiContext';
 
+import ProductVariant1 from '../../assets/images/Medical/Product-Variant (1).png';
+import ProductVariant2 from '../../assets/images/Medical/Product-Variant (2).png';
+import ProductVariant3 from '../../assets/images/Medical/Product-Variant (3).png';
+import ProductVariant4 from '../../assets/images/Medical/Product-Variant (4).png';
+import ProductVariant5 from '../../assets/images/Medical/Layer 19.png';
+
+const data = [
+  {
+    id: 1,
+    name: 'Product 1',
+    thumbnail_image: ProductVariant1,
+    stroked_price: 10,
+    discount: 10,
+    banner: ProductVariant1,
+    postdate: '03/12/2025',
+
+  },
+  {
+    id: 2,
+    name: 'Product 2',
+    thumbnail_image: ProductVariant2,
+    stroked_price: 14,
+    discount: 10,
+    banner: ProductVariant2,
+    postdate: '03/12/2025',
+
+  },
+  {
+    id: 3,
+    name: 'Product 3',
+    thumbnail_image: ProductVariant3,
+    stroked_price: 13,
+    discount: 10,
+    banner: ProductVariant3,
+    postdate: '03/12/2025',
+
+  },
+  {
+    id: 4,
+    name: 'Product 4',
+    thumbnail_image: ProductVariant4,
+    stroked_price: 12,
+    discount: 10,
+    banner: ProductVariant4,
+    postdate: '03/12/2025',
+
+  },
+  // {
+  //   id: 5,
+  //   name: 'Product 5',
+  //   thumbnail_image: ProductVariant5,
+  //   stroked_price: 15,
+  //   discount: 10,
+  //   banner: ProductVariant5,
+  //   postdate: '03/12/2025',
+
+  // }
+]
 
 
 const NewArrivalSection = () => {
@@ -94,20 +152,28 @@ const NewArrivalSection = () => {
     ]
   }
 
-  useEffect(() => {
-    const getTodaysDeal = () => {
-      const url = 'products/todays-deal'
+  // useEffect(() => {
+  //   const getTodaysDeal = () => {
+  //     const url = 'products/todays-deal'
 
-      context.getGetData(url, 'todaysDeal');
-    }
-    getTodaysDeal();
+  //     context.getGetData(url, 'todaysDeal');
+  //   }
+  //   getTodaysDeal();
+  // }, [])
+
+  // useEffect(() => {
+  //   if (context.getTodayDealData) {
+  //     setProducts(context.getTodayDealData.data.data);
+  //   }
+  // }, [context.getTodayDealData])
+
+
+ 
+  useEffect(() => {
+   
+      setProducts(data);
+    
   }, [])
-
-  useEffect(() => {
-    if (context.getTodayDealData) {
-      setProducts(context.getTodayDealData.data.data);
-    }
-  }, [context.getTodayDealData])
 
   return (
     <>

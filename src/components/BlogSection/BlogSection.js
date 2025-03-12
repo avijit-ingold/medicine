@@ -15,9 +15,62 @@ import Layer5 from '../../assets/images/Medical/Layer 31.png';
 import Layer6 from '../../assets/images/Medical/Layer 45.png';
 import { GenericApiContext } from '../../context/GenericApiContext';
 
+const data = [
+  {
+    id: 1,
+    name: 'Product 1',
+    thumbnail_image: Layer1,
+    stroked_price: 10,
+    discount: 10,
+    banner: Layer1,
+    postdate: '03/12/2025',
+
+  },
+  {
+    id: 2,
+    name: 'Product 2',
+    thumbnail_image: Layer2,
+    stroked_price: 14,
+    discount: 10,
+    banner: Layer2,
+    postdate: '03/12/2025',
+
+  },
+  {
+    id: 3,
+    name: 'Product 3',
+    thumbnail_image: Layer3,
+    stroked_price: 13,
+    discount: 10,
+    banner: Layer3,
+    postdate: '03/12/2025',
+
+  },
+  {
+    id: 4,
+    name: 'Product 4',
+    thumbnail_image: Layer4,
+    stroked_price: 12,
+    discount: 10,
+    banner: Layer4,
+    postdate: '03/12/2025',
+
+  },
+  // {
+  //   id: 5,
+  //   name: 'Product 5',
+  //   thumbnail_image: ProductVariant5,
+  //   stroked_price: 15,
+  //   discount: 10,
+  //   banner: ProductVariant5,
+  //   postdate: '03/12/2025',
+
+  // }
+]
+
 const BlogSection = () => {
 
-  const [blogList, setBlogList] = useState(null);
+  const [blogList, setBlogList] = useState(data);
 
   const blogsArray = [
     {
@@ -98,8 +151,8 @@ const BlogSection = () => {
 
   var settings = {
     speed: 300,
-    slidesToShow: 3,
-    slidesToScroll: 3,
+    slidesToShow: 4,
+    slidesToScroll: 4,
     initialSlide: 1,
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
@@ -107,7 +160,7 @@ const BlogSection = () => {
       {
         breakpoint: 2024,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: 4,
           slidesToScroll: 1,
           infinite: true,
           dots: false
@@ -116,7 +169,7 @@ const BlogSection = () => {
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: 4,
           slidesToScroll: 1,
           infinite: true,
           dots: false
@@ -125,7 +178,7 @@ const BlogSection = () => {
       {
         breakpoint: 768,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: 4,
           slidesToScroll: 1,
           infinite: true,
           dots: false
@@ -157,21 +210,21 @@ const BlogSection = () => {
 
 
 
-  useEffect(() => {
-    const getBlogData = () => {
-      const url = 'bloglist'
+    // useEffect(() => {
+    //   const getBlogData = () => {
+    //     const url = 'bloglist'
 
-      context.getGetData(url, 'bloglist');
-    }
+    //     context.getGetData(url, 'bloglist');
+    //   }
 
-    getBlogData();
-  }, [])
+    //   getBlogData();
+    // }, [])
 
-  useEffect(() => {
-    if (context.getBlogList) {
-      setBlogList(context.getBlogList.data.data);
-    }
-  }, [context.getBlogList])
+    // useEffect(() => {
+    //   if (context.getBlogList) {
+    //     setBlogList(context.getBlogList.data.data);
+    //   }
+    // }, [context.getBlogList])
 
 
   return (

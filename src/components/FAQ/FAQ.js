@@ -9,9 +9,37 @@ import Layer1 from '../../assets/images/Medical/Layer 28.png';
 import { CheckCircleFill } from 'react-bootstrap-icons';
 import { GenericApiContext } from '../../context/GenericApiContext';
 
+
+const DATA = [
+  {
+    id: 1,
+    title: 'Lorem ipsum dolor commodo viverra.',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+    faq_dropDown_answer_show: 'faq_dropDown_answer_show 1'
+  },
+  {
+    id: 2,
+    title: 'Lorem ipsum dolor commodo viverra?',
+    description: 'description 2',
+    faq_dropDown_answer_show: 'faq_dropDown_answer_show 2'
+  },
+  {
+    id: 3,
+    title: 'Lorem ipsum dolor commodo viverra?',
+    description: 'description 3',
+    faq_dropDown_answer_show: 'faq_dropDown_answer_show 3'
+  },
+  {
+    id: 4,
+    title: 'Lorem ipsum dolor commodo viverra?',
+    description: 'description 4',
+    faq_dropDown_answer_show: 'faq_dropDown_answer_show 4'
+  }
+]
+
 const FAQ = () => {
   const [expandedIndex, setExpandedIndex] = useState(0);
-  const [faqData, setFaqData] = useState(null)
+  const [faqData, setFaqData] = useState(DATA)
 
   const context = useContext(GenericApiContext);
 
@@ -61,21 +89,21 @@ const FAQ = () => {
     }
   ]
 
-  useEffect(() => {
-    const getFAQdata = () => {
-      const url = 'faqlist'
+  // useEffect(() => {
+  //   const getFAQdata = () => {
+  //     const url = 'faqlist'
 
-      context.getGetData(url, 'faqlist');
-    }
+  //     context.getGetData(url, 'faqlist');
+  //   }
 
-    getFAQdata();
-  }, [])
+  //   getFAQdata();
+  // }, [])
 
-  useEffect(() => {
-    if (context.getFaqList) {
-      setFaqData(context.getFaqList.data.data);
-    }
-  }, [context.getFaqList])
+  // useEffect(() => {
+  //   if (context.getFaqList) {
+  //     setFaqData(context.getFaqList.data.data);
+  //   }
+  // }, [context.getFaqList])
 
   return (
     <div className={styles.faq_container_main + ' container'}>
