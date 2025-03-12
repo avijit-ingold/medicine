@@ -89,7 +89,7 @@ const GenericApiProvider = ({ children }) => {
 
     }
 
-    const getCustomerData = async (url) => {
+    const getCustomerData = async (url, parent) => {
         setLoading(true);
         const headers = {
             "Content-Type": "application/json",
@@ -102,7 +102,13 @@ const GenericApiProvider = ({ children }) => {
             url: process.env.REACT_APP_API_URL + url,
             headers: headers
         }).then((res) => {
-            setCustomerData(res)
+            if (parent == 'wishList') {
+                setWishList(res)
+            } else if (parent == 'countries') {
+                setCountries(res)
+            } else {
+                setCustomerData(res)
+            }
         }).finally(() => {
             const timer = setTimeout(() => {
                 setLoading(false);
@@ -152,22 +158,34 @@ const GenericApiProvider = ({ children }) => {
             data: JSON.stringify(requestBody),
             headers: headers
         }).then((res) => {
-            if (res.data.result) {
-                toast.success(res.data.message, {
-                    autoClose: 1100
-                });
+            if (parent === 'addAddress') {
+                if (res) {
+                    toast.success('Successful', {
+                        autoClose: 1100
+                    });
+                } else {
+                    toast.error("Something Went Wrong!", {
+                        autoClose: 1100
+                    });
+                }
             } else {
-                toast.error("Something Went Wrong!", {
-                    autoClose: 1100
-                });
-            }
-            if (parent === 'addToCart') {
-                handleCart();
-                setAddToCartSuccess(true)
-            }
-            if (parent === 'imageUpload') {
-                setProfileImage(res.data.path);
-                sessionStorage.setItem('uploadedImage', res.data.path);
+                if (res.data.result) {
+                    toast.success(res.data.message, {
+                        autoClose: 1100
+                    });
+                } else {
+                    toast.error("Something Went Wrong!", {
+                        autoClose: 1100
+                    });
+                }
+                if (parent === 'addToCart') {
+                    handleCart();
+                    setAddToCartSuccess(true)
+                }
+                if (parent === 'imageUpload') {
+                    setProfileImage(res.data.path);
+                    sessionStorage.setItem('uploadedImage', res.data.path);
+                }
             }
         }).catch((err) => {
             toast.error(`Error: ${err.message || "Something went wrong!"}`);
@@ -252,9 +270,7 @@ const GenericApiProvider = ({ children }) => {
             else if (type === 'cities') {
                 setCities(res)
             }
-            else if (type === 'countries') {
-                setCountries(res)
-            }
+
             else if (type === 'states') {
                 setStates(res)
             }
@@ -275,7 +291,8 @@ const GenericApiProvider = ({ children }) => {
 
     }
 
-    const getGetDataQuick = async (url, type, reqBody) => {
+
+    const getPostDataQuick = async (url, type, reqBody) => {
         checkIfLoggedIn();
         const headers = {
             "Content-Type": "application/json",
@@ -290,7 +307,7 @@ const GenericApiProvider = ({ children }) => {
             data: JSON.stringify(reqBody)
         }).then((res) => {
             if (type === 'sad') {
-                toast.error(`${res.data.message}` + "! 😔", {
+                toast.error(`Removed From WishList` + "! 😔", {
                     icon: "😢",
                     autoClose: 1100,
                     style: {
@@ -299,12 +316,10 @@ const GenericApiProvider = ({ children }) => {
                         border: "1px solid #f5c6cb",
                     },
                 });
-            } else if (type === 'wishList') {
-                setWishList(res)
             } else if (type === 'userAddress') {
                 setUserAddress(res)
-            } else if(type == 'addWishList'){
-                if(res){
+            } else if (type == 'addWishList') {
+                if (res) {
                     toast.success('Successfully Added to Wishlist', {
                         autoClose: 1100
                     });
@@ -406,7 +421,7 @@ const GenericApiProvider = ({ children }) => {
         ifLoggedin,
         loading,
         getGetData,
-        getGetDataQuick,
+        getPostDataQuick,
         handleDeleteCart,
         handleCart,
         getHomeData,

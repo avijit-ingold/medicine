@@ -12,24 +12,38 @@ const WishlistComponent = () => {
   const context = useContext(GenericApiContext)
 
   const removeWishList = (id) => {
-    const url = `wishlists-remove-product?product_id=${id}&user_id=${loggedinData.user.id}`
-    context.getGetDataQuick(url, 'sad');
+    const url = `wishlist/remove`
+    const customerDetails = JSON.parse(sessionStorage.getItem("loginDetails"))
+    const reqBody = {
+      "customerId": customerDetails.id,
+      "productId": id
+    }
+    context.getPostDataQuick(url, 'sad', reqBody);
     setTimeout(() => {
-      const urlWishList = 'wishlists';
-      context.getGetDataQuick(urlWishList, 'wishList');
-    }, 500)
+      const getWishListDetails = () => {
+        const customerDetails = JSON.parse(sessionStorage.getItem("loginDetails"))
+        const url = `wishlist/items?customerId=${customerDetails.id}`
+        context.getCustomerData(url, 'wishList');
+      }
+
+      getWishListDetails();
+    }, 700)
   }
 
   useEffect(() => {
     const getWishListDetails = () => {
-      const url = 'wishlists'
-      context.getGetData(url, 'wishList');
+      const customerDetails = JSON.parse(sessionStorage.getItem("loginDetails"))
+      const url = `wishlist/items?customerId=${customerDetails.id}`
+      context.getCustomerData(url, 'wishList');
     }
+
     getWishListDetails();
   }, [])
 
   useEffect(() => {
-    setWishListData(context.wishList.data.data);
+    if (context.wishList) {
+      setWishListData(context.wishList.data);
+    }
   }, [context.wishList])
 
 
@@ -63,14 +77,14 @@ const WishlistComponent = () => {
                   ))
                 : wishListData &&
                 wishListData.map((product) => (
-                  <div className={styles.wishlist_card} key={product.product.id}>
+                  <div className={styles.wishlist_card} key={product.product_id}>
                     <div className={styles.wishlist_image}>
-                      <img src={product.product.thumbnail_image} alt={product.product.name} />
-                      <button className={styles.delete_btn} onClick={() => removeWishList(product.product.id)}>🗑</button>
+                      <img src={product.image_url} alt={product.product_name} />
+                      <button className={styles.delete_btn} onClick={() => removeWishList(product.product_id)}>🗑</button>
                     </div>
                     <div className={styles.wishlist_info}>
-                      <h3>{product.product.name}</h3>
-                      <p>{product.product.base_price}</p>
+                      <h3>{product.name}</h3>
+                      <p>{'€ ' + product.price}</p>
                     </div>
                   </div>
                 ))}

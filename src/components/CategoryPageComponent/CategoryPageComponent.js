@@ -62,11 +62,15 @@ const CategoryPageComponent = ({ id, loading, parent }) => {
   useEffect(() => {
     if (parent === 'category') {
       const getCategoryProducts = () => {
-        const url = `b2c/getProductsByCategory?categoryId=${id}&pagesize=10&pagenum=1`
-        context.getGetData(url, `categoryDetails`);
+        const loginDetails = sessionStorage.getItem('loginDetails') ? JSON.parse(sessionStorage.getItem('loginDetails')) : null
+        if(loginDetails){
+          const url = `b2c/getProductsByCategory?customerid=${loginDetails.id}&categoryId=${id}&pagesize=10&pagenum=1`
+          context.getGetData(url, `categoryDetails`);
+        }else{
+          const url = `b2c/getProductsByCategory?customerid=&categoryId=${id}&pagesize=10&pagenum=1`
+          context.getGetData(url, `categoryDetails`);
+        }
 
-        const categoriesFilterUrl = 'filter/categories'
-        context.getGetData(categoriesFilterUrl, `filter`)
       }
       getCategoryProducts();
     }
