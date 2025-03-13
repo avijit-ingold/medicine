@@ -447,7 +447,8 @@ const GenericApiProvider = ({ children }) => {
         profileImage,
         purchaseHistory,
         returnData,
-        addToCartSuccess
+        addToCartSuccess,
+        setCartCount
     }
 
     useEffect(() => {

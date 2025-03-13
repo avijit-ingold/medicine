@@ -118,15 +118,27 @@ const Header = () => {
   }
 
   useEffect(() => {
-
+    console.log(8888)
     setTimeout(() => {
-      context.handleCart()
-      setTimeout(() => {        
+      if(sessionStorage.getItem('loginDetails')){        
+        context.handleCart()         
         setUserCartCount(context.cartCount)
-      }, 800)
-    }, 500);
+       }
+    }, 1000);
 
+     
+      // context.handleCart() 
+      // setTimeout(() => {    
+      //   console.log(context.ifLoggedin)
+      //   setUserCartCount(context.cartCount)
+      // }, 1800)
+    
   }, [])
+
+  useEffect(() => {
+    //context.handleCart()
+    setUserCartCount(context.cartCount)
+  },[context.cartCount])
 
   // useEffect(() => {
   //   if (context.getHeaderdata) {
@@ -205,7 +217,9 @@ const Header = () => {
   // }, [])
 
   useEffect(() => {
+    
     getCustomerDetails();
+    context?.handleCart()
   }, [])
 
   return (
@@ -320,7 +334,7 @@ const Header = () => {
               </div>
               <span className={styles.navbar_profile_icons} onClick={() => navigateCart()}>
                 <Cart size={22} />
-                <span className={styles.navbar_cart_amount}>{userCartCount}</span>
+                <span className={styles.navbar_cart_amount}>{context?.cartCount}</span>
               </span>
               {/* {
 
