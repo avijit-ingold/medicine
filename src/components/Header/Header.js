@@ -91,8 +91,9 @@ const Header = () => {
 
   const getCustomerDetails = async () => {
     const url = 'customers/me'
-
-    context.getCustomerData(url);
+    if (sessionStorage.getItem('CustomerToken')) {
+      context.getCustomerData(url);
+    }
   }
 
   const handleProfile = () => {
@@ -118,27 +119,15 @@ const Header = () => {
   }
 
   useEffect(() => {
-    console.log(8888)
+
     setTimeout(() => {
-      if(sessionStorage.getItem('loginDetails')){        
-        context.handleCart()         
+      context.handleCart()
+      setTimeout(() => {
         setUserCartCount(context.cartCount)
-       }
-    }, 1000);
+      }, 800)
+    }, 500);
 
-     
-      // context.handleCart() 
-      // setTimeout(() => {    
-      //   console.log(context.ifLoggedin)
-      //   setUserCartCount(context.cartCount)
-      // }, 1800)
-    
   }, [])
-
-  useEffect(() => {
-    //context.handleCart()
-    setUserCartCount(context.cartCount)
-  },[context.cartCount])
 
   // useEffect(() => {
   //   if (context.getHeaderdata) {
@@ -217,9 +206,7 @@ const Header = () => {
   // }, [])
 
   useEffect(() => {
-    
     getCustomerDetails();
-    context?.handleCart()
   }, [])
 
   return (
@@ -334,7 +321,7 @@ const Header = () => {
               </div>
               <span className={styles.navbar_profile_icons} onClick={() => navigateCart()}>
                 <Cart size={22} />
-                <span className={styles.navbar_cart_amount}>{context?.cartCount}</span>
+                <span className={styles.navbar_cart_amount}>{userCartCount}</span>
               </span>
               {/* {
 
@@ -347,28 +334,24 @@ const Header = () => {
                   </span>)
               } */}
 
-
-
-
-              <span className={`${styles.navbar_profile_icons} ` + `${styles.navbar_profile_container}`} onClick={handleProfile}>
-                <span className={styles.navbar_profile_name}>{custName + ' '}</span>
-
-              </span>
-
-
-
               <span className={styles.navbar_profile_icons}>
                 {
                   customerDetails && customerDetails ? (
                     <>
-                      <span className={styles.navbar_profile_name}>EN</span>
-                      <span><ChevronDown size={13} /></span>
+                      <span className={`${styles.navbar_profile_icons} ` + `${styles.navbar_profile_container}`} onClick={handleProfile}>
+                        <span className={styles.navbar_profile_name}>{custName + ' '}</span>
+
+                      </span>
                     </>
                   ) : (
                     <span className={styles.navbar_profile_name} onClick={() => navigate('/')}>Login</span>
                   )
                 }
               </span>
+              <div>
+                <span className={styles.navbar_profile_name}>EN</span>
+                <span><ChevronDown size={13} /></span>
+              </div>
             </div>
           </div>
         </header>
