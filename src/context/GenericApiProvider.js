@@ -334,41 +334,40 @@ const GenericApiProvider = ({ children }) => {
 
     const handleCart = () => {
         checkIfLoggedIn();
-        if (ifLoggedin) {
-            const headers = {
-                "Content-Type": "application/json",
-                "System-Key": "12345",
-                "Authorization": `Bearer ${loggedinData.access_token}`
-            };
+        // if (ifLoggedin) {
+        const headers = {
+            "Content-Type": "application/json",
+        };
 
-            axios({
-                method: 'GET',
-                url: process.env.REACT_APP_API_URL + 'cart-count',
-                headers: headers
-            }).then((res) => {
-                if (res.data.status) {
-                    setCartCount(res.data.count)
-                } else {
-                    toast.error("Something Went Wrong!", {
-                        autoClose: 1500
-                    });
-                }
-            }).catch((err) => {
-                toast.error(`Error: ${err.message || "Something went wrong!"}`);
-                console.error(err);
-            }).finally(() => {
+        axios({
+            method: 'GET',
+            url: process.env.REACT_APP_API_URL + 'b2c/cartlist?cartid=4&loggin=true', // you got cart id dusring add to cart
+            headers: headers
+        }).then((res) => {
+            if (res.data[0]) {                
+                setCartCount(parseInt(res.data[0].total_qty))
+                setCartList(res)
+            } else {
+                toast.error("Something Went Wrong!", {
+                    autoClose: 1500
+                });
+            }
+        }).catch((err) => {
+            toast.error(`Error: ${err.message || "Something went wrong!"}`);
+            console.error(err);
+        }).finally(() => {
 
-            });
-        }
+        });
+        // }
+
+
     }
 
     const handleDeleteCart = async (url, type) => {
         checkIfLoggedIn();
         const headers = {
             "Content-Type": "application/json",
-            "X-Requested-With": "XMLHttpRequest",
-            "System-Key": "12345",
-            "Authorization": `Bearer ${loggedinData.access_token}`
+            "Authorization": `Bearer ${sessionStorage.getItem('CustomerToken')}`
         };
 
         axios({
@@ -378,7 +377,8 @@ const GenericApiProvider = ({ children }) => {
         }).then((res) => {
             handleCart();
             if (type === 'sad') {
-                toast.error(`${res.data.message}` + "! 😔", {
+                const msg = 'Successfully Removed'
+                toast.error(`${msg}` + "! 😔", {
                     icon: "😢",
                     autoClose: 1000,
                     style: {
