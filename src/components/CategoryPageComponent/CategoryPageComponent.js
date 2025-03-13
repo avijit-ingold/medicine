@@ -119,7 +119,7 @@ const CategoryPageComponent = ({ id, loading, parent }) => {
         <nav aria-label="breadcrumb">
           <ol className={"breadcrumb " + styles.custom_breadcrumb}>
             <li className={styles.breadcrumb_item}>
-              <Link to="/home" className="text-primary text-decoration-none">Home</Link>
+              <Link to="/" className="text-primary text-decoration-none">Home</Link>
             </li>
             <li className={styles.breadcrumb_item + " active text-grey"} aria-current="page">
               {

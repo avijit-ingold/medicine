@@ -28,7 +28,7 @@ const LoginSignup = () => {
 
   const context = useContext(GenericApiContext);
 
-  const from = location.state?.from?.pathname || "/home";
+  const from = location.state?.from?.pathname || "/";
 
   const loginUser = (e) => {
     e.preventDefault();
@@ -171,7 +171,7 @@ const LoginSignup = () => {
   useEffect(() => {
     context.checkIfLoggedIn();
     if (context.ifLoggedin) {
-      navigate('/home')
+      navigate('/')
     }
   }, [context.ifLoggedin])
 

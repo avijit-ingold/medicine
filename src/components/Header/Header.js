@@ -379,7 +379,7 @@ const Header = () => {
                       </span>
                     </>
                   ) : (
-                    <span className={styles.navbar_profile_name} onClick={() => navigate('/')}>Login</span>
+                    <span className={styles.navbar_profile_name} onClick={() => navigate('/login')}>Login</span>
                   )
                 }
               </span>

@@ -508,7 +508,7 @@ const CartComponent = () => {
               />
               <h1>Your Cart is Empty</h1>
               <p>It looks like you haven't added anything to your cart yet.</p>
-              <button className={styles.shop_now_button} onClick={() => navigate('/home')}>Shop Now</button>
+              <button className={styles.shop_now_button} onClick={() => navigate('/')}>Shop Now</button>
             </div>
           </div>
         </>

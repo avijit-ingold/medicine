@@ -325,7 +325,7 @@ const ProductDetailsComponent = ({ id, loading }) => {
             <div className={styles.productDetails_main_contaier}>
               <div className='container'>
                 <div className="d-block d-lg-none mb-3">
-                  <span className={styles.breadCrumb_section}><Link to="/home" className="text-primary text-decoration-none">Home</Link> &nbsp; &nbsp;  &gt; &nbsp; &nbsp; {productDetail.name} </span>
+                  <span className={styles.breadCrumb_section}><Link to="/" className="text-primary text-decoration-none">Home</Link> &nbsp; &nbsp;  &gt; &nbsp; &nbsp; {productDetail.name} </span>
                 </div>
                 <div className={styles.productSpecs_container + ' row'}>
                   <div className={styles.product_spec_cont + ' col-md-7 col-12'}>
@@ -347,7 +347,7 @@ const ProductDetailsComponent = ({ id, loading }) => {
                     </div>
                   </div>
                   <div className={styles.productDescription_container + ' col-md-5 col-12'}>
-                    <span className={styles.breadCrumb_section + ' d-none d-lg-block'}><Link to="/home" className="text-primary text-decoration-none">Home</Link> &nbsp; &nbsp;  &gt; &nbsp; &nbsp; {productDetail.name} </span>
+                    <span className={styles.breadCrumb_section + ' d-none d-lg-block'}><Link to="/" className="text-primary text-decoration-none">Home</Link> &nbsp; &nbsp;  &gt; &nbsp; &nbsp; {productDetail.name} </span>
                     <h1 className={styles.product_name}>{productDetail.name}</h1>
                     <span className={styles.product_shop}>Lorem Ipsum</span>
                     <p className={styles.product_desc}>{productDetail.short_description}</p>
