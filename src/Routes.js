@@ -18,8 +18,8 @@ const AppRoutes = () => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Auth />} />
-                <Route path="/home" element={
+                <Route path="/login" element={<Auth />} />
+                <Route path="/" element={
                     <Home />
                 } />
                 <Route path="/myProfile" element={
