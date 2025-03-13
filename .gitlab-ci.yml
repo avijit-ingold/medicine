@@ -1,0 +1,14 @@
+dev-deployment:
+ variables:
+   GIT_STRATEGY: fetch
+ script:
+   - bash ~/gitlab/node.sh
+ environment:
+     name: Development
+     url : https://health.ingold-dev.com
+     
+ tags:
+   - node
+ only:
+   - dev
+   
