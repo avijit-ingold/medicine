@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import styles from './Header.module.css';
-import { Facebook, Instagram, TwitterX, Youtube, GeoAlt, Envelope, Search, Cart, Person, ChevronDown } from 'react-bootstrap-icons';
-// import logo from '../../../src/assets/images/Medical/logo.jpg'
+import { Facebook, Instagram, TwitterX, Youtube, GeoAlt, Envelope, Search, Cart, ChevronDown } from 'react-bootstrap-icons';
 import logo from '../../../src/assets/images/Medical/logo 1.png'
 import { GenericApiContext } from '../../context/GenericApiContext';
 import { useNavigate } from 'react-router-dom';
@@ -59,7 +58,7 @@ const Header = () => {
   const handleMenuClick = (index, route) => {
     setSelectedIndex(index);
     if (route === 'Home') {
-      navigate('/' + route)
+      navigate('/')
     }
     else if (route === 'All Categories') {
       setShowCategories(!showCategories)
@@ -218,28 +217,6 @@ const Header = () => {
     }
   }, [context.getBrandData])
 
-  // useEffect(() => {
-  //   const getBannerImage = () => {
-  //     const url = 'business-settings'
-  //     context.getGetData(url, 'headerMenu');
-  //   }
-
-  //   const getBrandNames = () => {
-  //     const url = 'brands'
-  //     context.getGetData(url, 'brandData');
-  //   }
-
-  //   const categoriesImage = () => {
-  //     const url = 'categories/top'
-
-  //     context.getGetData(url, 'categories');
-  //   }
-
-  //   categoriesImage();
-  //   getBrandNames();
-  //   getBannerImage();
-  // }, [])
-
   useEffect(() => {
     getCustomerDetails();
   }, [])
@@ -290,15 +267,6 @@ const Header = () => {
         <header className={"app-header " + `${styles.navbar_navigation_container}`}>
           <div className={'container ' + `${styles.navbar_Navigator_container}`}>
             <div className={styles.navbar_Navigator_menu_container}>
-              {/* {headerData && JSON.parse(headerData.value).map((text, ind) => {
-                return (
-                  <span ref={ref} className={`${styles.homePage_banner_selector_text} ` + `${selectedIndex === ind ? styles.navBar_menu_selected : ''}`} key={ind} onClick={(() => {
-                    handleMenuClick(ind, text)
-                  })}>
-                    {text}
-                  </span>
-                )
-              })} */}
               {headerData.map((text, ind) => {
                 return (
                   <span ref={ref} className={`${styles.homePage_banner_selector_text} ` + `${selectedIndex === ind ? styles.navBar_menu_selected : ''}`} key={ind} onClick={(() => {
@@ -308,7 +276,6 @@ const Header = () => {
                   </span>
                 )
               })}
-
               {
                 showCategories && (
                   <div className={styles.categriesDropDown} ref={ref}>
@@ -336,7 +303,6 @@ const Header = () => {
                           )
                         })
                       }
-
                     </div>
                   </div>
                 )

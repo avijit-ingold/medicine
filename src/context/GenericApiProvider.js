@@ -343,32 +343,35 @@ const GenericApiProvider = ({ children }) => {
     }
 
     const handleCart = () => {
-        checkIfLoggedIn();
-        // if (ifLoggedin) {
-        const headers = {
-            "Content-Type": "application/json",
-        };
+        if (sessionStorage.getItem('QuoteID')) {
+            checkIfLoggedIn();
+            // if (ifLoggedin) {
+            const headers = {
+                "Content-Type": "application/json",
+            };
 
-        axios({
-            method: 'GET',
-            url: process.env.REACT_APP_API_URL + 'b2c/cartlist?cartid=4&loggin=true', // you got cart id dusring add to cart
-            headers: headers
-        }).then((res) => {
-            if (res.data[0]) {
-                setCartCount(parseInt(res.data[0].total_qty))
-                setCartList(res)
-            } else {
-                toast.error("Something Went Wrong!", {
-                    autoClose: 1500
-                });
-            }
-        }).catch((err) => {
-            toast.error(`Error: ${err.message || "Something went wrong!"}`);
-            console.error(err);
-        }).finally(() => {
+            axios({
+                method: 'GET',
+                url: process.env.REACT_APP_API_URL + `b2c/cartlist?cartid=${sessionStorage.getItem('QuoteID')}&loggin=true`, // you got cart id dusring add to cart
+                headers: headers
+            }).then((res) => {
+                if (res.data[0]) {
+                    setCartCount(parseInt(res.data[0].total_qty))
+                    setCartList(res)
+                } else {
+                    toast.error("Something Went Wrong!", {
+                        autoClose: 1500
+                    });
+                }
+            }).catch((err) => {
+                toast.error(`Error: ${err.message || "Something went wrong!"}`);
+                console.error(err);
+            }).finally(() => {
 
-        });
-        // }
+            });
+            // }
+
+        }
 
 
     }
