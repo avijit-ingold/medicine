@@ -76,8 +76,8 @@
 }
 
 .navbar_headLogo {
-    height: 44px;
-    width: 46px;
+    height: auto;
+    width: 140px;
 }
 
 .navbar_head_text {

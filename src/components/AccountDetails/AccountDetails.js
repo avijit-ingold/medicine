@@ -7,7 +7,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 const AccountDetails = () => {
   const [userAddress, setUserAddress] = useState([]);
-  const [hasDefaultAddress, setHasDefaultAddress] = useState();
+  const [hasDefaultAddress, setHasDefaultAddress] = useState(false);
   const [show, setShow] = useState(false);
   const [imageModalShow, setImageModalShow] = useState(false);
   const [newPassword, setNewPassword] = useState("");
@@ -19,44 +19,47 @@ const AccountDetails = () => {
   const [spinnerLoading, setSpinnerLoading] = useState(false);
   const [wishListData, setWishListData] = useState();
   const [recentlyBought, setRecentlyBought] = useState(null);
+  const [customerDetails, setCustomerDetails] = useState(null);
 
   const context = useContext(GenericApiContext);
   const location = useLocation();
 
   const navigate = useNavigate();
 
-  const getAddress = () => {
-    const url = 'user/shipping/address';
-    if(context.ifLoggedin){
-    context.getGetDataQuick(url, 'userAddress');
-    }
+  const getCustomerDetails = async () => {
+    const url = 'customers/me'
+
+    context.getCustomerData(url);
   }
+
 
   const getWishListDetails = () => {
-    const url = 'wishlists'
-    if(context.ifLoggedin){
-    context.getGetDataQuick(url, 'wishList');
+    const getWishListDetails = () => {
+      const customerDetails = JSON.parse(sessionStorage.getItem("loginDetails"))
+      const url = `wishlist/items?customerId=${customerDetails.id}`
+      context.getCustomerData(url, 'wishList');
     }
+    getWishListDetails();
   }
 
-  const getOrderDetails = () => {
-    const url = 'purchase-history'
-    if(context.ifLoggedin){
-      context.getGetData(url, 'purchaseHistory');
-    }
-  }
+  // const getOrderDetails = () => {
+  //   const url = 'purchase-history'
+  //   if (context.ifLoggedin) {
+  //     context.getGetData(url, 'purchaseHistory');
+  //   }
+  // }
 
   const handleClose = () => setShow(false);
 
   useEffect(() => {
-    getAddress();
+    getCustomerDetails();
     getWishListDetails();
-    getOrderDetails();
+    // getOrderDetails();
   }, [])
 
   useEffect(() => {
     if (context.wishList) {
-      setWishListData(context.wishList.data.data);
+      setWishListData(context.wishList.data);
     }
   }, [context.wishList])
 
@@ -120,24 +123,31 @@ const AccountDetails = () => {
     handleModalClose();
   };
 
-  useEffect(() => {
-    if (context.userAddress) {
-      setUserAddress(context.userAddress.data.data);
-    }
-  }, [context.userAddress])
 
   useEffect(() => {
-    if (userAddress.length > 0) {
-      const defaultAddress = userAddress.find(item => item.set_default == 1)
-      setHasDefaultAddress(defaultAddress);
+    if (context.customerData) {
+      setCustomerDetails(context.customerData.data)
+      const validAddresses = context.customerData.data.addresses.filter(
+        (address) => address.default_billing && address.default_shipping
+      );
+      console.log(validAddresses)
+      setHasDefaultAddress(true);
+      setUserAddress(validAddresses)
     }
-  }, [userAddress])
+  }, [context.customerData])
 
-  useEffect(() => {
-    if (context.purchaseHistory) {
-      setRecentlyBought(context.purchaseHistory.data.data)
-    }
-  }, [context.purchaseHistory])
+  // useEffect(() => {
+  //   if (userAddress.length > 0) {
+  //     const defaultAddress = userAddress.find(item => item.set_default == 1)
+  //     setHasDefaultAddress(defaultAddress);
+  //   }
+  // }, [userAddress])
+
+  // useEffect(() => {
+  //   if (context.purchaseHistory) {
+  //     setRecentlyBought(context.purchaseHistory.data.data)
+  //   }
+  // }, [context.purchaseHistory])
 
 
 
@@ -153,19 +163,19 @@ const AccountDetails = () => {
 
           </div>
           {
-            context.loggedinData && context.loggedinData.user && (
+            customerDetails && (
               <div className={styles.info_card}>
                 <div className={styles.details_card}>
                   <h3>Contact Information</h3>
-                  <p>{context.loggedinData.user.name}</p>
-                  <p>{context.loggedinData.user.email}</p>
+                  <p>{customerDetails.firstname + ' ' + customerDetails.lastname}</p>
+                  <p>{customerDetails.email}</p>
                   <div className={styles.info_actions}>
                     <a>Edit</a> | <a onClick={() => setShow(true)}>Change Password</a>
                   </div>
                 </div>
                 <div className={styles.profile_image_container_main}>
                   <div className={styles.profile_image_container} onClick={() => setImageModalShow(true)}>
-                    <img className={styles.profile_image} src={context.profileImage ? context.profileImage : sessionStorage.getItem('uploadedImage') ? sessionStorage.getItem('uploadedImage') : context.loggedinData.user.avatar_original} />
+                    {/* <img className={styles.profile_image} src={context.profileImage ? context.profileImage : sessionStorage.getItem('uploadedImage') ? sessionStorage.getItem('uploadedImage') : context.loggedinData.user.avatar_original} /> */}
                     <span className={styles.profile_change_image}><Camera color='white' /></span>
                   </div>
                 </div>
@@ -184,20 +194,18 @@ const AccountDetails = () => {
               {
                 hasDefaultAddress ?
                   userAddress && userAddress.map((ele, key) => {
-                    if (ele.set_default > 0) {
-                      return (
-                        <div key={key} className={styles.default_address_card}>
-                          <h3>Default Shipping Address</h3>
-                          <p>{ele.address}</p>
-                          <p>{ele.city_name}</p>
-                          <p>{ele.city_name},{ele.state_name},{ele.postal_code}</p>
-                          <p>{ele.country_name}</p>
-                          <p>
-                            T: <a style={{ textDecoration: 'none' }}>{ele.phone}</a>
-                          </p>
-                        </div>
-                      )
-                    }
+                    return (
+                      <div key={key} className={styles.default_address_card}>
+                        <h3>Default Shipping Address</h3>
+                        <p>{ele.street[0]}</p>
+                        <p>{ele.city}</p>
+                        <p>{ele.street[0]},{ele.city},{ele.postcode}</p>
+                        <p>{ele.country_id}</p>
+                        <p>
+                          T: <a style={{ textDecoration: 'none' }}>{ele.telephone}</a>
+                        </p>
+                      </div>
+                    )
                   })
                   : (
                     <h3>No Default Shipping Address Selected</h3>
@@ -226,14 +234,14 @@ const AccountDetails = () => {
           <div className={styles.my_wishlist}>
             {wishListData && wishListData.map((product, key) => {
               return (
-                <div className={styles.wishlist_card} key={product.product.id}>
+                <div className={styles.wishlist_card} key={product.product_id}>
                   <div className={styles.wishlist_image}>
-                    <img src={product.product.thumbnail_image} alt={product.product.name} />
+                    <img src={product.image_url} alt={product.product_name} />
                     {/* <button className={styles.delete_btn} onClick={() => removeWishList(product.product.id)}>🗑</button> */}
                   </div>
                   <div className={styles.wishlist_info}>
-                    <h3>{product.product.name}</h3>
-                    <p>{product.product.base_price}</p>
+                    <h3>{product.product_name}</h3>
+                    <p>{'€ ' + product.price}</p>
                   </div>
                 </div>
               )

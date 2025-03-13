@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import styles from './Header.module.css';
 import { Facebook, Instagram, TwitterX, Youtube, GeoAlt, Envelope, Search, Cart, Person, ChevronDown } from 'react-bootstrap-icons';
-import logo from '../../../src/assets/images/Medical/logo.jpg'
+// import logo from '../../../src/assets/images/Medical/logo.jpg'
+import logo from '../../../src/assets/images/Medical/logo 1.png'
 import { GenericApiContext } from '../../context/GenericApiContext';
 import { useNavigate } from 'react-router-dom';
 import { encryptData, decryptData } from "../../utils/CryptoUtils";
@@ -25,13 +26,15 @@ export const useClickOutside = (callback) => {
   return ref;
 };
 
+const data = ['Home', 'About us', 'Flash deal', 'All Categories']
+
 const Header = () => {
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [searchText, setSearchText] = useState('')
   const [custName, setCustName] = useState();
   const [customerDetails, setCustomerDetails] = useState(null);
-  const [headerData, setHeaderData] = useState();
+  const [headerData, setHeaderData] = useState(data);
   const [showCategories, setShowCategories] = useState(false);
   const [categories, setCategories] = useState([]);
   const [brandData, setBrandData] = useState(null);
@@ -115,14 +118,21 @@ const Header = () => {
   }
 
   useEffect(() => {
-    setUserCartCount(context.cartCount)
-  }, [context.cartCount])
 
-  useEffect(() => {
-    if (context.getHeaderdata) {
-      setHeaderData(context.getHeaderdata.data.data.find(item => item.type === "header_menu_labels"));
-    }
-  }, [context.getHeaderdata])
+    setTimeout(() => {
+      context.handleCart()
+      setTimeout(() => {        
+        setUserCartCount(context.cartCount)
+      }, 800)
+    }, 500);
+
+  }, [])
+
+  // useEffect(() => {
+  //   if (context.getHeaderdata) {
+  //     setHeaderData(context.getHeaderdata.data.data.find(item => item.type === "header_menu_labels"));
+  //   }
+  // }, [context.getHeaderdata])
 
   useEffect(() => {
     if (context.customerData) {
@@ -140,11 +150,12 @@ const Header = () => {
 
   useEffect(() => {
     if (context.getCategoryData) {
+
       var tempArray = []
-      if (context.getCategoryData.data.data) {
-        setCategories(context.getCategoryData.data.data)
-        if (context.getCategoryData.data.data.length > 0) {
-          context.getCategoryData.data.data.map((ele) => {
+      if (context.getCategoryData.data) {
+        setCategories(context.getCategoryData.data)
+        if (context.getCategoryData.data.length > 0) {
+          context.getCategoryData.data.map((ele) => {
             const encrypted = encryptData(ele.id);
             tempArray.push(encrypted);
           })
@@ -171,27 +182,27 @@ const Header = () => {
     }
   }, [context.getBrandData])
 
-  useEffect(() => {
-    const getBannerImage = () => {
-      const url = 'business-settings'
-      context.getGetData(url, 'headerMenu');
-    }
+  // useEffect(() => {
+  //   const getBannerImage = () => {
+  //     const url = 'business-settings'
+  //     context.getGetData(url, 'headerMenu');
+  //   }
 
-    const getBrandNames = () => {
-      const url = 'brands'
-      context.getGetData(url, 'brandData');
-    }
+  //   const getBrandNames = () => {
+  //     const url = 'brands'
+  //     context.getGetData(url, 'brandData');
+  //   }
 
-    const categoriesImage = () => {
-      const url = 'categories/top'
+  //   const categoriesImage = () => {
+  //     const url = 'categories/top'
 
-      context.getGetData(url, 'categories');
-    }
+  //     context.getGetData(url, 'categories');
+  //   }
 
-    categoriesImage();
-    getBrandNames();
-    getBannerImage();
-  }, [])
+  //   categoriesImage();
+  //   getBrandNames();
+  //   getBannerImage();
+  // }, [])
 
   useEffect(() => {
     getCustomerDetails();
@@ -243,7 +254,16 @@ const Header = () => {
         <header className={"app-header " + `${styles.navbar_navigation_container}`}>
           <div className={'container ' + `${styles.navbar_Navigator_container}`}>
             <div className={styles.navbar_Navigator_menu_container}>
-              {headerData && JSON.parse(headerData.value).map((text, ind) => {
+              {/* {headerData && JSON.parse(headerData.value).map((text, ind) => {
+                return (
+                  <span ref={ref} className={`${styles.homePage_banner_selector_text} ` + `${selectedIndex === ind ? styles.navBar_menu_selected : ''}`} key={ind} onClick={(() => {
+                    handleMenuClick(ind, text)
+                  })}>
+                    {text}
+                  </span>
+                )
+              })} */}
+              {headerData.map((text, ind) => {
                 return (
                   <span ref={ref} className={`${styles.homePage_banner_selector_text} ` + `${selectedIndex === ind ? styles.navBar_menu_selected : ''}`} key={ind} onClick={(() => {
                     handleMenuClick(ind, text)
@@ -252,6 +272,7 @@ const Header = () => {
                   </span>
                 )
               })}
+
               {
                 showCategories && (
                   <div className={styles.categriesDropDown} ref={ref}>
@@ -287,7 +308,7 @@ const Header = () => {
             </div>
             <div className={styles.navbar_headLogo_text_container}>
               <img className={styles.navbar_headLogo} src={logo} alt='logo' />
-              <span className={styles.navbar_head_text}>Health Life</span>
+              {/* <span className={styles.navbar_head_text}>Health Life</span> */}
             </div>
             <div className={styles.navbar_pofile_search_section_container}>
               <div className={styles.navbar_search_bar} style={searchText !== '' ? { width: '300px', cursor: 'pointer' } : {}}>
@@ -301,7 +322,7 @@ const Header = () => {
                 <Cart size={22} />
                 <span className={styles.navbar_cart_amount}>{userCartCount}</span>
               </span>
-              {
+              {/* {
 
                 profileImage == null ?
                   (<span className={`${styles.navbar_profile_icons} ` + `${styles.navbar_profile_container}`} onClick={handleProfile}>
@@ -310,13 +331,23 @@ const Header = () => {
                   (<span className={`${styles.navbar_profile_icons} ` + `${styles.navbar_profile_container}`} onClick={handleProfile}>
                     <img className={styles.header_profile_image} src={context.profileImage ? context.profileImage : sessionStorage.getItem('uploadedImage') ? sessionStorage.getItem('uploadedImage') : profileImage} />
                   </span>)
-              }
+              } */}
+
+
+
+
+              <span className={`${styles.navbar_profile_icons} ` + `${styles.navbar_profile_container}`} onClick={handleProfile}>
+                <span className={styles.navbar_profile_name}>{custName + ' '}</span>
+
+              </span>
+
+
 
               <span className={styles.navbar_profile_icons}>
                 {
-                 customerDetails && customerDetails ? (
+                  customerDetails && customerDetails ? (
                     <>
-                      <span className={styles.navbar_profile_name}>{custName + ' '}</span>
+                      <span className={styles.navbar_profile_name}>EN</span>
                       <span><ChevronDown size={13} /></span>
                     </>
                   ) : (

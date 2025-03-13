@@ -9,26 +9,26 @@ const OfferBanner = () => {
 
   const context = useContext(GenericApiContext)
 
-  useEffect(() => {
-    const getOfferBannerDetails = () => {
-      const url = 'business-settings'
+  // useEffect(() => {
+  //   const getOfferBannerDetails = () => {
+  //     const url = 'business-settings'
 
-      context.getGetData(url, 'headerMenu');
-    }
+  //     context.getGetData(url, 'headerMenu');
+  //   }
 
-    getOfferBannerDetails();
-  }, [])
+  //   getOfferBannerDetails();
+  // }, [])
 
-  useEffect(() => {
-    if (context.getHeaderdata) {
-      const title = {
-        title: context.getHeaderdata.data.data.find(item => item.type === "endodfsale_title"),
-        subTitle: context.getHeaderdata.data.data.find(item => item.type === "endodfsale_subtitle"),
-        heading: context.getHeaderdata.data.data.find(item => item.type === "endodfsale_heading")
-      }
-      setSaleArray(title);
-    }
-  }, [context.getHeaderdata])
+  // useEffect(() => {
+  //   if (context.getHeaderdata) {
+  //     const title = {
+  //       title: context.getHeaderdata.data.data.find(item => item.type === "endodfsale_title"),
+  //       subTitle: context.getHeaderdata.data.data.find(item => item.type === "endodfsale_subtitle"),
+  //       heading: context.getHeaderdata.data.data.find(item => item.type === "endodfsale_heading")
+  //     }
+  //     setSaleArray(title);
+  //   }
+  // }, [context.getHeaderdata])
 
 
   return (
@@ -36,22 +36,22 @@ const OfferBanner = () => {
       <div className={styles.OfferBanner_main_container + ' mt-5'}>
         <div className={styles.OfferBanner_image_overLay_container}>
           <div className={styles.OfferBanner_text_container}>
-            {saleArray && (
-              <>
+            
+              
                 <span className={styles.OfferBanner_heading_text}>
-                  {saleArray.heading.value}
+                  {/* {saleArray.heading.value} */} Week End SALE
                 </span>
                 <span className={styles.OfferBanner_sub_heading_Description + ' d-none d-lg-block d-xl-block d-md-block'}>
-                  {saleArray.title.value}
+                  {/* {saleArray.title.value} */} Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 </span>
                 <span className={styles.OfferBanner_Description + ' d-none d-lg-block d-xl-block d-md-block'}>
-                  {saleArray.subTitle.value}
+                  {/* {saleArray.subTitle.value} */} Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.
                 </span>
                 <span className={styles.OfferBanner_Button}>
                   SHOP NOW
                 </span>
-              </>
-            )}
+             
+           
 
           </div>
         </div>

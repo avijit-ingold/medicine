@@ -2,107 +2,232 @@ import React, { useState, useEffect, useContext, useRef } from 'react';
 import styles from './AddressDetails.module.css';
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
 import { GenericApiContext } from '../../context/GenericApiContext';
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const AddressDetails = () => {
   const [show, setShow] = useState(false);
   const [userAddress, setUserAddress] = useState([]);
   const [userCountries, setUserCountries] = useState();
-  const [userCities, setUserCities] = useState();
   const [userState, setUserState] = useState();
   const [hasDefaultAddress, setHasDefaultAddress] = useState();
+  const [allAddress, setAllAddress] = useState([]);
+  const [customerDetails, setCustomerDetails] = useState(null);
+  const [billingChecked, setBillingChecked] = useState(false);
+  const [isEditAddress, setIsEditAddress] = useState(false)
+  const [addressId, setAddressId] = useState('');
 
   const context = useContext(GenericApiContext);
 
   const phoneNumber = useRef(null);
   const country = useRef(null);
-  const city = useRef(null);
   const zipCode = useRef(null);
   const addressName = useRef(null);
   const state = useRef(null);
+  const firstName = useRef(null);
+  const lastName = useRef(null);
+  const companyName = useRef(null);
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = () => {
+    setIsEditAddress(false)
+    setShow(true);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const reqBody = {
-      "user_id": context.loggedinData.user.id,
-      "address": addressName.current.value,
-      "country_id": country.current.value,
-      "state_id": state.current.value,
-      "city_id": city.current.value,
-      "postal_code": zipCode.current.value,
-      "phone": phoneNumber.current.value
+      "addressData": {
+        "region": {
+          "region_code": null,
+          "region": "ddd",
+          "region_id": 0
+        },
+        "country_id": country.current.value ? country.current.value : '',
+        "street": [
+          addressName.current.value ? addressName.current.value : ''
+        ],
+        "company": companyName.current.value ? companyName.current.value : '',
+        "telephone": phoneNumber.current.value ? phoneNumber.current.value : '',
+        "postcode": zipCode.current.value ? zipCode.current.value : '',
+        "city": state.current ? state.current.value : '',
+        "firstname": firstName.current.value ? firstName.current.value : '',
+        "lastname": lastName.current.value ? lastName.current.value : '',
+        "default_shipping": 0,
+        "default_billing": 0
+      }
     }
-    const url = 'user/shipping/create';
-
-    context.getPostDataWithAuth(url, reqBody, '')
-    getUserAddressdetails();
-    setShow(false);
-
+    if (!isEditAddress) {
+      const loginDetails = JSON.parse(sessionStorage.getItem('loginDetails'))
+      const url = `create-address/${loginDetails.id}?defaultShipping=${billingChecked ? 1 : 0}&defaultBilling=${billingChecked ? 1 : 0}`;
+      context.getPostDataWithAuth(url, reqBody, 'addAddress')
+      setTimeout(() => {
+        getCustomerDetails()
+      }, 1000)
+      setShow(false);
+    } else {
+      const url = `update-address/${addressId}?defaultShipping=${billingChecked ? 1 : 0}&defaultBilling=${billingChecked ? 1 : 0}`;
+      updateAddress(url, reqBody)
+      setTimeout(() => {
+        getCustomerDetails()
+      }, 1000)
+      setShow(false);
+    }
   };
 
+  const updateAddress = async (url, reqBody) => {
+    const headers = {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${sessionStorage.getItem('AdminToken')}`
+    };
+
+    axios({
+      method: 'PUT',
+      url: process.env.REACT_APP_API_URL + url,
+      data: JSON.stringify(reqBody),
+      headers: headers
+    }).then((res) => {
+      if (res) {
+        toast.success('Successfully Updated Address', {
+          autoClose: 1100
+        });
+      } else {
+        toast.error("Something Went Wrong!", {
+          autoClose: 1100
+        });
+      }
+
+    }).catch((err) => {
+      toast.error(`Error: ${err.message || "Something went wrong!"}`);
+      console.error(err);
+    }).finally(() => {
+
+    });
+  }
+
+  const getCustomerDetails = async () => {
+    const url = 'customers/me'
+
+    context.getCustomerData(url);
+  }
+
   const getUserAddressdetails = () => {
-    const url = [
-      { url: 'user/shipping/address', name: 'userAddress' },
-      { url: 'cities', name: 'cities' },
-      { url: 'countries', name: 'countries' },
-      { url: 'states', name: 'states' }
-    ];
+    const url = 'directory/countries'
 
-    url.map((ele) => {
-      context.getGetData(ele.url, ele.name);
-    })
+    context.getCustomerData(url, 'countries');
   }
 
-  const deleteAddress = (param) => {
-    const url = `user/shipping/delete/${param.id}`
-    context.getGetDataQuick(url, '')
+  const getAvailableRegions = (countryId) => {
+    const country = userCountries.find(c => c.id === countryId);
+    setUserState(country && country.available_regions ? country.available_regions : []);
+  }
+
+  const handleShippingChange = (e) => {
+    setBillingChecked(e.target.checked);
+  };
+
+  const getStateCode = (stateName) => {
+    const state = userState.find((s) => s.name.toLowerCase() === stateName.toLowerCase());
+    return state ? state.code : "State not found";
+  };
+
+  const handleEditAddresss = (param) => {
+    setIsEditAddress(true)
+    setAddressId(param.id)
+    setShow(true);
     setTimeout(() => {
-      getUserAddressdetails();
-    }, 300)
+      if (country.current) {
+        country.current.value = param.country_id ? param.country_id : '';
+      }
+      if (phoneNumber.current) {
+        phoneNumber.current.value = param.telephone ? param.telephone : '';
+      }
+      if (zipCode.current) {
+        zipCode.current.value = param.postcode ? param.postcode : '';
+      }
+      if (addressName.current) {
+        addressName.current.value = param.street[0] ? param.street[0] : '';
+      }
+      if (state.current) {
+        getAvailableRegions(param.country_id)
+        state.current.value = param.country_id ? getStateCode(param.country_id) : '';
+      }
+      if (firstName.current) {
+        console.log(param.firstName)
+        firstName.current.value = param.firstname ? param.firstname : '';
+      }
+      if (lastName.current) {
+        lastName.current.value = param.lastname ? param.lastname : '';
+      }
+      if (companyName.current) {
+        companyName.current.value = param.company ? param.company : '';
+      }
+    }, 200)
+
+
   }
 
-  const makeDefault = (param) => {
-    const url = 'user/shipping/make_default';
 
-    const reqBody = {
-      id: param.id
-    }
+  const deleteAddress = (id) => {
+    const headers = {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${sessionStorage.getItem('AdminToken')}`
+    };
 
-    context.getPostDataWithAuth(url, reqBody, '')
-    setTimeout(() => {
-      getUserAddressdetails();
-    }, 1300)
+    axios({
+      method: 'DELETE',
+      url: process.env.REACT_APP_API_URL + `addresses/${id}`,
+      headers: headers
+    }).then((res) => {
+      if (res) {
+        toast.success('Successfully Deleted Address', {
+          autoClose: 1100
+        });
+      } else {
+        toast.error("Something Went Wrong!", {
+          autoClose: 1100
+        });
+      }
+
+    }).catch((err) => {
+      toast.error(`Error: ${err.message || "Something went wrong!"}`);
+      console.error(err);
+    }).finally(() => {
+      setTimeout(() => {
+        getCustomerDetails()
+      }, 1000)
+    });
+
   }
+
 
   useEffect(() => {
-    getUserAddressdetails();
+    getCustomerDetails()
+    getUserAddressdetails()
   }, [])
 
   useEffect(() => {
-    if (context.userAddress) {
-      setUserAddress(context.userAddress.data.data);
+    if (context.customerData) {
+      setCustomerDetails(context.customerData.data)
+      setAllAddress(context.customerData.data.addresses)
+      const validAddresses = context.customerData.data.addresses.filter(
+        (address) => address.default_billing && address.default_shipping
+      );
+      if (validAddresses.length > 0) {
+        setHasDefaultAddress(true);
+      } else {
+        setHasDefaultAddress(false);
+      }
+      setUserAddress(validAddresses)
     }
-    if (context.cities) {
-      setUserCities(context.cities.data.data);
-    }
-    if (context.countries) {
-      setUserCountries(context.countries.data.data);
-    }
-    if (context.states) {
-      setUserState(context.states.data.data)
-    }
-  }, [context.userAddress, context.cities, context.countries, context.states])
+  }, [context.customerData])
 
   useEffect(() => {
-    if (userAddress.length > 0){
-      const defaultAddress = userAddress.find(item => item.set_default == 1)
-      setHasDefaultAddress(defaultAddress);
+    if (context.countries) {
+      setUserCountries(context.countries.data)
     }
-  }, [userAddress])
-
+  }, [context.countries])
 
   return (
     <>
@@ -113,23 +238,22 @@ const AddressDetails = () => {
           {
             hasDefaultAddress ?
               userAddress && userAddress.map((ele, key) => {
-                if (ele.set_default > 0) {
-                  return (
-                    <div key={key} className={styles.default_address_card}>
-                      <h3>Default Shipping Address</h3>
-                      <p>{ele.address}</p>
-                      <p>{ele.city_name}</p>
-                      <p>{ele.city_name},{ele.state_name},{ele.postal_code}</p>
-                      <p>{ele.country_name}</p>
-                      <p>
-                        T: <a href="tel:676767678">{ele.phone}</a>
-                      </p>
-                      <a className={styles.change_link}>
-                        Change Shipping Address
-                      </a>
-                    </div>
-                  )
-                }
+                return (
+                  <div key={key} className={styles.default_address_card}>
+                    <h3>Default Shipping Address</h3>
+                    <p>{ele.firstname + ' ' + ele.lastname}</p>
+                    <p>{ele.street[0]}</p>
+                    <p>{ele.city}</p>
+                    <p>{ele.street[0]},{ele.city},{ele.postcode}</p>
+                    <p>{ele.country_id}</p>
+                    <p>
+                      T: <a href="tel:676767678">{ele.telephone}</a>
+                    </p>
+                    <a className={styles.change_link}>
+                      Change Shipping Address
+                    </a>
+                  </div>
+                )
               })
               : (
                 <h3>No Default Shipping Address Selected</h3>
@@ -155,21 +279,24 @@ const AddressDetails = () => {
             </thead>
             <tbody>
               {
-                userAddress && userAddress.map((ele, id) => {
+                allAddress && allAddress.map((ele, id) => {
                   return (
                     <tr key={id}>
-                      <td>{ele.address}</td>
-                      <td>{ele.address}</td>
-                      <td>{ele.city_name}</td>
-                      <td>{ele.country_name}</td>
-                      <td>{ele.state_name}</td>
-                      <td>{ele.postal_code}</td>
-                      <td>{ele.phone}</td>
+                      <td>{ele.firstname + ' ' + ele.lastname}</td>
+                      <td>{ele.street[0]}</td>
+                      <td>{ele.city}</td>
+                      <td>{ele.country_id}</td>
+                      <td>{ele.city}</td>
+                      <td>{ele.postcode}</td>
+                      <td>{ele.telephone}</td>
                       <td>
-                        <a className={styles.edit_link}>Edit</a> |{" "}
-                        <a className={styles.delete_link} onClick={() => deleteAddress(ele)}>Delete</a>
+
+
                         {
-                          ele.set_default > 0 ? ('') : (<a className={styles.default_link} onClick={() => makeDefault(ele)}>  |{" "}Make Default</a>)
+                          !ele.default_shipping && (<>
+                            <a className={styles.delete_link} onClick={() => deleteAddress(ele.id)}>Delete</a>
+                            <a className={styles.edit_link} onClick={() => handleEditAddresss(ele)}> | Edit</a>
+                          </>)
                         }
                       </td>
                     </tr>
@@ -194,18 +321,18 @@ const AddressDetails = () => {
             <Row className="mb-3">
               <Form.Group as={Col} controlId="formFirstName">
                 <Form.Label>First Name </Form.Label>
-                <Form.Control type="text" placeholder="First Name" />
+                <Form.Control type="text" placeholder="First Name" ref={firstName} />
               </Form.Group>
 
               <Form.Group as={Col} controlId="formLastName">
                 <Form.Label>Last Name </Form.Label>
-                <Form.Control type="text" placeholder="Last Name" />
+                <Form.Control type="text" placeholder="Last Name" ref={lastName} />
               </Form.Group>
             </Row>
 
             <Form.Group className="mb-3" controlId="formCompany">
               <Form.Label>Company</Form.Label>
-              <Form.Control type="text" placeholder="Company" />
+              <Form.Control type="text" placeholder="Company" ref={companyName} />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formPhoneNumber">
@@ -222,26 +349,12 @@ const AddressDetails = () => {
             <Row className="mb-3">
               <Form.Group as={Col} controlId="formCountry">
                 <Form.Label>Country *</Form.Label>
-                <Form.Select required ref={country}>
+                <Form.Select required ref={country} onChange={(e) => getAvailableRegions(e.target.value)}>
                   <option value="">Select Country</option>
                   {
                     userCountries && userCountries.map((ele, key) => {
                       return (
-                        <option key={key} value={ele.id}>{ele.name}</option>
-                      )
-                    })
-                  }
-                </Form.Select>
-              </Form.Group>
-
-              <Form.Group as={Col} controlId="formState">
-                <Form.Label>Province *</Form.Label>
-                <Form.Select required ref={city}>
-                  <option value="">Select Province</option>
-                  {
-                    userCities && userCities.map((ele, id) => {
-                      return (
-                        <option key={id} value={ele.id}>{ele.name}</option>
+                        <option key={key} value={ele.id}>{ele.full_name_english}</option>
                       )
                     })
                   }
@@ -249,19 +362,31 @@ const AddressDetails = () => {
               </Form.Group>
             </Row>
             <Row className="mb-3">
-              <Form.Group as={Col} controlId="formState">
-                <Form.Label>State *</Form.Label>
-                <Form.Select required ref={state}>
-                  <option value="">Select State</option>
-                  {
-                    userState && userState.map((ele, id) => {
-                      return (
-                        <option key={id} value={ele.id}>{ele.name}</option>
+              {
+                country.current?.value && (
+                  <Form.Group as={Col} controlId="formState">
+                    <Form.Label>State *</Form.Label>
+                    {
+                      userState && userState.length > 0 ? (
+                        <Form.Select required ref={state}>
+                          <option value="">Select State</option>
+                          {
+                            userState && userState.map((ele, id) => {
+                              return (
+                                <option key={id} value={ele.name}>{ele.name}</option>
+                              )
+                            })
+                          }
+                        </Form.Select>
+                      ) : (
+                        <Form.Control type="text" placeholder="State" required ref={state} />
                       )
-                    })
-                  }
-                </Form.Select>
-              </Form.Group>
+                    }
+
+                  </Form.Group>
+                )
+              }
+
             </Row>
 
             <Row className="mb-3">
@@ -271,17 +396,17 @@ const AddressDetails = () => {
               </Form.Group>
             </Row>
 
-            {/* <Form.Group className="mb-3" controlId="formDefaultCheckboxes">
-              <Form.Check type="checkbox" label="Use as my default billing address" />
-              <Form.Check type="checkbox" label="Use as my default shipping address" />
-            </Form.Group> */}
-
+            <Form.Group className="mb-3" controlId="formDefaultCheckboxes">
+              <Form.Check checked={billingChecked}
+                onChange={handleShippingChange} type="checkbox" label="Use as my default billing and Shipping address" />
+            </Form.Group>
             <Button variant="primary" type="submit">
               Save Address
             </Button>
           </Form>
         </Modal.Body>
       </Modal>
+
     </>
   )
 };

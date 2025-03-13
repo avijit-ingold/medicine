@@ -18,17 +18,21 @@ const ProductSecond = ({ productObject, parent }) => {
   const handleWishList = (id) => {
     const loginDetail = JSON.parse(sessionStorage.getItem('loginDetails'))
 
-    // if (!wishlistState) {
+    if (!wishlistState) {
       const url = `wishlist/add`
       const reqBody = {
         "customerId": loginDetail.id,
         "productId": productObject.id
+      }
+      context.getPostDataQuick(url, 'addWishList', reqBody);
+    } else {
+      const url = `wishlist/remove`
+      const reqBody = {
+        "customerId": loginDetail.id,
+        "productId": productObject.id
+      }
+      context.getPostDataQuick(url, 'sad', reqBody);
     }
-      context.getGetDataQuick(url, 'addWishList', reqBody);
-    // } else {
-    //   const url = `wishlists-remove-product?product_id=${id}&user_id=${loggedinData.user.id}`
-    //   context.getGetDataQuick(url, 'sad');
-    // }
 
     setWishListState(!wishlistState);
   }
@@ -78,7 +82,7 @@ const ProductSecond = ({ productObject, parent }) => {
           {productObject.special_price && (
             <span className={styles.old_price}>{"€" + ' ' + parseInt(productObject.price).toFixed(2)}</span>
           )}
-          <span className={styles.new_price}>{productObject.special_price ? "€" + ' ' +  parseInt(productObject.special_price).toFixed(2) :"€" + ' ' + parseInt(productObject.price).toFixed(2)}</span>
+          <span className={styles.new_price}>{productObject.special_price ? "€" + ' ' + parseInt(productObject.special_price).toFixed(2) : "€" + ' ' + parseInt(productObject.price).toFixed(2)}</span>
         </p>
       </div>
     </div>

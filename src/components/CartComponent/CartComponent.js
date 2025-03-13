@@ -28,30 +28,29 @@ const CartComponent = () => {
   };
 
   const handleCartValue = (cartId, cartQuantity, ownerId, itemObject) => {
+   
     context.checkIfLoggedIn();
     const headers = {
       "Content-Type": "application/json",
-      "System-Key": "12345",
-      "Authorization": `Bearer ${context.loggedinData.access_token}`
+      "Authorization": `Bearer ${sessionStorage.getItem('CustomerToken')}`
     };
     const requestBody = {
-      "cart_ids": cartId,
-      "cart_quantities": cartQuantity
+      "cartItem": {
+        "sku": itemObject.sku,
+        "qty": cartQuantity,
+        "quote_id": "4"
+      }
     }
     axios({
-      method: 'POST',
-      url: process.env.REACT_APP_API_URL + 'carts/process',
+      method: 'PUT',
+      url: process.env.REACT_APP_API_URL + `carts/mine/items/${itemObject.id}`,
       data: JSON.stringify(requestBody),
       headers: headers
     }).then((res) => {
-      if (!res.data.result) {
-        toast.error(`${res.data.message}` + "! 😔", {
-          autoClose: 500,
-          style: {
-            backgroundColor: "#f8d7da",
-            color: "#721c24",
-            border: "1px solid #f5c6cb",
-          },
+      if (!res.message) {
+        const msg = 'Successfully Updated'
+        toast.success(`${msg}`, {
+          autoClose: 500
         });
         if (cartQuantity > itemObject.upper_limit) {
           itemObject.quantity = itemObject.upper_limit;
@@ -76,26 +75,24 @@ const CartComponent = () => {
 
     context.getPostDataWithAuth(url, reqBody, '')
     setTimeout(() => {
-      getCartDetails();
-      context.handleCart()
+      //getCartDetails();
+     // context.handleCart()
     }, 200)
   }
 
-  const handleCartSummary = () => {
+  const handleCartSummary = () => { 
     setSpinnerLoading(true)
     setTimeout(() => {
       const headers = {
-        "Content-Type": "application/json",
-        "X-Requested-With": "XMLHttpRequest",
-        "System-Key": "12345",
-        "Authorization": `Bearer ${context.loggedinData.access_token}`,
+        "Content-Type": "application/json",        
       };
       axios({
         method: 'GET',
-        url: process.env.REACT_APP_API_URL + 'cart-summary',
+        url: process.env.REACT_APP_API_URL + 'b2c/cartlist?cartid=4&loggin=true',
         headers: headers
       }).then((res) => {
-        setCartSummary(res.data);
+        setCartSummary(res.data[0]);
+        
       }).finally(() => {
         setSpinnerLoading(false)
       });
@@ -132,15 +129,18 @@ const CartComponent = () => {
 
   const confirmRemove = () => {
     if (itemToRemove) {
-      context.handleDeleteCart(`cart/${itemToRemove.id}`, 'sad')
+      context.handleDeleteCart(`carts/mine/items/${itemToRemove.id}`, 'sad')
     }
     setShowModal(false);
     setItemToRemove(null);
 
-    const url = 'carts'
+    // const url = 'b2c/cartlist?cartid=4&loggin=true'
 
-    context.getGetData(url, 'cartData');
-    handleCartSummary();
+    // context.getGetData(url, 'cartData');
+    setTimeout(() => {
+      getCartDetails()          
+      }, 800);
+    //handleCartSummary();
 
   };
 
@@ -153,32 +153,41 @@ const CartComponent = () => {
   };
 
   const handleCartItem = (type, item) => {
+   
     let itemObject = item
     if (type === 'subtract') {
-      let cartValue = JSON.parse(item.quantity);
+      let cartValue = JSON.parse(item.qty);
       let cartAmount = item.singleprice;
       if (cartValue > 1) {
         cartValue = cartValue - 1
-        itemObject.quantity = cartValue
+        itemObject.qty = cartValue
         cartAmount = cartValue * cartAmount;
-        itemObject.quantity = cartValue
+        itemObject.qty = cartValue
         itemObject.price = formatToCurrency(cartAmount);
-        handleCartValue(item.id, itemObject.quantity, cartData.owner_id, itemObject);
+        handleCartValue(item.id, itemObject.qty, cartData.owner_id, itemObject);
         updateCartItem(cartData.owner_id, item.id, itemObject);
-        handleCartSummary()
+        setTimeout(() => {
+          getCartDetails()          
+          }, 800);
+        //handleCartSummary()
       }
     } else {
-      let cartValue = JSON.parse(item.quantity);
+  
+      let cartValue = JSON.parse(item.qty);
       let cartAmount = item.singleprice;
       if (cartValue > 0) {
         cartValue = cartValue + 1
-        itemObject.quantity = cartValue
+        itemObject.qty = cartValue
         cartAmount = cartValue * cartAmount;
-        itemObject.quantity = cartValue
+        itemObject.qty = cartValue
         itemObject.price = formatToCurrency(cartAmount)
-        handleCartValue(item.id, itemObject.quantity, cartData.owner_id, itemObject);
+       
+        handleCartValue(item.id, itemObject.qty, cartData.owner_id, itemObject);
         updateCartItem(cartData.owner_id, item.id, itemObject)
-        handleCartSummary()
+        setTimeout(() => {
+        getCartDetails()          
+        }, 800);
+       // handleCartSummary()
       }
     }
   }
@@ -208,7 +217,7 @@ const CartComponent = () => {
         context.getPostDataWithAuth(url, body, '')
         setDiscountValue('')
       }
-      handleCartSummary();
+      //handleCartSummary();
     } else {
       toast.info("Please Enter a correct Coupon Code", {
         autoClose: 800
@@ -217,26 +226,28 @@ const CartComponent = () => {
   }
 
   const getCartDetails = () => {
-    const url = 'carts'
+    const url = 'b2c/cartlist?cartid=4&loggin=true'
 
     context.getGetData(url, 'cartData');
   }
 
   useEffect(() => {
     getCartDetails();
-    handleCartSummary();
+    // handleCartSummary();
   }, [])
 
   useEffect(() => {
+    
     if (context.cartList) {
-      setCartData(context.cartList.data.data);
+      console.log('aa',context.cartList.data[0])
+      setCartData(context.cartList.data);
     }
   }, [context.cartList])
 
 
   return (
     <>
-      {cartData && cartData.length > 0 ? (
+      {cartData && cartData[0].cart_items.length > 0 ? (
         <div className={styles.shopping_cart}>
           <div className={styles.cart_items}>
             {!context.loading
@@ -245,33 +256,34 @@ const CartComponent = () => {
                   <div className={styles.cart_item}>
                     <div className={styles.item_info}>
                       <img
-                        src={item.product_thumbnail_image}
+                        src={item.image_url}
                         className={styles.cart_item_image}
-                        alt={item.product_name}
+                        alt={item.name}
                       />
                     </div>
                     <div className={styles.item_info}>
-                      <p className={styles.item_name}>{item.product_name}</p>
+                      <p className={styles.item_name}>{item.name}</p>
                       {item.size && <p>Size: {item.size}</p>}
                       {item.color && <p>Color: {item.color}</p>}
                     </div>
                     <div className={styles.item_price}>
-                      <p>€{item.singleprice}.00</p>
+                      <p>€{(parseFloat(item.price)).toFixed(2)}</p>
                     </div>
                     <div className={styles.item_quantity}>
 
                       <button onClick={() => handleCartItem('subtract', item)}>_</button>
-                      <input type="number" value={item.quantity} readOnly />
+                      <input type="number" value={item.qty} readOnly />
                       {
-                        item.quantity < item.upper_limit ? (
+                        item.qty < item.upper_limit ? (
                           <button onClick={() => handleCartItem('add', item)}>+</button>
                         ) : (
-                          <button onClick={() => handleCartExcess(item.upper_limit)}>+</button>
+                          // <button onClick={() => handleCartExcess(item.upper_limit)}>+</button>
+                          <button onClick={() => handleCartItem('add', item)}>+</button>
                         )
                       }
                     </div>
                     <div className={styles.price}>
-                      <p>{item.price}</p>
+                      <p>{parseFloat(item.price).toFixed(2)}</p>
                     </div>
                   </div>
                   <span className={styles.cart_removeItem} onClick={() => handleRemoveClick(item)}>Remove Item</span>
@@ -309,13 +321,15 @@ const CartComponent = () => {
           {!context.loading ? (
             <div className={styles.cart_summary}>
               {
-                cartSummary && (
+                cartData && (
                   <>
                     <h3>SUMMARY</h3>
-                    <p>Subtotal: {cartSummary.sub_total}</p>
-                    <p>Tax: {cartSummary.tax}</p>
-                    <p>Shipping Cost: {cartSummary.shipping_cost}</p>
-                    <p>Discount: {cartSummary.discount}</p>
+                    <p>Subtotal: €{(parseFloat(cartData[0].subtotal)).toFixed(2)}</p>
+                    {cartData[0].tax && (
+                      <p>Tax: €{(parseFloat(cartData[0].tax)).toFixed(2)}</p>
+                    )}
+                    <p>Shipping Cost: €{(parseFloat(cartData[0].shipping_total)).toFixed(2)}</p>
+                    <p>Discount: €{(parseFloat(cartData[0].discount_amount)).toFixed(2)}</p>
                     <div className={styles.input_container}>
                       <input value={discountValue} className={styles.discount_input} onChange={discounValueChange} placeholder='Apply Discount' />
                       {
@@ -328,7 +342,7 @@ const CartComponent = () => {
                       <Button className={styles.discount_button} variant="success" onClick={() => handleCoupon('apply')}>Apply</Button>
                       <Button className={styles.discount_button} variant="danger" onClick={() => handleCoupon('remove')}>Remove</Button>
                     </div>
-                    <h4>Order Total: {cartSummary.grand_total}</h4>
+                    <h4>Order Total: €{(parseFloat(cartData[0].grand_total)).toFixed(2)}</h4>
                   </>
                 )
               }

@@ -87,7 +87,7 @@ const Product = ({ productObject, parent , ele}) => {
             ) : (
               <>
                 <span className={styles.product_price_afterPrice}>
-                  <strong>{productObject.stroked_price}</strong>
+                  <strong>{productObject.stroked_price}</strong>€
                 </span>
               </>
             )}

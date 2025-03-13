@@ -7,10 +7,34 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 
+import Layer1 from '../../assets/images/Medical/Layer 40.jpg';
+import Layer2 from '../../assets/images/Medical/Layer 41.jpg';
+import Layer3 from '../../assets/images/Medical/Layer 42.jpg';
+import Layer4 from '../../assets/images/Medical/Layer 43.jpg';
+
+const data = [
+  {
+    id: 1,
+    logo: Layer1
+  },
+  {
+    id: 2,
+    logo: Layer2
+  },
+  {
+    id: 3,
+    logo: Layer3
+  },
+  {
+    id: 4,
+    logo: Layer4
+  }
+]
+
 
 const TestamentBranding = () => {
 
-  const [brandData, setBrandData] = useState(null);
+  const [brandData, setBrandData] = useState(data);
   const [aboutUsArray, setAboutUsArray] = useState();
 
   const context = useContext(GenericApiContext);
@@ -21,43 +45,43 @@ const TestamentBranding = () => {
   const rightTopRef = useRef(null)
 
 
-  useEffect(() => {
-    const getBrandNames = () => {
-      const url = 'brands'
+  // useEffect(() => {
+  //   const getBrandNames = () => {
+  //     const url = 'brands'
 
-      context.getGetData(url, 'brandData');
-    }
+  //     context.getGetData(url, 'brandData');
+  //   }
 
-    getBrandNames();
-  }, [])
+  //   getBrandNames();
+  // }, [])
 
-  useEffect(() => {
-    if (context.getBrandData) {
+  // useEffect(() => {
+  //   if (context.getBrandData) {
 
-      setBrandData(context.getBrandData.data.data);
-    }
-  }, [context.getBrandData])
+  //     setBrandData(context.getBrandData.data.data);
+  //   }
+  // }, [context.getBrandData])
 
 
-  useEffect(() => {
-    const getAboutUsDetails = () => {
-      const url = 'business-settings'
+  // useEffect(() => {
+  //   const getAboutUsDetails = () => {
+  //     const url = 'business-settings'
 
-      context.getGetData(url, 'headerMenu');
-    }
+  //     context.getGetData(url, 'headerMenu');
+  //   }
 
-    getAboutUsDetails();
-  }, [])
+  //   getAboutUsDetails();
+  // }, [])
 
-  useEffect(() => {
-    if (context.getHeaderdata) {
-      const title = {
-        aboutUS: context.getHeaderdata.data.data.find(item => item.type === "about_title"),
-        ourServices: context.getHeaderdata.data.data.find(item => item.type === "service_subtitle")
-      }
-      setAboutUsArray(title);
-    }
-  }, [context.getHeaderdata])
+  // useEffect(() => {
+  //   if (context.getHeaderdata) {
+  //     const title = {
+  //       aboutUS: context.getHeaderdata.data.data.find(item => item.type === "about_title"),
+  //       ourServices: context.getHeaderdata.data.data.find(item => item.type === "service_subtitle")
+  //     }
+  //     setAboutUsArray(title);
+  //   }
+  // }, [context.getHeaderdata])
 
   useGSAP(() => {
     if (!leftRef.current || !rightRef.current || !leftTopRef.current || !rightTopRef.current) {
@@ -146,12 +170,13 @@ const TestamentBranding = () => {
     <>
       <div className={styles.testament_branding_container_main + ' container'}>
         <div className={styles.testament_container}>
-          {aboutUsArray && (
-            <>
+          {/* {aboutUsArray && (
+            <> */}
               <div className={styles.testament_container_upper + ' row'}>
                 <div className={styles.testament_text_container + ' col-6'} ref={leftTopRef}>
                   <span className={styles.testament_text_heading}>ABOUT US</span>
-                  <span className={styles.testament_text_description}>{aboutUsArray.aboutUS.value}</span>
+                  {/* <span className={styles.testament_text_description}>{aboutUsArray.aboutUS.value}</span> */}
+                  <span className={styles.testament_text_description}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.</span>
                   <span className={styles.testament_Button} >
                     SHOP NOW
                   </span>
@@ -167,17 +192,17 @@ const TestamentBranding = () => {
                 </div>
                 <div className={styles.testament_text_container + ' col-6'} ref={rightRef} >
                   <span className={styles.testament_text_heading}>OUR SERVICES</span>
-                  <span className={styles.testament_text_description}>{aboutUsArray.ourServices.value}</span>
+                  {/* <span className={styles.testament_text_description}>{aboutUsArray.ourServices.value}</span> */}
+                  <span className={styles.testament_text_description}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.</span>
+                  
                   <br />
                   <span className={styles.testament_Button} >
                     SHOP NOW
                   </span>
                 </div>
               </div>
-            </>
-          )
-
-          }
+            {/* </>
+           )} */}
 
         </div>
 
