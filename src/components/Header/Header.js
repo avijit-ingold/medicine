@@ -321,7 +321,7 @@ const Header = () => {
               </div>
               <span className={styles.navbar_profile_icons} onClick={() => navigateCart()}>
                 <Cart size={22} />
-                <span className={styles.navbar_cart_amount}>{userCartCount}</span>
+                <span className={styles.navbar_cart_amount}>{context?.cartCount}</span>
               </span>
               {/* {
 
