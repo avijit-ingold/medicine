@@ -17,11 +17,11 @@ const ShopByCategories = () => {
 
   const handleCategoryClick = (param, id) => {
     setSelectedCategory(param);
-    redirect(id);
+    redirect(param);
   }
 
   const redirect = (id) => {
-    navigate(`/category/${categoryEncryptedArray[id - 1]}`);
+    navigate(`/category/${categoryEncryptedArray[id]}`);
     // setShowCategories(false)
   }
 
@@ -48,9 +48,11 @@ const ShopByCategories = () => {
       var tempArray = []
       if (context.getCategoryData.data) {
         if (context.getCategoryData.data.length > 0) {
+          console.log(context.getCategoryData.data, 'context.getCategoryData.data')
           context.getCategoryData.data.map((ele) => {
             const encrypted = encryptData(ele.id);
             tempArray.push(encrypted);
+            console.log(encrypted, ele.id)
           })
         }
       }

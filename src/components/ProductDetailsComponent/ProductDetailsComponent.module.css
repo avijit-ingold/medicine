@@ -456,12 +456,11 @@
 }
 
 .product_shop {
-    font-size: 12px;
+    font-size: 16px;
     font-weight: 600;
 }
 
 .product_desc {
-    font-size: 10px !important;
     color: #353333;
 }
 

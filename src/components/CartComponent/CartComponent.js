@@ -6,7 +6,7 @@ import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { Modal, Button } from 'react-bootstrap';
 import { ToastContainer, toast } from "react-toastify";
-import { XCircle } from 'react-bootstrap-icons';
+import { XCircle, Trash } from 'react-bootstrap-icons';
 import CartImage from '../../assets/images/Medical/shopping.png';
 import axios from "axios";
 
@@ -97,7 +97,7 @@ const CartComponent = () => {
       };
       axios({
         method: 'GET',
-        url: process.env.REACT_APP_API_URL + 'b2c/cartlist?cartid=4&loggin=true',
+        url: process.env.REACT_APP_API_URL + `b2c/cartlist?cartid=${sessionStorage.getItem('QuoteID')}&loggin=true`,
         headers: headers
       }).then((res) => {
         console.log(res.data)
@@ -143,9 +143,6 @@ const CartComponent = () => {
 
   const confirmRemove = () => {
     if (itemToRemove) {
-      // context.handleDeleteCart(`cart/${itemToRemove.id}`, 'sad')
-      //context.handleDeleteCart(`carts/mine/items/${itemToRemove.id}`, 'sad')
-
       const headers = {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${sessionStorage.getItem('CustomerToken')}`
@@ -273,16 +270,9 @@ const CartComponent = () => {
         }).finally(() => {
         });
 
-        // context.getPostDataWithAuth(url, body, '')
 
       } else {
-        // const url = 'coupon-remove';
-        // const body = {
-        //   "user_id": context.loggedinData.user.id,
-        //   "owner_id": cartData.owner_id,
-        // }
-        // context.getPostDataWithAuth(url, body, '')
-        // setDiscountValue('')
+
         const headers = {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${sessionStorage.getItem('CustomerToken')}`
@@ -350,7 +340,7 @@ const CartComponent = () => {
                       {item.color && <p>Color: {item.color}</p>}
                     </div>
                     <div className={styles.item_price}>
-                      <p>€{item.singleprice}.00</p>
+                      <p>€{parseInt(item.price) / parseInt(item.qty)}.00</p>
                     </div>
                     <div className={styles.item_quantity}>
 
@@ -366,10 +356,10 @@ const CartComponent = () => {
                       }
                     </div>
                     <div className={styles.price}>
-                      <p>{item.price}</p>
+                      <p>{ '€ ' + (parseInt(item.price)).toFixed(2)}</p>
                     </div>
                   </div>
-                  <span className={styles.cart_removeItem} onClick={() => handleRemoveClick(item)}>Remove Item</span>
+                  <span className={styles.cart_removeItem} onClick={() => handleRemoveClick(item)}><Trash className='mr-3'/>Remove Item</span>
                 </div>
               ))
               : Array(3)

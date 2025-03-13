@@ -39,9 +39,6 @@ const ProductSecond = ({ productObject, parent }) => {
     } else {
       setShowModal(true)
     }
-
-
-
     setWishListState(!wishlistState);
   }
 
@@ -55,11 +52,18 @@ const ProductSecond = ({ productObject, parent }) => {
 
   useEffect(() => {
     const handleEncrypt = () => {
-      const encrypted = encryptData(productObject.id);
+      const encrypted = encryptData(productObject.sku);
       setProductId(encrypted);
     };
 
     handleEncrypt();
+
+    if(productObject.wishlist == '0'){
+      setWishListState(false);
+    }else{
+      setWishListState(true)
+    }
+
   }, [productObject])
 
   useEffect(() => {

@@ -6,6 +6,8 @@ import logo from '../../../src/assets/images/Medical/logo 1.png'
 import { GenericApiContext } from '../../context/GenericApiContext';
 import { useNavigate } from 'react-router-dom';
 import { encryptData, decryptData } from "../../utils/CryptoUtils";
+import axios from 'axios';
+import { ToastContainer, toast } from "react-toastify";
 
 export const useClickOutside = (callback) => {
   const ref = useRef(null);
@@ -93,7 +95,40 @@ const Header = () => {
     const url = 'customers/me'
     if (sessionStorage.getItem('CustomerToken')) {
       context.getCustomerData(url);
+      getQuoteID();
     }
+  }
+
+  const getQuoteID = async () => {
+    const headers = {
+      "Content-Type": "application/json",
+      "System-Key": "12345",
+      "Authorization": `Bearer ${sessionStorage.getItem('CustomerToken')}`
+    };
+    axios({
+      method: 'POST',
+      url: process.env.REACT_APP_API_URL + 'carts/mine/',
+      headers: headers
+    }).then((res) => {
+      sessionStorage.setItem('QuoteID', res.data)
+    }).catch((err) => {
+      if (err.response) {
+        if (err.response.status === 400) {
+          toast.error(`Bad Request: ${err.response.data.message || 'Invalid request'}`, {
+            autoClose: 1100
+          });
+        } else {
+          toast.error(`Error ${err.response.status}: ${err.response.data.message || 'Something went wrong'}`, {
+            autoClose: 1100
+          });
+        }
+      } else {
+        toast.error(`Network Error: ${err.message}`, {
+          autoClose: 1100
+        });
+      }
+    }).finally(() => {
+    });
   }
 
   const handleProfile = () => {

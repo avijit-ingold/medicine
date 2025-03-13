@@ -8,7 +8,7 @@ import { GenericApiContext } from '../../context/GenericApiContext';
 import styles from './RelatedProductComponent.module.css';
 import ProductSecond from '../ProductSecond/ProductSecond';
 
-const RelatedProductComponent = ({ id, parent }) => {
+const RelatedProductComponent = ({ id, parent, productParent }) => {
   const [products, setProducts] = useState(null);
 
   const context = useContext(GenericApiContext);
@@ -187,13 +187,14 @@ const RelatedProductComponent = ({ id, parent }) => {
   }
 
   useEffect(() => {
-    // alert(id)
-    const getRelatedProducts = () => {
-      const url = `products/related/${id}`
+    if (id) {
+      const getRelatedProducts = () => {
+        const url = `products/related/${id}`
 
-      context.getGetData(url, 'relatedProducts');
+        context.getGetData(url, 'relatedProducts');
+      }
+      getRelatedProducts();
     }
-    getRelatedProducts();
   }, [id])
 
   useEffect(() => {
@@ -209,7 +210,7 @@ const RelatedProductComponent = ({ id, parent }) => {
         <>
           <div className={styles.newArrivalSection_container + ' ' + 'container'}>
             <Slider {...newarrivalSettings} className='container'>
-              {products && products.map((product, index) => {
+              {productParent && productParent.map((product, index) => {
                 return (
                   <div key={index}>
                     {/* <ProductSecond productObject={product} parent="newArrival" /> */}
@@ -220,20 +221,36 @@ const RelatedProductComponent = ({ id, parent }) => {
             </Slider>
           </div >
         </>
-      ) : (
-        <div className={styles.newArrivalSection_container + ' ' + 'container'}>
-          <Slider {...settings} className='container'>
-            {products && products.map((product, index) => {
-              return (
-                <div key={index}>
-                  {/* <ProductSecond productObject={product} parent="newArrival" /> */}
-                  <ProductSecond productObject={product} parent={'related'} />
-                </div>
-              );
-            })}
-          </Slider>
-        </div >
-      )}
+      ) : parent == 'productRelatedProduct' ? (
+        <>
+          <div className={styles.newArrivalSection_container + ' ' + 'container'}>
+            <Slider {...settings} className='container'>
+              {productParent && productParent.map((product, index) => {
+                return (
+                  <div key={index}>
+                    {/* <ProductSecond productObject={product} parent="newArrival" /> */}
+                    <ProductSecond productObject={product} parent={'related'} />
+                  </div>
+                );
+              })}
+            </Slider>
+          </div >
+        </>
+      ) :
+        (
+          <div className={styles.newArrivalSection_container + ' ' + 'container'}>
+            <Slider {...settings} className='container'>
+              {products && products.map((product, index) => {
+                return (
+                  <div key={index}>
+                    {/* <ProductSecond productObject={product} parent="newArrival" /> */}
+                    <ProductSecond productObject={product} parent={'related'} />
+                  </div>
+                );
+              })}
+            </Slider>
+          </div >
+        )}
 
     </>
   )
