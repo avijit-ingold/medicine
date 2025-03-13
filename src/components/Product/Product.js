@@ -54,6 +54,10 @@ const Product = ({ productObject, parent , ele}) => {
     handleEncrypt();
   }, [productObject])
 
+  useEffect(() => {
+    console.log(productObject, 'anish')
+  })
+
 
   return (
     <>
@@ -141,7 +145,7 @@ const Product = ({ productObject, parent , ele}) => {
                     </span>
                   </div>
                   <span className={styles.blogs_name}>
-                    {productObject.title}
+                    {productObject.blog_name}
                   </span>
                 </div>
                 <div className={styles.readMore_container}>

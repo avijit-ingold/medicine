@@ -6,7 +6,7 @@ import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { Modal, Button } from 'react-bootstrap';
 import { ToastContainer, toast } from "react-toastify";
-import { XCircle } from 'react-bootstrap-icons';
+import { XCircle, Trash } from 'react-bootstrap-icons';
 import CartImage from '../../assets/images/Medical/shopping.png';
 import axios from "axios";
 
@@ -28,7 +28,6 @@ const CartComponent = () => {
   };
 
   const handleCartValue = (cartId, cartQuantity, ownerId, itemObject) => {
-   
     context.checkIfLoggedIn();
     const headers = {
       "Content-Type": "application/json",
@@ -47,15 +46,24 @@ const CartComponent = () => {
       data: JSON.stringify(requestBody),
       headers: headers
     }).then((res) => {
-      if (!res.message) {
-        const msg = 'Successfully Updated'
-        toast.success(`${msg}`, {
-          autoClose: 500
+      if (res.message) {
+        toast.error(`${res.data.message}` + "! 😔", {
+          autoClose: 500,
+          style: {
+            backgroundColor: "#f8d7da",
+            color: "#721c24",
+            border: "1px solid #f5c6cb",
+          },
         });
         if (cartQuantity > itemObject.upper_limit) {
           itemObject.quantity = itemObject.upper_limit;
           updateCartItem(ownerId, itemObject.id, itemObject);
         }
+      } else {
+        // const msg = 'Successfully Updated'
+        // toast.success(msg, {
+        //   autoClose: 1500
+        // });
       }
     }).catch((err) => {
       console.error(err);
@@ -75,24 +83,30 @@ const CartComponent = () => {
 
     context.getPostDataWithAuth(url, reqBody, '')
     setTimeout(() => {
-      //getCartDetails();
-     // context.handleCart()
+      getCartDetails();
+      context.handleCart()
     }, 200)
   }
 
-  const handleCartSummary = () => { 
+  const handleCartSummary = () => {
+
     setSpinnerLoading(true)
     setTimeout(() => {
       const headers = {
-        "Content-Type": "application/json",        
+        "Content-Type": "application/json",
       };
       axios({
         method: 'GET',
-        url: process.env.REACT_APP_API_URL + 'b2c/cartlist?cartid=4&loggin=true',
+        url: process.env.REACT_APP_API_URL + `b2c/cartlist?cartid=${sessionStorage.getItem('QuoteID')}&loggin=true`,
         headers: headers
       }).then((res) => {
+        console.log(res.data)
         setCartSummary(res.data[0]);
-        
+        setCartData(res.data);
+
+        context?.setCartCount(parseInt(res.data[0].total_qty))
+
+
       }).finally(() => {
         setSpinnerLoading(false)
       });
@@ -129,18 +143,39 @@ const CartComponent = () => {
 
   const confirmRemove = () => {
     if (itemToRemove) {
-      context.handleDeleteCart(`carts/mine/items/${itemToRemove.id}`, 'sad')
+      const headers = {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${sessionStorage.getItem('CustomerToken')}`
+      };
+
+      axios({
+        method: 'DELETE',
+        url: process.env.REACT_APP_API_URL + `carts/mine/items/${itemToRemove.id}`,
+        headers: headers
+      }).then((res) => {
+        if (!res.message) {
+          const msg = 'Successfully Removed'
+          toast.error(`${msg}` + "! 😔", {
+            icon: "😢",
+            autoClose: 1000,
+            style: {
+              backgroundColor: "#f8d7da",
+              color: "#721c24",
+              border: "1px solid #f5c6cb",
+            },
+          });
+          handleCartSummary();
+        }
+      })
     }
     setShowModal(false);
     setItemToRemove(null);
 
-    // const url = 'b2c/cartlist?cartid=4&loggin=true'
+    // const url = 'carts'
 
     // context.getGetData(url, 'cartData');
-    setTimeout(() => {
-      getCartDetails()          
-      }, 800);
-    //handleCartSummary();
+
+
 
   };
 
@@ -153,11 +188,10 @@ const CartComponent = () => {
   };
 
   const handleCartItem = (type, item) => {
-   
     let itemObject = item
     if (type === 'subtract') {
       let cartValue = JSON.parse(item.qty);
-      let cartAmount = item.singleprice;
+      let cartAmount = 80 //item.singleprice;
       if (cartValue > 1) {
         cartValue = cartValue - 1
         itemObject.qty = cartValue
@@ -166,28 +200,21 @@ const CartComponent = () => {
         itemObject.price = formatToCurrency(cartAmount);
         handleCartValue(item.id, itemObject.qty, cartData.owner_id, itemObject);
         updateCartItem(cartData.owner_id, item.id, itemObject);
-        setTimeout(() => {
-          getCartDetails()          
-          }, 800);
-        //handleCartSummary()
+        handleCartSummary()
       }
     } else {
-  
       let cartValue = JSON.parse(item.qty);
-      let cartAmount = item.singleprice;
+
+      let cartAmount = 80 //item.singleprice;
       if (cartValue > 0) {
         cartValue = cartValue + 1
         itemObject.qty = cartValue
         cartAmount = cartValue * cartAmount;
         itemObject.qty = cartValue
         itemObject.price = formatToCurrency(cartAmount)
-       
         handleCartValue(item.id, itemObject.qty, cartData.owner_id, itemObject);
         updateCartItem(cartData.owner_id, item.id, itemObject)
-        setTimeout(() => {
-        getCartDetails()          
-        }, 800);
-       // handleCartSummary()
+        handleCartSummary()
       }
     }
   }
@@ -199,25 +226,73 @@ const CartComponent = () => {
   const handleCoupon = (parent) => {
     if (discountValue) {
       if (parent === 'apply') {
-        const url = 'coupon-apply';
-        const body = {
-          "user_id": context.loggedinData.user.id,
-          "owner_id": cartData.owner_id,
-          "coupon_code": discountValue
-        }
+        //const url = 'coupon-apply';
+        // const body = {
+        //   "user_id": context.loggedinData.user.id,
+        //   "owner_id": cartData.owner_id,
+        //   "coupon_code": discountValue
+        // }
 
-        context.getPostDataWithAuth(url, body, '')
+        const headers = {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${sessionStorage.getItem('CustomerToken')}`
+        };
+
+        axios({
+          method: 'PUT',
+          url: process.env.REACT_APP_API_URL + `carts/mine/coupons/${discountValue}`,
+          headers: headers
+        }).then((res) => {
+          if (!res.message) {
+            setDiscountValue('')
+            handleCartSummary();
+          } else {
+            toast.error(`${res.message}` + "! 😔", {
+              autoClose: 500,
+              style: {
+                backgroundColor: "#f8d7da",
+                color: "#721c24",
+                border: "1px solid #f5c6cb",
+              },
+            });
+          }
+        }).catch((err) => {
+          const msg = 'Please apply valid Coupon code'
+          toast.error(`${msg}`, {
+            autoClose: 500,
+            style: {
+              backgroundColor: "#f8d7da",
+              color: "#721c24",
+              border: "1px solid #f5c6cb",
+            },
+          });
+          setDiscountValue('')
+        }).finally(() => {
+        });
+
 
       } else {
-        const url = 'coupon-remove';
-        const body = {
-          "user_id": context.loggedinData.user.id,
-          "owner_id": cartData.owner_id,
-        }
-        context.getPostDataWithAuth(url, body, '')
-        setDiscountValue('')
+
+        const headers = {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${sessionStorage.getItem('CustomerToken')}`
+        };
+
+        axios({
+          method: 'DELETE',
+          url: process.env.REACT_APP_API_URL + `carts/mine/coupons`,
+          headers: headers
+        }).then((res) => {
+          if (!res.message) {
+            handleCartSummary();
+          }
+        }).catch((err) => {
+
+        }).finally(() => {
+        });
+
       }
-      //handleCartSummary();
+
     } else {
       toast.info("Please Enter a correct Coupon Code", {
         autoClose: 800
@@ -226,28 +301,26 @@ const CartComponent = () => {
   }
 
   const getCartDetails = () => {
-    const url = 'b2c/cartlist?cartid=4&loggin=true'
+    const url = 'carts'
 
     context.getGetData(url, 'cartData');
   }
 
   useEffect(() => {
-    getCartDetails();
-    // handleCartSummary();
+    // getCartDetails();
+    handleCartSummary();
   }, [])
 
-  useEffect(() => {
-    
-    if (context.cartList) {
-      console.log('aa',context.cartList.data[0])
-      setCartData(context.cartList.data);
-    }
-  }, [context.cartList])
+  // useEffect(() => {
+  //   if (context.cartList) {
+  //     setCartData(context.cartList.data.data);
+  //   }
+  // }, [context.cartList])
 
 
   return (
     <>
-      {cartData && cartData[0].cart_items.length > 0 ? (
+      {cartData && cartData.length > 0 && cartData[0].cart_items.length > 0 ? (
         <div className={styles.shopping_cart}>
           <div className={styles.cart_items}>
             {!context.loading
@@ -267,7 +340,7 @@ const CartComponent = () => {
                       {item.color && <p>Color: {item.color}</p>}
                     </div>
                     <div className={styles.item_price}>
-                      <p>€{(parseFloat(item.price)).toFixed(2)}</p>
+                      <p>€{parseInt(item.price) / parseInt(item.qty)}.00</p>
                     </div>
                     <div className={styles.item_quantity}>
 
@@ -283,10 +356,10 @@ const CartComponent = () => {
                       }
                     </div>
                     <div className={styles.price}>
-                      <p>{parseFloat(item.price).toFixed(2)}</p>
+                      <p>{ '€ ' + (parseInt(item.price)).toFixed(2)}</p>
                     </div>
                   </div>
-                  <span className={styles.cart_removeItem} onClick={() => handleRemoveClick(item)}>Remove Item</span>
+                  <span className={styles.cart_removeItem} onClick={() => handleRemoveClick(item)}><Trash className='mr-3'/>Remove Item</span>
                 </div>
               ))
               : Array(3)
@@ -321,15 +394,15 @@ const CartComponent = () => {
           {!context.loading ? (
             <div className={styles.cart_summary}>
               {
-                cartData && (
+                cartSummary && (
                   <>
                     <h3>SUMMARY</h3>
-                    <p>Subtotal: €{(parseFloat(cartData[0].subtotal)).toFixed(2)}</p>
-                    {cartData[0].tax && (
-                      <p>Tax: €{(parseFloat(cartData[0].tax)).toFixed(2)}</p>
+                    <p>Subtotal: €{parseFloat(cartSummary.subtotal).toFixed(2)}</p>
+                    {cartSummary.tax && (
+                      <p>Tax: €{parseFloat(cartSummary.tax).toFixed(2)}</p>
                     )}
-                    <p>Shipping Cost: €{(parseFloat(cartData[0].shipping_total)).toFixed(2)}</p>
-                    <p>Discount: €{(parseFloat(cartData[0].discount_amount)).toFixed(2)}</p>
+                    <p>Shipping Cost: €{parseFloat(cartSummary.shipping_total).toFixed(2)}</p>
+                    <p>Discount: €{parseFloat(cartSummary.discount_amount).toFixed(2)}</p>
                     <div className={styles.input_container}>
                       <input value={discountValue} className={styles.discount_input} onChange={discounValueChange} placeholder='Apply Discount' />
                       {
@@ -342,7 +415,7 @@ const CartComponent = () => {
                       <Button className={styles.discount_button} variant="success" onClick={() => handleCoupon('apply')}>Apply</Button>
                       <Button className={styles.discount_button} variant="danger" onClick={() => handleCoupon('remove')}>Remove</Button>
                     </div>
-                    <h4>Order Total: €{(parseFloat(cartData[0].grand_total)).toFixed(2)}</h4>
+                    <h4>Order Total: €{parseFloat(cartSummary.grand_total).toFixed(2)}</h4>
                   </>
                 )
               }

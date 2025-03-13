@@ -6,6 +6,8 @@ import logo from '../../../src/assets/images/Medical/logo 1.png'
 import { GenericApiContext } from '../../context/GenericApiContext';
 import { useNavigate } from 'react-router-dom';
 import { encryptData, decryptData } from "../../utils/CryptoUtils";
+import axios from 'axios';
+import { ToastContainer, toast } from "react-toastify";
 
 export const useClickOutside = (callback) => {
   const ref = useRef(null);
@@ -91,8 +93,42 @@ const Header = () => {
 
   const getCustomerDetails = async () => {
     const url = 'customers/me'
+    if (sessionStorage.getItem('CustomerToken')) {
+      context.getCustomerData(url);
+      getQuoteID();
+    }
+  }
 
-    context.getCustomerData(url);
+  const getQuoteID = async () => {
+    const headers = {
+      "Content-Type": "application/json",
+      "System-Key": "12345",
+      "Authorization": `Bearer ${sessionStorage.getItem('CustomerToken')}`
+    };
+    axios({
+      method: 'POST',
+      url: process.env.REACT_APP_API_URL + 'carts/mine/',
+      headers: headers
+    }).then((res) => {
+      sessionStorage.setItem('QuoteID', res.data)
+    }).catch((err) => {
+      if (err.response) {
+        if (err.response.status === 400) {
+          toast.error(`Bad Request: ${err.response.data.message || 'Invalid request'}`, {
+            autoClose: 1100
+          });
+        } else {
+          toast.error(`Error ${err.response.status}: ${err.response.data.message || 'Something went wrong'}`, {
+            autoClose: 1100
+          });
+        }
+      } else {
+        toast.error(`Network Error: ${err.message}`, {
+          autoClose: 1100
+        });
+      }
+    }).finally(() => {
+    });
   }
 
   const handleProfile = () => {
@@ -100,7 +136,7 @@ const Header = () => {
   }
 
   const redirect = (id) => {
-    navigate(`/category/${categoryEncryptedArray[id - 1]}`);
+    navigate(`/category/${categoryEncryptedArray[id]}`);
     setShowCategories(false)
   }
 
@@ -121,7 +157,7 @@ const Header = () => {
 
     setTimeout(() => {
       context.handleCart()
-      setTimeout(() => {        
+      setTimeout(() => {
         setUserCartCount(context.cartCount)
       }, 800)
     }, 500);
@@ -280,7 +316,7 @@ const Header = () => {
                       {
                         categories && categories.map((ele, id) => {
                           return (
-                            <p key={id} onClick={() => redirect(ele.id)}>{ele.name}</p>
+                            <p key={id} onClick={() => redirect(id)}>{ele.name}</p>
                           )
                         })
                       }
@@ -320,7 +356,7 @@ const Header = () => {
               </div>
               <span className={styles.navbar_profile_icons} onClick={() => navigateCart()}>
                 <Cart size={22} />
-                <span className={styles.navbar_cart_amount}>{userCartCount}</span>
+                <span className={styles.navbar_cart_amount}>{context?.cartCount}</span>
               </span>
               {/* {
 
@@ -333,28 +369,24 @@ const Header = () => {
                   </span>)
               } */}
 
-
-
-
-              <span className={`${styles.navbar_profile_icons} ` + `${styles.navbar_profile_container}`} onClick={handleProfile}>
-                <span className={styles.navbar_profile_name}>{custName + ' '}</span>
-
-              </span>
-
-
-
               <span className={styles.navbar_profile_icons}>
                 {
                   customerDetails && customerDetails ? (
                     <>
-                      <span className={styles.navbar_profile_name}>EN</span>
-                      <span><ChevronDown size={13} /></span>
+                      <span className={`${styles.navbar_profile_icons} ` + `${styles.navbar_profile_container}`} onClick={handleProfile}>
+                        <span className={styles.navbar_profile_name}>{custName + ' '}</span>
+
+                      </span>
                     </>
                   ) : (
                     <span className={styles.navbar_profile_name} onClick={() => navigate('/')}>Login</span>
                   )
                 }
               </span>
+              <div>
+                <span className={styles.navbar_profile_name}>EN</span>
+                <span><ChevronDown size={13} /></span>
+              </div>
             </div>
           </div>
         </header>

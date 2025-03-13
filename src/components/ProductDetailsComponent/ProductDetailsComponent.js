@@ -5,7 +5,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { GenericApiContext } from '../../context/GenericApiContext';
 import ReviewCardComponent from '../ReviewCardComponent/ReviewCardComponent';
 import { Cart3, Box2 } from 'react-bootstrap-icons';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import ProductVariant1 from '../../assets/images/Medical/Product-Variant (1).png';
 import ProductVariant2 from '../../assets/images/Medical/Product-Variant (2).png';
 import ProductVariant3 from '../../assets/images/Medical/Product-Variant (3).png';
@@ -120,13 +120,13 @@ const ProductDetailsComponent = ({ id, loading }) => {
   }
 
   const handleAddCart = () => {
-    const url = `carts/add`
+    const url = `carts/mine/items`
     const body = {
-      "id": id,
-      "variant": "",
-      "user_id": loggedinData.user.id,
-      "quantity": productCounter
-
+      "cartItem": {
+        "sku": productDetail.sku,
+        "qty": productCounter,
+        "quote_id": sessionStorage.getItem('QuoteID')
+      }
     }
 
     context.getPostDataWithAuth(url, body, 'addToCart');
@@ -135,12 +135,13 @@ const ProductDetailsComponent = ({ id, loading }) => {
 
   useEffect(() => {
     const getProductDetails = () => {
-      const url = `products/${id}`
-      context.getGetData(url, `productDetails`);
-
-      if (context.ifLoggedin) {
-        const getWishListurl = `wishlists-check-product?product_id=${id}&user_id=${JSON.parse(sessionStorage.getItem('loginDetails')).user.id}`
-        context.getGetData(getWishListurl, `getWishList`);
+      if (sessionStorage.getItem('loginDetails')) {
+        const loginDetails = JSON.parse(sessionStorage.getItem('loginDetails'))
+        const url = `b2c/getProductsBySku?sku=${id}&customerid=${loginDetails.id}`
+        context.getGetData(url, `productDetails`);
+      } else {
+        const url = `b2c/getProductsBySku?sku=${id}`
+        context.getGetData(url, `productDetails`);
       }
     }
 
@@ -149,25 +150,26 @@ const ProductDetailsComponent = ({ id, loading }) => {
 
   useEffect(() => {
     if (context.getProductDetails) {
-      if (context.getProductDetails.data.data) {
-        setProductDetails(context.getProductDetails.data.data[0])
+      console.log(context.getProductDetails.data[0], 'context.getProductDetails')
+      if (context.getProductDetails.data[0]) {
+        setProductDetails(context.getProductDetails.data[0])
       }
     }
   }, [context.getProductDetails])
 
-  useEffect(() => {
-    if (context.ifLoggedin) {
-      if (context.ifWishListed) {
-        setWishListState(context.ifWishListed)
-      } else if (!context.getWishList) {
-        setWishListState(context.ifWishListed)
-      }
-    }
-  }, [context.ifWishListed])
+  // useEffect(() => {
+  //   if (context.ifLoggedin) {
+  //     if (context.ifWishListed) {
+  //       setWishListState(context.ifWishListed)
+  //     } else if (!context.getWishList) {
+  //       setWishListState(context.ifWishListed)
+  //     }
+  //   }
+  // }, [context.ifWishListed])
 
-  useEffect(() => {
-    setLoggedInData(JSON.parse(sessionStorage.getItem('loginDetails')));
-  }, [])
+  // useEffect(() => {
+  //   setLoggedInData(JSON.parse(sessionStorage.getItem('loginDetails')));
+  // }, [])
 
   useEffect(() => {
     setCartSuccess(context.addToCartSuccess)
@@ -323,33 +325,45 @@ const ProductDetailsComponent = ({ id, loading }) => {
             <div className={styles.productDetails_main_contaier}>
               <div className='container'>
                 <div className="d-block d-lg-none mb-3">
-                  <span className={styles.breadCrumb_section}>Lorem Ipsum &nbsp; &nbsp;  &gt; &nbsp; &nbsp; Lorem Ipsum  &nbsp; &nbsp; &gt; &nbsp; &nbsp;  Lorem Ipsum</span>
+                  <span className={styles.breadCrumb_section}><Link to="/home" className="text-primary text-decoration-none">Home</Link> &nbsp; &nbsp;  &gt; &nbsp; &nbsp; {productDetail.name} </span>
                 </div>
                 <div className={styles.productSpecs_container + ' row'}>
                   <div className={styles.product_spec_cont + ' col-md-7 col-12'}>
                     <div className={styles.product_demoContainer}>
-                      <img src={productDetail.thumbnail_image} className={`${styles.variant_image} ${selectedImage === productDetail.thumbnail_image ? styles.selected : ''}`} onClick={() => setSelectedImage(productDetail.thumbnail_image)} />
+                      <img src={productDetail.image_url} className={`${styles.variant_image} ${selectedImage === productDetail.thumbnail_image ? styles.selected : ''}`} onClick={() => setSelectedImage(productDetail.image_url)} />
                       {
-                        variantArray && variantArray.map((ele) => {
+                        productDetail.all_images && productDetail.all_images.map((ele) => {
                           return (
-                            <img src={ele} className={`${styles.variant_image} ${selectedImage === ele ? styles.selected : ''}`} onClick={() => setSelectedImage(ele)} />)
+                            <img src={ele.url} className={`${styles.variant_image} ${selectedImage === ele ? styles.selected : ''}`} onClick={() => setSelectedImage(ele.url)} />)
                         })
                       }
                     </div>
                     <div className={styles.product_main_image_container}>
-                      {productDetail && (
-                        <img src={selectedImage == '' ? productDetail.thumbnail_image : selectedImage} className={styles.product_main_image} />
+                      {selectedImage == '' ? (
+                        <img src={selectedImage} className={styles.product_main_image} />
+                      ) : (
+                        <img src={productDetail.image_url} className={styles.product_main_image} />
                       )}
                     </div>
                   </div>
                   <div className={styles.productDescription_container + ' col-md-5 col-12'}>
-                    <span className={styles.breadCrumb_section + ' d-none d-lg-block'}>Lorem Ipsum &nbsp; &nbsp;  &gt; &nbsp; &nbsp; Lorem Ipsum  &nbsp; &nbsp; &gt; &nbsp; &nbsp;  Lorem Ipsum</span>
+                    <span className={styles.breadCrumb_section + ' d-none d-lg-block'}><Link to="/home" className="text-primary text-decoration-none">Home</Link> &nbsp; &nbsp;  &gt; &nbsp; &nbsp; {productDetail.name} </span>
                     <h1 className={styles.product_name}>{productDetail.name}</h1>
-                    <span className={styles.product_shop}>{productDetail.shop_name}</span>
-                    <p className={styles.product_desc} dangerouslySetInnerHTML={{ __html: productDetail.description }} />
-                    <p className={styles.productPrice}>{productDetail.main_price}</p>
+                    <span className={styles.product_shop}>Lorem Ipsum</span>
+                    <p className={styles.product_desc}>{productDetail.short_description}</p>
+                    {
+                      productDetail.special_price ? (
+                        <p className={styles.productPrice}>{'€ ' + (parseInt(productDetail.special_price)).toFixed(2)}</p>
+                      ) : (
+                        <p className={styles.productPrice}>{'€ ' + (parseInt(productDetail.price)).toFixed(2)}</p>
+                      )
+                    }
                     <p className={styles.price_description}>All prices include VAT, plus shipping</p>
-                    <p className={styles.price_description}>Base Price: 94.99 € / P</p>
+                    {
+                      productDetail.special_price && (
+                        <p className={styles.price_description}>Base Price: {(parseInt(productDetail.price))} / P</p>
+                      )
+                    }
                     <div className={styles.size_container}>
                       <span className={styles.size}>Size
                         <div className={styles.size_selector}>
@@ -420,14 +434,43 @@ const ProductDetailsComponent = ({ id, loading }) => {
                       <p className={styles.specs_list}><img src={SpecsSmall3} className={styles.specs_image} />Let me know if you need more details</p>
                       <p className={styles.specs_list}><img src={SpecsSmall4} className={styles.specs_image} />Let me know if you need more details</p>
                     </div>
-                    <div className={styles.specsCard_container}>
-                      <p className={styles.specsCard}><img src={SpecscardImg1} className={styles.card_image} />Eco-Friendly Materials</p>
-                      <p className={styles.specsCard}><img src={SpecscardImg2} className={styles.card_image} />Non Toxic</p>
-                      <p className={styles.specsCard}><img src={SpecscardImg3} className={styles.card_image} />Hypoallergenic</p>
-                      <p className={styles.specsCard}><img src={SpecscardImg4} className={styles.card_image} />BPA Free</p>
-                      <p className={styles.specsCard}><img src={SpecscardImg5} className={styles.card_image} />FDA Approved</p>
-                      <p className={styles.specsCard}><img src={SpecscardImg6} className={styles.card_image} />Recyclable Design</p>
-                    </div>
+                    {
+                      productDetail.product_specification && (
+                        <div className={styles.specsCard_container}>
+                          {
+                            productDetail.product_specification[0].attr_one && (
+                              <p className={styles.specsCard}><img src={SpecscardImg1} className={styles.card_image} />{productDetail.product_specification[0].attr_one}</p>
+                            )
+                          }
+                          {
+                            productDetail.product_specification[0].attr_two && (
+                              <p className={styles.specsCard}><img src={SpecscardImg2} className={styles.card_image} />{productDetail.product_specification[0].attr_two}</p>
+                            )
+                          }
+                          {
+                            productDetail.product_specification[0].attr_three && (
+                              <p className={styles.specsCard}><img src={SpecscardImg3} className={styles.card_image} />{productDetail.product_specification[0].attr_three}</p>
+                            )
+                          }
+                          {
+                            productDetail.product_specification[0].attr_four && (
+                              <p className={styles.specsCard}><img src={SpecscardImg4} className={styles.card_image} />{productDetail.product_specification[0].attr_four}</p>
+                            )
+                          }
+                          {
+                            productDetail.product_specification[0].attr_five && (
+                              <p className={styles.specsCard}><img src={SpecscardImg5} className={styles.card_image} />{productDetail.product_specification[0].attr_five}</p>
+                            )
+                          }
+                          {
+                            productDetail.product_specification[0].attr_six && (
+                              <p className={styles.specsCard}><img src={SpecscardImg6} className={styles.card_image} />{productDetail.product_specification[0].attr_six}</p>
+                            )
+                          }
+                        </div>
+                      )
+                    }
+
 
                   </div>
                 </div>
@@ -438,8 +481,14 @@ const ProductDetailsComponent = ({ id, loading }) => {
                 </div>
               </div>
               <div className={styles.related_products_container}>
-                <div className={styles.divider}>Faucibus adipiscing ligula cursus</div>
-                <RelatedProductComponent id={id} />
+                {
+                  productDetail.related_products.length > 0 && (
+                    <>
+                      <div className={styles.divider}>Faucibus adipiscing ligula cursus</div>
+                      <RelatedProductComponent parent={'productRelatedProduct'} productParent={productDetail.related_products} />
+                    </>
+                  )
+                }
               </div>
               <div className={`${styles.homePage_categories_container_main} container`}>
                 <div className={styles.homePage_categories_container}>
@@ -515,8 +564,14 @@ const ProductDetailsComponent = ({ id, loading }) => {
                 </div>
               </div>
               <div className={styles.related_products_container}>
-                <div className='container fw-bold'><h5> Dictum mi pretium porttitor suscipit phasellus laoreet</h5></div>
-                <RelatedProductComponent id={id} parent={'newArrivals'} />
+                {
+                  productDetail.upsell_products.length > 0 && (
+                    <>
+                      <div className='container fw-bold'><h5> Dictum mi pretium porttitor suscipit phasellus laoreet</h5></div>
+                      <RelatedProductComponent parent={'newArrivals'} productParent={productDetail.upsell_products} />
+                    </>
+                  )
+                }
               </div>
               <div className='container mt-5 mb-4'>
                 <div className={styles.productsFaq}>

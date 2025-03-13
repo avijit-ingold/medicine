@@ -149,7 +149,7 @@ const GenericApiProvider = ({ children }) => {
         const headers = {
             "Content-Type": "application/json",
             "System-Key": "12345",
-            "Authorization": `Bearer ${loggedinData.access_token}`
+            "Authorization": `Bearer ${sessionStorage.getItem('CustomerToken')}`
         };
 
         axios({
@@ -159,6 +159,16 @@ const GenericApiProvider = ({ children }) => {
             headers: headers
         }).then((res) => {
             if (parent === 'addAddress') {
+                if (res) {
+                    toast.success('Successful', {
+                        autoClose: 1100
+                    });
+                } else {
+                    toast.error("Something Went Wrong!", {
+                        autoClose: 1100
+                    });
+                }
+            } else if (parent === 'addToCart') {
                 if (res) {
                     toast.success('Successful', {
                         autoClose: 1100
@@ -344,7 +354,7 @@ const GenericApiProvider = ({ children }) => {
             url: process.env.REACT_APP_API_URL + 'b2c/cartlist?cartid=4&loggin=true', // you got cart id dusring add to cart
             headers: headers
         }).then((res) => {
-            if (res.data[0]) {                
+            if (res.data[0]) {
                 setCartCount(parseInt(res.data[0].total_qty))
                 setCartList(res)
             } else {
@@ -447,7 +457,8 @@ const GenericApiProvider = ({ children }) => {
         profileImage,
         purchaseHistory,
         returnData,
-        addToCartSuccess
+        addToCartSuccess,
+        setCartCount
     }
 
     useEffect(() => {

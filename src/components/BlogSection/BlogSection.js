@@ -24,6 +24,7 @@ const data = [
     discount: 10,
     banner: Layer1,
     postdate: '03/12/2025',
+    blog_name: "Understanding JSON Basics",
 
   },
   {
@@ -34,6 +35,7 @@ const data = [
     discount: 10,
     banner: Layer2,
     postdate: '03/12/2025',
+    blog_name: "Top 10 Programming Languages in 2024",
 
   },
   {
@@ -44,6 +46,7 @@ const data = [
     discount: 10,
     banner: Layer3,
     postdate: '03/12/2025',
+    blog_name: "How to Build a Responsive Website",
 
   },
   {
@@ -54,80 +57,14 @@ const data = [
     discount: 10,
     banner: Layer4,
     postdate: '03/12/2025',
+    blog_name: "Introduction to AI and Machine Learning",
 
-  },
-  // {
-  //   id: 5,
-  //   name: 'Product 5',
-  //   thumbnail_image: ProductVariant5,
-  //   stroked_price: 15,
-  //   discount: 10,
-  //   banner: ProductVariant5,
-  //   postdate: '03/12/2025',
-
-  // }
+  }
 ]
 
 const BlogSection = () => {
 
   const [blogList, setBlogList] = useState(data);
-
-  const blogsArray = [
-    {
-      "blog_name": "Understanding JSON Basics",
-      "number_of_comments": 15,
-      "blog_date": "November 05,2024",
-      "img": Layer1
-    },
-    {
-      "blog_name": "Top 10 Programming Languages in 2024",
-      "number_of_comments": 23,
-      "blog_date": "November 05,2024",
-      "img": Layer2
-    },
-    {
-      "blog_name": "How to Build a Responsive Website",
-      "number_of_comments": 8,
-      "blog_date": "November 05,2024",
-      "img": Layer3
-    },
-    {
-      "blog_name": "Introduction to AI and Machine Learning",
-      "number_of_comments": 30,
-      "blog_date": "November 05,2024",
-      "img": Layer4
-    },
-    {
-      "blog_name": "The Future of Cloud Computing",
-      "number_of_comments": 12,
-      "blog_date": "November 05,2024",
-      "img": Layer5
-    },
-    {
-      "blog_name": "Top 10 Programming Languages in 2024",
-      "number_of_comments": 23,
-      "blog_date": "November 05,2024",
-      "img": Layer6
-    },
-    {
-      "blog_name": "How to Build a Responsive Website",
-      "number_of_comments": 8,
-      "blog_date": "November 05,2024",
-      "img": Layer1
-    },
-    {
-      "blog_name": "Introduction to AI and Machine Learning",
-      "number_of_comments": 30,
-      "blog_date": "November 05,2024",
-      "img": Layer2
-    },
-    {
-      "blog_name": "The Future of Cloud Computing",
-      "number_of_comments": 12,
-      "blog_date": "November 05,2024",
-      "img": Layer3
-    }
-  ]
 
   const context = useContext(GenericApiContext)
 
@@ -207,24 +144,6 @@ const BlogSection = () => {
       }
     ]
   }
-
-
-
-    // useEffect(() => {
-    //   const getBlogData = () => {
-    //     const url = 'bloglist'
-
-    //     context.getGetData(url, 'bloglist');
-    //   }
-
-    //   getBlogData();
-    // }, [])
-
-    // useEffect(() => {
-    //   if (context.getBlogList) {
-    //     setBlogList(context.getBlogList.data.data);
-    //   }
-    // }, [context.getBlogList])
 
 
   return (

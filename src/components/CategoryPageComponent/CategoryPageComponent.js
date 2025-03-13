@@ -8,6 +8,7 @@ import Product from '../Product/Product';
 import { ChevronDown, ChevronExpand, Sliders, } from 'react-bootstrap-icons';
 import FilterCollapsible from '../FilterCollapsible/FilterCollapsible';
 import ProductSecond from '../ProductSecond/ProductSecond';
+import { Link } from 'react-router-dom';
 
 const CategoryPageComponent = ({ id, loading, parent }) => {
   const [categoryDetails, setCategoryDetails] = useState();
@@ -63,10 +64,10 @@ const CategoryPageComponent = ({ id, loading, parent }) => {
     if (parent === 'category') {
       const getCategoryProducts = () => {
         const loginDetails = sessionStorage.getItem('loginDetails') ? JSON.parse(sessionStorage.getItem('loginDetails')) : null
-        if(loginDetails){
+        if (loginDetails) {
           const url = `b2c/getProductsByCategory?customerid=${loginDetails.id}&categoryId=${id}&pagesize=10&pagenum=1`
           context.getGetData(url, `categoryDetails`);
-        }else{
+        } else {
           const url = `b2c/getProductsByCategory?customerid=&categoryId=${id}&pagesize=10&pagenum=1`
           context.getGetData(url, `categoryDetails`);
         }
@@ -115,8 +116,20 @@ const CategoryPageComponent = ({ id, loading, parent }) => {
         </div>
       </div>
       <div className={styles.filterSection_container + ' container'}>
-        <span className={styles.breadCrumb_section}>Lorem Ipsum &nbsp; &nbsp;  &gt; &nbsp; &nbsp; Lorem Ipsum  &nbsp; &nbsp; &gt; &nbsp; &nbsp;  Lorem Ipsum</span>
-        <div className={styles.filter_icon_container}>
+        <nav aria-label="breadcrumb">
+          <ol className={"breadcrumb " + styles.custom_breadcrumb}>
+            <li className={styles.breadcrumb_item}>
+              <Link to="/home" className="text-primary text-decoration-none">Home</Link>
+            </li>
+            <li className={styles.breadcrumb_item + " active text-grey"} aria-current="page">
+              {
+                parent == 'category' ? (<>Category</>) : (<>Brand</>)
+              }
+            </li>
+          </ol>
+        </nav>
+        {/* <span className={styles.breadCrumb_section}>Lorem Ipsum &nbsp; &nbsp;  &gt; &nbsp; &nbsp; Lorem Ipsum  &nbsp; &nbsp; &gt; &nbsp; &nbsp;  Lorem Ipsum</span> */}
+        <div className={styles.filter_icon_container + ' mt-3'}>
           <span><Sliders /> Filters <ChevronDown size={10} /></span>
           <span><ChevronExpand /> Sort</span>
         </div>
