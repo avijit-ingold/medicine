@@ -11,7 +11,7 @@ const Home = () => {
 
     // useEffect(() => {
     //     context.checkIfLoggedIn();
-    //     if (!context.ifLoggedin) {
+    //     if (!context.ifLoggedin){
     //         navigate('/')
     //     }
     // }, [context.ifLoggedin])

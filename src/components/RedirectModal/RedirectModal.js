@@ -11,7 +11,7 @@ const RedirectModal = ({ show, location }) => {
       setTimeout(() => {
         setRedirecting(true);
         setTimeout(() => {
-          navigate('login',{ state: { from: location }, replace: true })
+          navigate('/login',{ state: { from: location }, replace: true })
         }, 2000);
       }, 200);
     }

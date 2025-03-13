@@ -51,7 +51,7 @@ const WishlistComponent = () => {
     setLoggedInData(JSON.parse(sessionStorage.getItem('loginDetails')));
   }, [])
 
-  console.log(wishListData, 'wishListData')
+  // console.log(wishListData, 'wishListData')
 
   return (
     <div className={styles.wishlist_container}>

@@ -130,7 +130,7 @@ const AccountDetails = () => {
       const validAddresses = context.customerData.data.addresses.filter(
         (address) => address.default_billing && address.default_shipping
       );
-      console.log(validAddresses)
+      // console.log(validAddresses)
       setHasDefaultAddress(true);
       setUserAddress(validAddresses)
     }

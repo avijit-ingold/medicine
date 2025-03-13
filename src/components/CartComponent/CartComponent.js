@@ -72,7 +72,7 @@ const CartComponent = () => {
   }
 
   const createOrder = () => {
-    console.log(cartData)
+    // console.log(cartData)
     const url = 'order/store';
 
     const reqBody = {
@@ -100,7 +100,7 @@ const CartComponent = () => {
         url: process.env.REACT_APP_API_URL + `b2c/cartlist?cartid=${sessionStorage.getItem('QuoteID')}&loggin=true`,
         headers: headers
       }).then((res) => {
-        console.log(res.data)
+        // console.log(res.data)
         setCartSummary(res.data[0]);
         setCartData(res.data);
 

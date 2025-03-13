@@ -48,11 +48,11 @@ const ShopByCategories = () => {
       var tempArray = []
       if (context.getCategoryData.data) {
         if (context.getCategoryData.data.length > 0) {
-          console.log(context.getCategoryData.data, 'context.getCategoryData.data')
+          // console.log(context.getCategoryData.data, 'context.getCategoryData.data')
           context.getCategoryData.data.map((ele) => {
             const encrypted = encryptData(ele.id);
             tempArray.push(encrypted);
-            console.log(encrypted, ele.id)
+            // console.log(encrypted, ele.id)
           })
         }
       }

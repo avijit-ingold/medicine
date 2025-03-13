@@ -35,6 +35,7 @@ import DetailsSlider2 from '../../assets/images/Medical/details-slider-2.png';
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import RedirectModal from '../RedirectModal/RedirectModal';
 
 
 gsap.registerPlugin(ScrollTrigger);
@@ -50,8 +51,10 @@ const ProductDetailsComponent = ({ id, loading }) => {
   const [cartSuccess, setCartSuccess] = useState(false)
   const [hovEffect, setHovEffect] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState();
+  const [showModal, setShowModal] = useState(false);
 
   const variantArray = [ProductVariant1, ProductVariant2, ProductVariant3, ProductVariant4];
+  const locationSelf = useLocation()
 
   const categories = [
     {
@@ -150,7 +153,7 @@ const ProductDetailsComponent = ({ id, loading }) => {
 
   useEffect(() => {
     if (context.getProductDetails) {
-      console.log(context.getProductDetails.data[0], 'context.getProductDetails')
+      // console.log(context.getProductDetails.data[0], 'context.getProductDetails')
       if (context.getProductDetails.data[0]) {
         setProductDetails(context.getProductDetails.data[0])
       }
@@ -332,9 +335,9 @@ const ProductDetailsComponent = ({ id, loading }) => {
                     <div className={styles.product_demoContainer}>
                       <img src={productDetail.image_url} className={`${styles.variant_image} ${selectedImage === productDetail.thumbnail_image ? styles.selected : ''}`} onClick={() => setSelectedImage(productDetail.image_url)} />
                       {
-                        productDetail.all_images && productDetail.all_images.map((ele) => {
+                        productDetail.all_images && productDetail.all_images.map((ele, id) => {
                           return (
-                            <img src={ele.url} className={`${styles.variant_image} ${selectedImage === ele ? styles.selected : ''}`} onClick={() => setSelectedImage(ele.url)} />)
+                            <img key={id} src={ele.url} className={`${styles.variant_image} ${selectedImage === ele ? styles.selected : ''}`} onClick={() => setSelectedImage(ele.url)} />)
                         })
                       }
                     </div>
@@ -364,14 +367,14 @@ const ProductDetailsComponent = ({ id, loading }) => {
                         <p className={styles.price_description}>Base Price: {(parseInt(productDetail.price))} / P</p>
                       )
                     }
-                    <div className={styles.size_container}>
+                    {/* <div className={styles.size_container}>
                       <span className={styles.size}>Size
                         <div className={styles.size_selector}>
                           <p>100</p>
                           <p>150 capsules</p>
                         </div>
                       </span>
-                    </div>
+                    </div> */}
 
                     <div className={styles.size_container}>
                       <span className={styles.size}>Quantity
@@ -398,8 +401,8 @@ const ProductDetailsComponent = ({ id, loading }) => {
                             </>
                           ) : (
                             <>
-                              <button className={styles.cart_button + + ' d-none d-lg-block '} onClick={() => navigate('/', { state: { from: location }, replace: true })}>
-                                <span className={styles.add_to_cart}>Add to cart</span>
+                              <button className={styles.cart_button + ' d-none d-lg-block '} onClick={() =>  setShowModal(true)}>
+                                <span className={styles.add_to_cart}>ADD TO CART</span>
                               </button>
                             </>
                           )
@@ -583,6 +586,7 @@ const ProductDetailsComponent = ({ id, loading }) => {
           )
         )
       }
+      <RedirectModal show={showModal} location={locationSelf} />
     </>
 
   )

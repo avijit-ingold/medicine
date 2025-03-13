@@ -147,9 +147,9 @@ const CategoryPageComponent = ({ id, loading, parent }) => {
       </div>
       <div className={styles.productFilter_Section}>
         <div className={styles.productFilter_list_container}>
-          {filterOptions && filterOptions.map((ele) => {
+          {filterOptions && filterOptions.map((ele, id) => {
             return (
-              <FilterCollapsible options={ele} />
+              <FilterCollapsible key={id} options={ele} />
             )
           })}
         </div>

@@ -154,7 +154,7 @@ const AddressDetails = () => {
         state.current.value = param.country_id ? getStateCode(param.country_id) : '';
       }
       if (firstName.current) {
-        console.log(param.firstName)
+        // console.log(param.firstName)
         firstName.current.value = param.firstname ? param.firstname : '';
       }
       if (lastName.current) {

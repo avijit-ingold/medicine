@@ -55,7 +55,7 @@ const Product = ({ productObject, parent , ele}) => {
   }, [productObject])
 
   useEffect(() => {
-    console.log(productObject, 'anish')
+    // console.log(productObject, 'anish')
   })
 
 
