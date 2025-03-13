@@ -136,7 +136,7 @@ const Header = () => {
   }
 
   const redirect = (id) => {
-    navigate(`/category/${categoryEncryptedArray[id - 1]}`);
+    navigate(`/category/${categoryEncryptedArray[id]}`);
     setShowCategories(false)
   }
 
@@ -316,7 +316,7 @@ const Header = () => {
                       {
                         categories && categories.map((ele, id) => {
                           return (
-                            <p key={id} onClick={() => redirect(ele.id)}>{ele.name}</p>
+                            <p key={id} onClick={() => redirect(id)}>{ele.name}</p>
                           )
                         })
                       }
