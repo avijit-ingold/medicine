@@ -19,6 +19,18 @@ const NewsletterSection = () => {
         <div className={styles.newsLetterSection_right_container + ' col-7'}>
           <span className={styles.newsLetterSection_text_heading}>Sign Up For Newsletter</span>
           <span className={styles.newsLetterSection_text_sub_heading}>Join 60,000+ Subscriber and get a new discount coupon every Saturday</span>
+          <div>
+            <form className={styles.subscribe_form} onSubmit={handleSubmit}>
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <button type="submit">SUBSCRIBE</button>
+            </form>
+          </div>
         </div>
         <div className={styles.newsLetterSection_left_container + ' col-5'}>
           <span className={styles.downloadNow_text} > Download the app now! </span>
@@ -31,18 +43,7 @@ const NewsletterSection = () => {
             </div>
           </div>
         </div>
-        <div>
-          <form className={styles.subscribe_form} onSubmit={handleSubmit}>
-            <input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <button type="submit">SUBSCRIBE</button>
-          </form>
-        </div>
+
       </div>
     </div>
   )

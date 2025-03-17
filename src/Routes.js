@@ -11,6 +11,7 @@ import Category from "./pages/Category";
 import Checkout from "./pages/Checkout";
 import Privacy from "./pages/Privacy";
 import Blogs from "./pages/Blogs";
+import PaymentSuccesful from "./pages/PaymentSuccesful";
 
 
 const AppRoutes = () => {
@@ -42,10 +43,13 @@ const AppRoutes = () => {
                     <Checkout />
                 } />
                 <Route path="/privacy" element={
-                    <Privacy/>
+                    <Privacy />
                 } />
                 <Route path="/blogs" element={
-                    <Blogs/>
+                    <Blogs />
+                } />
+                <Route path="/success/:orderId" element={
+                    <PaymentSuccesful />
                 } />
             </Routes>
         </BrowserRouter>

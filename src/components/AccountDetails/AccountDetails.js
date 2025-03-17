@@ -3,7 +3,7 @@ import styles from './AccountDetails.module.css';
 import { GenericApiContext } from '../../context/GenericApiContext';
 import { Modal, Button, Form, InputGroup } from "react-bootstrap";
 import { Eye, EyeSlash, Camera } from 'react-bootstrap-icons';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const AccountDetails = () => {
   const [userAddress, setUserAddress] = useState([]);
@@ -20,6 +20,7 @@ const AccountDetails = () => {
   const [wishListData, setWishListData] = useState();
   const [recentlyBought, setRecentlyBought] = useState(null);
   const [customerDetails, setCustomerDetails] = useState(null);
+  const [orderList, setOrderList] = useState(null)
 
   const context = useContext(GenericApiContext);
   const location = useLocation();
@@ -42,19 +43,19 @@ const AccountDetails = () => {
     getWishListDetails();
   }
 
-  // const getOrderDetails = () => {
-  //   const url = 'purchase-history'
-  //   if (context.ifLoggedin) {
-  //     context.getGetData(url, 'purchaseHistory');
-  //   }
-  // }
+  const getOrderDetails = () => {
+    const customerDetails = JSON.parse(sessionStorage.getItem("loginDetails"))
+    const url = `orders?searchCriteria[filterGroups][0][filters][0][field]=customer_id&searchCriteria[filterGroups][0][filters][0][value]=${customerDetails.id}&searchCriteria[filterGroups][0][filters][0][condition_type]=eq&searchCriteria[pageSize]=10&searchCriteria[currentPage]=1`
+    context.getGetData(url, 'orderList');
+  }
+
 
   const handleClose = () => setShow(false);
 
   useEffect(() => {
     getCustomerDetails();
     getWishListDetails();
-    // getOrderDetails();
+    getOrderDetails();
   }, [])
 
   useEffect(() => {
@@ -62,6 +63,13 @@ const AccountDetails = () => {
       setWishListData(context.wishList.data);
     }
   }, [context.wishList])
+
+  useEffect(() => {
+    if (context.orderList) {
+      console.log('context.orderList', context.orderList.data)
+      setOrderList(context.orderList.data)
+    }
+  }, [context.orderList])
 
 
   const handleModalClose = () => setImageModalShow(false);
@@ -136,18 +144,6 @@ const AccountDetails = () => {
     }
   }, [context.customerData])
 
-  // useEffect(() => {
-  //   if (userAddress.length > 0) {
-  //     const defaultAddress = userAddress.find(item => item.set_default == 1)
-  //     setHasDefaultAddress(defaultAddress);
-  //   }
-  // }, [userAddress])
-
-  // useEffect(() => {
-  //   if (context.purchaseHistory) {
-  //     setRecentlyBought(context.purchaseHistory.data.data)
-  //   }
-  // }, [context.purchaseHistory])
 
 
 
@@ -175,7 +171,6 @@ const AccountDetails = () => {
                 </div>
                 <div className={styles.profile_image_container_main}>
                   <div className={styles.profile_image_container} onClick={() => setImageModalShow(true)}>
-                    {/* <img className={styles.profile_image} src={context.profileImage ? context.profileImage : sessionStorage.getItem('uploadedImage') ? sessionStorage.getItem('uploadedImage') : context.loggedinData.user.avatar_original} /> */}
                     <span className={styles.profile_change_image}><Camera color='white' /></span>
                   </div>
                 </div>
@@ -269,17 +264,17 @@ const AccountDetails = () => {
               </tr>
             </thead>
             <tbody>
-              {recentlyBought && recentlyBought.map((item, id) => {
+              {orderList && orderList.items.map((item, id) => {
                 return (
                   <tr key={id}>
-                    <td>{item.code}</td>
-                    <td>{item.date}</td>
-                    <td>{item.payment_type}</td>
-                    <td>{item.payment_status}</td>
-                    <td>{item.grand_total}</td>
-                    <td>{item.delivery_status}</td>
+                    <td>{id + 1}</td>
+                    <td>{item.created_at}</td>
+                    <td>{item.payment.additional_information[0]}</td>
+                    <td>{item.payment.additional_information[0]}</td>
+                    <td>{item.base_grand_total}</td>
+                    <td>{item.shipping_description}</td>
                     <td>
-                      <a href="#">View Order</a> | <a href="#">Reorder</a>
+                      <Link to={`/success/${item.items[0].order_id}`}>View Order</Link>
                     </td>
                   </tr>
                 )

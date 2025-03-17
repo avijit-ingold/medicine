@@ -34,15 +34,27 @@ const AddressDetails = () => {
     setShow(true);
   };
 
+
+const getRegionByCode = (name) => {
+  const region = userState.find(region => region.name === name);
+  return region ? { id: region.id, code: region.code } : null;
+}
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(state.current.value)
+    const region = getRegionByCode(state.current.value)
+    const region_code = region.code;
+    const region_id = region.id;
+
+    console.log(region_code,region_id )
 
     const reqBody = {
       "addressData": {
         "region": {
-          "region_code": null,
-          "region": "ddd",
-          "region_id": 0
+          "region_code": region_code,
+          "region": state.current ? state.current.value : '',
+          "region_id": region_id
         },
         "country_id": country.current.value ? country.current.value : '',
         "street": [

@@ -1,0 +1,23 @@
+.canavsContainer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.canvas {
+    width: 500px;
+}
+
+.redirectButton {
+    border: none;
+    background: #003399;
+    height: 60px;
+    width: 210px;
+    border-radius: 30px;
+    margin: 15px;
+    color: white;
+}
+
+.redirectButton:hover{
+    background-color: #7c8fb6;
+}

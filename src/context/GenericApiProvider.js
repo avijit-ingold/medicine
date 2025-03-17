@@ -37,6 +37,9 @@ const GenericApiProvider = ({ children }) => {
     const [addToCartSuccess, setAddToCartSuccess] = useState(false)
     const [customerData, setCustomerData] = useState(null);
     const [adminToken, setAdminToken] = useState();
+    const [paymentMethod, setPaymentMethod] = useState(null);
+    const [orderDetails, setOrderDetails] = useState(null);
+    const [orderList, setOrderList] = useState(null);
 
     const getAdminPostData = async (url, requestBody, parent) => {
         setLoading(true);
@@ -220,16 +223,6 @@ const GenericApiProvider = ({ children }) => {
             "Authorization": `Bearer ${sessionStorage.getItem('AdminToken')}`,
         };
 
-        // } else {
-        //     headers = {
-        //         "Content-Type": "application/json",
-        //         "X-Requested-With": "XMLHttpRequest",
-        //         "System-Key": "12345",
-        //         // "Authorization": `Bearer ${(JSON.parse(loggedinData)).access_token}`
-        //     };
-
-        // }
-
         axios({
             method: 'GET',
             url: process.env.REACT_APP_API_URL + url,
@@ -290,6 +283,12 @@ const GenericApiProvider = ({ children }) => {
             else if (type === 'return') {
                 setReturnData(res)
             }
+            else if(type === 'orderDetails'){
+                setOrderDetails(res)
+            }
+            else if(type === 'orderList'){
+                setOrderList(res)
+            }
         }).finally(() => {
             const timer = setTimeout(() => {
                 setLoading(false);
@@ -334,6 +333,8 @@ const GenericApiProvider = ({ children }) => {
                         autoClose: 1100
                     });
                 }
+            } else if (type == 'paymentMethod') {
+                setPaymentMethod(res)
             }
         }).catch((err) => {
             toast.error(`Error: ${err.message || "Something went wrong!"}`);
@@ -461,6 +462,9 @@ const GenericApiProvider = ({ children }) => {
         purchaseHistory,
         returnData,
         addToCartSuccess,
+        paymentMethod,
+        orderDetails,
+        orderList,
         setCartCount
     }
 
