@@ -19,7 +19,7 @@ const Profile = () => {
 
     const { cart } = useParams();
 
-    const menuArray = ['My Account', 'My Orders', 'My Wish List', 'My Cart', 'Address Book', 'Store Credit', 'Users', 'My Product Reviews']
+    const menuArray = ['My Account', 'My Wish List', 'My Cart', 'Address Book', 'Store Credit', 'Users', 'My Product Reviews']
 
     const handleSideMenuClick = (index, value) => {
         setSelectedIndex(index);
@@ -68,10 +68,6 @@ const Profile = () => {
                                 selectedMenu && selectedMenu === 'My Account' ? (
                                     <>
                                         <AccountDetails />
-                                    </>
-                                ) : selectedMenu === 'My Orders' ? (
-                                    <>
-                                        <OrderDetails />
                                     </>
                                 ) : selectedMenu === 'Address Book' ? (
                                     <>
