@@ -47,7 +47,7 @@ const Product = ({ productObject, parent , ele}) => {
 
   useEffect(() => {
     const handleEncrypt = () => {
-      const encrypted = encryptData(productObject.id);
+      const encrypted = encryptData(productObject.sku);
       setProductId(encrypted);
     };
 

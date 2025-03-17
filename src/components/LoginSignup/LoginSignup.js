@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-import PropTypes from 'prop-types';
 import styles from './LoginSignup.module.css';
 import { GenericApiContext } from '../../context/GenericApiContext';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -174,8 +173,6 @@ const LoginSignup = () => {
       navigate('/')
     }
   }, [context.ifLoggedin])
-
-
 
 
   return (

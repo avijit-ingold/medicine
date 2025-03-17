@@ -23,6 +23,7 @@ const data = [
     discount: 10,
     banner: ProductVariant1,
     postdate: '03/12/2025',
+    sku: "Product1",
 
   },
   {
@@ -33,6 +34,7 @@ const data = [
     discount: 10,
     banner: ProductVariant2,
     postdate: '03/12/2025',
+    sku: "Product2",
 
   },
   {
@@ -43,6 +45,7 @@ const data = [
     discount: 10,
     banner: ProductVariant3,
     postdate: '03/12/2025',
+    sku: "Product3",
 
   },
   {
@@ -53,6 +56,7 @@ const data = [
     discount: 10,
     banner: ProductVariant4,
     postdate: '03/12/2025',
+    sku: "Product5",
 
   },
   // {
@@ -168,11 +172,11 @@ const NewArrivalSection = () => {
   // }, [context.getTodayDealData])
 
 
- 
+
   useEffect(() => {
-   
-      setProducts(data);
-    
+
+    setProducts(data);
+
   }, [])
 
   return (

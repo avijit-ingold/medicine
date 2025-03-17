@@ -26,19 +26,15 @@ const HeaderMobile = () => {
   };
 
   const handleAfterLogin = (param) => {
-    setCustName(getInitials(param.user.name));
+    setCustName(getInitials(param.firstname, param.lastname));
   }
 
-  const getInitials = (name) => {
-    var parts = name.split(' ')
-    var initials = ''
-    for (var i = 0; i < parts.length; i++) {
-      if (parts[i].length > 0 && parts[i] !== '') {
-        initials += parts[i][0]
-      }
-    }
-    return initials
-  }
+
+  const getInitials = (firstName, lastName) => {
+    if (!firstName || !lastName) return '';
+    return `${firstName.charAt(0).toUpperCase()}${lastName.charAt(0).toUpperCase()}`;
+  };
+
 
   useEffect(() => {
     if (context.getHeaderdata) {
@@ -58,7 +54,6 @@ const HeaderMobile = () => {
   return (
     <>
       <header>
-
         <div className={styles.hamburger_menu_container}>
           <div className={styles.navbar_adress_details_container_main}>
             <div className={styles.navbar_adress_details_container}>
