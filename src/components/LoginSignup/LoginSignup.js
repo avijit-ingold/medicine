@@ -2,8 +2,9 @@ import React, { useState, useEffect, useContext } from 'react';
 import styles from './LoginSignup.module.css';
 import { GenericApiContext } from '../../context/GenericApiContext';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
 import { Toast, ToastContainer } from 'react-bootstrap';
-
+import axios from 'axios';
 
 
 const LoginSignup = () => {
@@ -60,40 +61,66 @@ const LoginSignup = () => {
   const signUpUser = (e) => {
     e.preventDefault();
 
-    const SplittedName = splitFullName(signUpName);
-    const requestBody = {
-      "customer": {
-        "email": signUpEmail,
-        "firstname": SplittedName.firstName,
-        "lastname": SplittedName.lastName,
-        "group_id": 1,
-        "dob": "1/05/2025",
-        "taxvat": "",
-        "addresses": [
-          {
-            "default_billing": true,
-            "default_shipping": true,
-            "firstname": "Jane",
-            "lastname": "Doe",
-            "street": ["123 Main St"],
-            "city": "New York",
-            "region": {
-              "region_code": "NY",
-              "region": "New York",
-              "region_id": 43
-            },
-            "postcode": "10001",
-            "country_id": "US",
-            "telephone": "1234567890"
-          }
-        ]
-      },
-      "password": signUpPassword
-    }
+    const check_url = `customers/search?searchCriteria[filterGroups][0][filters][0][field]=email&searchCriteria[filterGroups][0][filters][0][value]=${signUpEmail}&searchCriteria[filterGroups][0][filters][0][conditionType]=eq`
 
-    const url = 'customers'
+    const headers = {
+      "Content-Type": "application/json",
+      "System-Key": "12345",
+      "Authorization": `Bearer ${sessionStorage.getItem('AdminToken')}`
+    };
 
-    context.getAdminPostData(url, requestBody, 'registration');
+    axios({
+      method: 'GET',
+      url: process.env.REACT_APP_API_URL + check_url,
+      headers: headers
+    }).then((res) => {
+      if (res.data.items.length == 0) {
+        const SplittedName = splitFullName(signUpName);
+        const requestBody = {
+          "customer": {
+            "email": signUpEmail,
+            "firstname": SplittedName.firstName,
+            "lastname": SplittedName.lastName,
+            "group_id": 1,
+            "dob": "1/05/2025",
+            "taxvat": "",
+            "addresses": [
+              {
+                "default_billing": true,
+                "default_shipping": true,
+                "firstname": "Jane",
+                "lastname": "Doe",
+                "street": ["123 Main St"],
+                "city": "New York",
+                "region": {
+                  "region_code": "NY",
+                  "region": "New York",
+                  "region_id": 43
+                },
+                "postcode": "10001",
+                "country_id": "US",
+                "telephone": "1234567890"
+              }
+            ]
+          },
+          "password": signUpPassword
+        }
+
+        const url = 'customers'
+
+        context.getAdminPostData(url, requestBody, 'registration');
+      } else {
+        toast.error('User Already Registered', {
+          autoClose: 1100
+        });
+      }
+    }).catch((err) => {
+
+    }).finally(() => {
+
+    });
+
+
   };
 
   const handleLogin = (param) => {

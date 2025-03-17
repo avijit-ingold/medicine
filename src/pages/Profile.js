@@ -2,7 +2,6 @@ import { useState, useContext, useEffect } from "react";
 import Layout from "./Layout"
 import styles from './page.module.css';
 import AccountDetails from '../components/AccountDetails/AccountDetails';
-import OrderDetails from '../components/OrderDetails/OrderDetails';
 import AddressDetails from "../components/AddressDetails/AddressDetails";
 import StoreCredit from "../components/StoreCredit/StoreCredit";
 import UsersComponent from "../components/UsersComponent/UsersComponent";
