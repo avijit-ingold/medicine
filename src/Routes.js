@@ -42,9 +42,6 @@ const AppRoutes = () => {
                 <Route path="/checkout" element={
                     <Checkout />
                 } />
-                <Route path="/privacy" element={
-                    <Privacy />
-                } />
                 <Route path="/blogs" element={
                     <Blogs />
                 } />
