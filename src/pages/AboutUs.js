@@ -44,7 +44,7 @@ const AboutUs = () => {
                                             <img src={Layer1} alt="" />
                                         </div>
                                     </div>
-                                    <div className="col-lg-6 col-md-12 right-side">
+                                    <div className="col-lg-6 col-md-12 right-side align-items-center d-flex">
                                         <div className="about_content">
                                             <h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h4>
                                             <p>
@@ -63,7 +63,7 @@ const AboutUs = () => {
                                             <img src={Layer2} alt="" />
                                         </div>
                                     </div>
-                                    <div className="col-lg-6 col-md-12 left-side">
+                                    <div className="col-lg-6 col-md-12 left-side align-items-center d-flex">
                                         <div className="about_content">
                                             <h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h4>
                                             <p>
@@ -82,7 +82,7 @@ const AboutUs = () => {
                                             <img src={Layer3} alt="" />
                                         </div>
                                     </div>
-                                    <div className="col-lg-6 col-md-12 right-side">
+                                    <div className="col-lg-6 col-md-12 right-side align-items-center d-flex">
                                         <div className="about_content">
                                             <h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h4>
                                             <p>
