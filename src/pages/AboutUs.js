@@ -37,6 +37,9 @@ const AboutUs = () => {
                 {
                     aboutUs && (
                         <div style={{ marginTop: '110px' }}>
+                            {/* <div dangerouslySetInnerHTML={{__html:aboutUs}}>
+
+                            </div> */}
                             <div className={styles.mainContainer + ' container'}>
                                 <div className="row mb-4">
                                     <div className="col-lg-6 col-md-12 image left-side">
