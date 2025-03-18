@@ -167,8 +167,8 @@ const HeaderMobile = () => {
             <li onClick={() => navigate('blogs')}>
               Blogs
             </li>
-            <li>
-              <a href="">About Us</a>
+            <li onClick={() => navigate('aboutUs')}>
+              About Us
             </li>
             {
               sessionStorage.getItem('loginDetails') && (

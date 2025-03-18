@@ -42,6 +42,7 @@ const GenericApiProvider = ({ children }) => {
     const [orderDetails, setOrderDetails] = useState(null);
     const [orderList, setOrderList] = useState(null);
     const [logout, setLogout] = useState(null);
+    const [aboutUsContent, setAboutUsContent] = useState(null)
 
 
     const getAdminPostData = async (url, requestBody, parent) => {
@@ -304,6 +305,9 @@ const GenericApiProvider = ({ children }) => {
             else if (type === 'orderList') {
                 setOrderList(res)
             }
+            else if(type === 'aboutus'){
+                setAboutUsContent(res)
+            }
         }).finally(() => {
             const timer = setTimeout(() => {
                 setLoading(false);
@@ -496,6 +500,7 @@ const GenericApiProvider = ({ children }) => {
         orderList,
         logout,
         setLoading,
+        aboutUsContent,
         setCartCount
     }
 

@@ -151,3 +151,7 @@
 .privacy_sidebar a:hover {
     text-decoration: underline;
 }
+
+.mainContainer img{
+    width: 150px;
+}
