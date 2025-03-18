@@ -233,7 +233,7 @@ header {
 
 .navbar_headLogo {
     height: 20px;
-    width: 20px;
+    width: 90px;
 }
 
 .navbar_head_text {
@@ -381,7 +381,7 @@ header {
 
     .navbar_headLogo {
         height: 44px !important;
-        width: 40px !important;
+        width: 210px !important;
     }
 
     .navbar_head_text {

@@ -1,7 +1,12 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React from 'react';
 import styles from './BlogComponent.module.css';
-import { GenericApiContext } from '../../context/GenericApiContext';
 import { Facebook, TwitterX, Linkedin } from 'react-bootstrap-icons';
+import Layer1 from '../../assets/images/Medical/Layer 16.jpg';
+import Layer2 from '../../assets/images/Medical/Layer 17.jpg';
+import Layer3 from '../../assets/images/Medical/Layer 29.png';
+import Layer4 from '../../assets/images/Medical/Layer 30.png';
+import Layer5 from '../../assets/images/Medical/Layer 31.png';
+import Layer6 from '../../assets/images/Medical/Layer 45.png';
 
 const BlogComponent = () => {
   const cards = [
@@ -12,7 +17,7 @@ const BlogComponent = () => {
       category: "Nature",
       tags: ["Flower", "White petaled"],
       author: "Admin",
-      image: "flower.jpg", // Add an image path here
+      image: Layer1, // Add an image path here
     },
     {
       title: "Most Popular And Pleasant Ways To Take A Selfie",
@@ -21,7 +26,7 @@ const BlogComponent = () => {
       category: "Fashion",
       tags: ["Popular", "Selfie"],
       author: "Marry Robson",
-      image: "selfie.jpg",
+      image: Layer2,
     },
     {
       title: "White petaled flower",
@@ -30,7 +35,7 @@ const BlogComponent = () => {
       category: "Nature",
       tags: ["Flower", "White petaled"],
       author: "Admin",
-      image: "flower.jpg", // Add an image path here
+      image: Layer3 // Add an image path here
     },
     {
       title: "Most Popular And Pleasant Ways To Take A Selfie",
@@ -39,7 +44,7 @@ const BlogComponent = () => {
       category: "Fashion",
       tags: ["Popular", "Selfie"],
       author: "Marry Robson",
-      image: "selfie.jpg",
+      image: Layer4,
     },
     {
       title: "White petaled flower",
@@ -48,7 +53,7 @@ const BlogComponent = () => {
       category: "Nature",
       tags: ["Flower", "White petaled"],
       author: "Admin",
-      image: "flower.jpg", // Add an image path here
+      image: Layer5, // Add an image path here
     },
     {
       title: "Most Popular And Pleasant Ways To Take A Selfie",
@@ -57,7 +62,7 @@ const BlogComponent = () => {
       category: "Fashion",
       tags: ["Popular", "Selfie"],
       author: "Marry Robson",
-      image: "selfie.jpg",
+      image: Layer6,
     },
     {
       title: "White petaled flower",
@@ -66,7 +71,7 @@ const BlogComponent = () => {
       category: "Nature",
       tags: ["Flower", "White petaled"],
       author: "Admin",
-      image: "flower.jpg", // Add an image path here
+      image: Layer1, // Add an image path here
     },
     {
       title: "Most Popular And Pleasant Ways To Take A Selfie",
@@ -75,36 +80,19 @@ const BlogComponent = () => {
       category: "Fashion",
       tags: ["Popular", "Selfie"],
       author: "Marry Robson",
-      image: "selfie.jpg",
+      image: Layer2,
     },
     // Add more card objects as needed
   ];
-  const [blogList, setBlogList] = useState(null);
-  const context = useContext(GenericApiContext)
 
-  useEffect(() => {
-    const getBlogData = () => {
-      const url = 'bloglist'
-
-      context.getGetData(url, 'bloglist');
-    }
-
-    getBlogData();
-  }, [])
-
-  useEffect(() => {
-    if (context.getBlogList) {
-      setBlogList(context.getBlogList.data.data);
-    }
-  }, [context.getBlogList])
   return (
     <div className={styles.card_grid}>
-      {blogList && blogList.map((blog, index) => (
+      {cards && cards.map((blog, index) => (
         <div className={styles.card} key={index}>
-          <img src={blog.banner} alt={blog.title} className={styles.card_image} />
+          <img src={blog.image} alt={blog.title} className={styles.card_image} />
           <div className={styles.card_content}>
             <h3>{blog.title}</h3>
-            <p>{blog.short_description}</p>
+            <p>{blog.content}</p>
             <div className={styles.social_icons}>
               <a href="#"><Facebook /></a>
               <a href="#"><TwitterX /></a>

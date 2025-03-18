@@ -77,14 +77,17 @@ const AccountDetails = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const url = 'profile/update';
+    const url = 'customers/me/password';
     const reqBody = {
-      "id": context.loggedinData.user.id,
-      "name": context.loggedinData.user.name,
-      "password": confirmPassword
+      "currentPassword":confirmPassword ,
+      "newPassword": newPassword
     }
 
-    context.getPostDataWithAuth(url, reqBody, '')
+
+    context.getPostDataWithAuth(url, reqBody, 'changePassword')
+    setNewPassword('')
+    setConfirmPassword('')
+
     handleClose();
   };
 
@@ -166,7 +169,7 @@ const AccountDetails = () => {
                   <p>{customerDetails.firstname + ' ' + customerDetails.lastname}</p>
                   <p>{customerDetails.email}</p>
                   <div className={styles.info_actions}>
-                    <a>Edit</a> | <a onClick={() => setShow(true)}>Change Password</a>
+                    <a onClick={() => setShow(true)} style={{ cursor: 'pointer' }}>Change Password</a>
                   </div>
                 </div>
               </div>
@@ -288,6 +291,28 @@ const AccountDetails = () => {
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
+            <Form.Group className="mb-3" controlId="formConfirmPassword">
+              <Form.Label>Old Password</Form.Label>
+              <InputGroup className={styles.modal_inputField}>
+                <Form.Control
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="Enter Old password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                />
+                <div
+                  className={styles.modal_eye_container}
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  {showConfirmPassword ?
+                    (<Eye />) : (<EyeSlash />)
+                  }
+                </div>
+              </InputGroup>
+              
+
+            </Form.Group>
             <Form.Group className="mb-3" controlId="formNewPassword">
               <Form.Label>New Password</Form.Label>
               <InputGroup className={styles.modal_inputField}>
@@ -307,30 +332,9 @@ const AccountDetails = () => {
                   }
                 </div>
               </InputGroup>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formConfirmPassword">
-              <Form.Label>Confirm Password</Form.Label>
-              <InputGroup className={styles.modal_inputField}>
-                <Form.Control
-                  type={showConfirmPassword ? "text" : "password"}
-                  placeholder="Confirm new password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  required
-                />
-                <div
-                  className={styles.modal_eye_container}
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                >
-                  {showConfirmPassword ?
-                    (<Eye />) : (<EyeSlash />)
-                  }
-                </div>
-              </InputGroup>
               {
-                newPassword != confirmPassword ? (<span className={styles.warning}>Your Passwords Dont Match</span>) : ''
+                newPassword && confirmPassword && (newPassword == confirmPassword )? (<span className={styles.warning}>Your New Password cannot be same as Old Password</span>) : ''
               }
-
             </Form.Group>
             <Button variant="primary" type="submit">
               Save Changes

@@ -18,7 +18,6 @@ export const useClickOutside = (callback) => {
         callback();
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -28,7 +27,7 @@ export const useClickOutside = (callback) => {
   return ref;
 };
 
-const data = ['Home', 'About us', 'Flash deal', 'All Categories']
+const data = ['Home', 'About us', 'Blogs', 'All Categories']
 
 const Header = () => {
 
@@ -36,7 +35,7 @@ const Header = () => {
   const [searchText, setSearchText] = useState('')
   const [custName, setCustName] = useState();
   const [customerDetails, setCustomerDetails] = useState(null);
-  const [headerData, setHeaderData] = useState(data);
+  const [ headerData, setHeaderData] = useState(data);
   const [showCategories, setShowCategories] = useState(false);
   const [categories, setCategories] = useState([]);
   const [brandData, setBrandData] = useState(null);
@@ -320,7 +319,7 @@ const Header = () => {
               }
             </div>
             <div className={styles.navbar_headLogo_text_container}>
-              <img className={styles.navbar_headLogo} src={logo} alt='logo' />
+              <img className={styles.navbar_headLogo} onClick={() => navigate('/')} src={logo} alt='logo' />
               {/* <span className={styles.navbar_head_text}>Health Life</span> */}
             </div>
             <div className={styles.navbar_pofile_search_section_container}>
@@ -360,10 +359,6 @@ const Header = () => {
                   )
                 }
               </span>
-              <div>
-                <span className={styles.navbar_profile_name}>EN</span>
-                <span><ChevronDown size={13} /></span>
-              </div>
             </div>
           </div>
         </header>

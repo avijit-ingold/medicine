@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import styles from './HeaderMobile.module.css';
 import { CaretDown, GeoAlt, Envelope, Search, Cart, Person, ChevronDown } from 'react-bootstrap-icons';
 import { GenericApiContext } from '../../context/GenericApiContext';
-import logo from '../../../src/assets/images/Medical/logo.jpg';
+import logo from '../../assets/images/Medical/logo 1.png';
 import { encryptData, decryptData } from "../../utils/CryptoUtils";
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const HeaderMobile = () => {
 
@@ -42,6 +42,12 @@ const HeaderMobile = () => {
   const redirect = (id) => {
     navigate(`/category/${categoryEncryptedArray[id]}`);
   }
+
+  const handleLogout = () => {
+    const url = 'integration/customer/revoke-customer-token';
+    context.getPostDataQuick(url, 'logout')
+  }
+
 
   useEffect(() => {
     loginDetails = JSON.parse(sessionStorage.getItem('loginDetails'));
@@ -80,6 +86,16 @@ const HeaderMobile = () => {
 
   }, [context.getCategoryData])
 
+  useEffect(() => {
+    if (context.logout) {
+      sessionStorage.removeItem('CustomerToken');
+      sessionStorage.removeItem('QuoteID');
+      sessionStorage.removeItem('loginDetails');
+      navigate('/')
+      setMenuActive(false)
+    }
+  }, [context.logout])
+
 
   return (
     <>
@@ -107,9 +123,8 @@ const HeaderMobile = () => {
           </div>
           <div className={styles.hamburger_menu}>
             <div className={styles.bar + ' ' + (menuActive ? styles.animate : "")} onClick={toggleMenu}></div>
-            <div className={styles.navbar_headLogo_text_container}>
-              <img className={styles.navbar_headLogo} src={logo} alt='logo' />
-              <span className={styles.navbar_head_text}>Health Life</span>
+            <div className={styles.navbar_headLogo_text_container} onClick={() => navigate('/')}>
+              <img className={styles.navbar_headLogo} onClick={() => navigate('/')} src={logo} alt='logo' />
             </div>
             <div className={styles.navbar_pofile_search_section_container}>
               <div className={styles.navbar_search_bar}>
@@ -137,7 +152,7 @@ const HeaderMobile = () => {
         <nav className={styles.mobile_menu + " " + (menuActive ? styles.active : "")}>
           <ul className={styles.mobile_menu_list}>
             <li>
-              <a href="">Home</a>
+              <Link to='/'>Home</Link>
             </li>
             <li className={styles.has_children} onClick={toggleSubmenu}>
               <span className={styles.li_about} >Categories <span className={styles.icon_arrow + " " + (submenuOpen ? styles.open : "")}><CaretDown /></span></span>
@@ -149,15 +164,20 @@ const HeaderMobile = () => {
                 })}
               </ul>
             </li>
-            <li>
-              <a href="">Blogs</a>
+            <li onClick={() => navigate('blogs')}>
+              Blogs
             </li>
             <li>
               <a href="">About Us</a>
             </li>
-            <li>
-              <a href="">Logout</a>
-            </li>
+            {
+              sessionStorage.getItem('loginDetails') && (
+                <li>
+                  <a onClick={() => handleLogout()}>Logout</a>
+                </li>
+
+              )
+            }
           </ul>
         </nav >
         <div className={(menuActive ? styles.blurBackground : "d-none")} onClick={toggleMenu}></div>

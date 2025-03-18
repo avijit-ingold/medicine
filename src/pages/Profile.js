@@ -18,7 +18,7 @@ const Profile = () => {
 
     const { cart } = useParams();
 
-    const menuArray = ['My Account', 'My Wish List', 'My Cart', 'Address Book', 'Store Credit', 'My Product Reviews', 'Logout']
+    const menuArray = ['My Account', 'My Wish List', 'My Cart', 'Address Book', 'My Product Reviews', 'Logout']
 
     const handleSideMenuClick = (index, value) => {
         setSelectedIndex(index);
@@ -33,16 +33,16 @@ const Profile = () => {
             navigate('/myProfile/addressBook')
         } else if (value == 'Store Credit') {
             navigate('/myProfile/storeCredit')
-        } else if( value == 'My Product Reviews'){
+        } else if (value == 'My Product Reviews') {
             navigate('/myProfile/productReviews')
-        } else if(value == 'Logout'){
+        } else if (value == 'Logout') {
             handleLogout()
         }
     };
 
     const handleLogout = () => {
         const url = 'integration/customer/revoke-customer-token';
-        context.getPostDataQuick(url , 'logout')
+        context.getPostDataQuick(url, 'logout')
     }
 
 
@@ -63,7 +63,7 @@ const Profile = () => {
         } else if (cart === 'storeCredit') {
             setSelectedMenu('Store Credit');
             setSelectedIndex(4);
-        }else if(cart === 'productReviews'){
+        } else if (cart === 'productReviews') {
             setSelectedMenu('My Product Reviews');
             setSelectedIndex(5);
         } else {
@@ -73,13 +73,11 @@ const Profile = () => {
     }, [cart])
 
     useEffect(() => {
-        if(context.logout){
-            if(context.logout.data){
-                sessionStorage.removeItem('CustomerToken');
-                sessionStorage.removeItem('QuoteID');
-                navigate('/')
-                sessionStorage.removeItem('loginDetails');
-            }
+        if (context.logout) {
+            sessionStorage.removeItem('CustomerToken');
+            sessionStorage.removeItem('QuoteID');
+            sessionStorage.removeItem('loginDetails');
+            navigate('/')
         }
     }, [context.logout])
 
@@ -110,10 +108,6 @@ const Profile = () => {
                                 ) : selectedMenu === 'Address Book' ? (
                                     <>
                                         <AddressDetails />
-                                    </>
-                                ) : selectedMenu === 'Store Credit' ? (
-                                    <>
-                                        <StoreCredit />
                                     </>
                                 ) : selectedMenu === 'My Product Reviews' ? (
                                     <>

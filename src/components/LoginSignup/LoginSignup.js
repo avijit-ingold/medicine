@@ -13,6 +13,7 @@ const LoginSignup = () => {
   const location = useLocation();
 
   const [isLogin, setIsLogin] = useState(false);
+  const [isforgetPassword, setIsForgetPassword] = useState(false)
   const [loginResponseData, setLoginResponseData] = useState(null);
   const [loginPassword, setLoginPassword] = useState()
   const [loginEmail, setLoginEmail] = useState("");
@@ -125,13 +126,11 @@ const LoginSignup = () => {
 
   const handleLogin = (param) => {
     if (param.data) {
-      sessionStorage.setItem('CustomerToken', param.data);
-      setToastMessage('Logged In Successfully!')
       setShowPassToast(true);
+      setToastMessage('Logged In Successfully!')
       const timer = setTimeout(() => {
         navigate(from, { replace: true });
       }, 1000);
-
       return () => clearTimeout(timer);
     } else {
       if (param.data.message) {
@@ -180,6 +179,40 @@ const LoginSignup = () => {
     }
   };
 
+  const forgotPassword = (e) => {
+    e.preventDefault();
+    context.setLoading(true)
+    const headers = {
+      "Content-Type": "application/json",
+      "System-Key": "12345"
+    };
+
+    const requestBody = {
+      "email": loginEmail,
+      "template": "email_reset"
+    }
+
+    axios({
+      method: 'PUT',
+      url: '/customers/password',
+      data: JSON.stringify(requestBody),
+      headers: headers
+    }).then((res) => {
+      if (res.data) {
+        toast.success('Successful', {
+          autoClose: 1100
+        });
+        setIsForgetPassword(false)
+      } else {
+        toast.error("Something Went Wrong!", {
+          autoClose: 1100
+        });
+      }
+    }).finally(() => {
+      context.setLoading(false)
+    });
+  }
+
   useEffect(() => {
     if (context.postResultData) {
       setLoginResponseData(context.postResultData)
@@ -209,13 +242,27 @@ const LoginSignup = () => {
           <div className={styles.form_wrapper}>
             {isLogin ? (
               <form>
-                <div className={styles.login_form}>
-                  <h2>Login</h2>
-                  <input type="email" placeholder="Email" value={loginEmail} onChange={handleLoginEmail} required />
-                  <input type="password" placeholder="Password" value={loginPassword} onChange={handleLoginPassWord} required />
-                  <button className={styles.button_style} onClick={loginUser}>{context.loading ? 'Loading...' : 'Login'}</button>
-                  <p onClick={toggleForm}>Don't have an account? Sign up</p>
-                </div>
+                {isforgetPassword ? (
+                  <>
+                    <div className={styles.login_form}>
+                      <h2>Forgot Password</h2>
+                      <input type="email" placeholder="Email" value={loginEmail} onChange={handleLoginEmail} required />
+                      <button className={styles.button_style} onClick={(e) => forgotPassword(e)}>{context.loading ? 'Loading...' : 'Send Email'}</button>
+                      <p onClick={() => setIsForgetPassword(false)}>Login ?</p>
+                      <p onClick={toggleForm}>Don't have an account? Sign up</p>
+                    </div>
+                  </>
+                ) : (
+                  <div className={styles.login_form}>
+                    <h2>Login</h2>
+                    <input type="email" placeholder="Email" value={loginEmail} onChange={handleLoginEmail} required />
+                    <input type="password" placeholder="Password" value={loginPassword} onChange={handleLoginPassWord} required />
+                    <button className={styles.button_style} onClick={loginUser}>{context.loading ? 'Loading...' : 'Login'}</button>
+                    <p onClick={() => setIsForgetPassword(true)}>Forgot Password?</p>
+                    <p onClick={toggleForm}>Don't have an account? Sign up</p>
+                  </div>
+                )}
+
               </form>
             ) : (
               <>
@@ -267,7 +314,7 @@ const LoginSignup = () => {
           <Toast.Body style={{ color: 'white' }}>{toastMessage}</Toast.Body>
         </Toast>
       </ToastContainer>
-    </div>
+    </div >
   )
 };
 

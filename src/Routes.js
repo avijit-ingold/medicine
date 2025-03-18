@@ -9,7 +9,7 @@ import Profile from "./pages/Profile";
 import ProductDetailsPage from "./pages/ProductDetailPage";
 import Category from "./pages/Category";
 import Checkout from "./pages/Checkout";
-import Privacy from "./pages/Privacy";
+import AboutUs from "./pages/AboutUS";
 import Blogs from "./pages/Blogs";
 import PaymentSuccesful from "./pages/PaymentSuccesful";
 
@@ -47,6 +47,9 @@ const AppRoutes = () => {
                 } />
                 <Route path="/blogs" element={
                     <Blogs />
+                } />
+                <Route path="/aboutUs" element={
+                    <AboutUs />
                 } />
                 <Route path="/success/:orderId" element={
                     <PaymentSuccesful />

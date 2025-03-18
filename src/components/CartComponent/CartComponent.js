@@ -343,8 +343,8 @@ const CartComponent = () => {
                       <p>€{parseInt(item.price) / parseInt(item.qty)}.00</p>
                     </div>
                     <div className={styles.item_quantity}>
-
-                      <button onClick={() => handleCartItem('subtract', item)}>_</button>
+                      
+                      <button onClick={() => handleCartItem('subtract', item)}>-</button>
                       <input type="number" value={item.qty} readOnly />
                       {
                         item.qty < item.upper_limit ? (

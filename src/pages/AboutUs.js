@@ -3,15 +3,15 @@ import Layout from "./Layout"
 import { GenericApiContext } from "../context/GenericApiContext";
 import styles from './page.module.css';
 
-const Privacy = () => {
+const AboutUs = () => {
     const [blogData, setBlogData] = useState();
 
     const context = useContext(GenericApiContext);
 
     const getBlogData = () => {
-        const url = 'policies/return';
+        const url = 'cmsPage/5';
 
-        context.getGetData(url, 'return')
+        context.getGetData(url, 'AboutUS')
     }
 
     useEffect(() => {
@@ -71,5 +71,5 @@ const Privacy = () => {
     )
 }
 
-export default Privacy;
+export default AboutUs;
 

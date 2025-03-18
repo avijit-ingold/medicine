@@ -65,8 +65,11 @@ const GenericApiProvider = ({ children }) => {
                     autoClose: 1100
                 });
                 setRegistrationData(res)
+                setLogout(false);
             } else if (parent == 'login') {
                 setPostResultData(res)
+                setLogout(false);
+                sessionStorage.setItem('CustomerToken', res.data);
             }
         }).catch((err) => {
             if (err.response) {
@@ -139,7 +142,7 @@ const GenericApiProvider = ({ children }) => {
 
         axios({
             method: 'POST',
-            url:'integration/admin/token',
+            url: '/integration/admin/token',
             data: JSON.stringify(requestBody),
             headers: headers
         }).then((res) => {
@@ -159,7 +162,7 @@ const GenericApiProvider = ({ children }) => {
         };
 
         axios({
-            method: 'POST',
+            method: parent == 'changePassword' ? 'PUT' : 'POST',
             url: process.env.REACT_APP_API_URL + url,
             data: JSON.stringify(requestBody),
             headers: headers
@@ -175,6 +178,16 @@ const GenericApiProvider = ({ children }) => {
                     });
                 }
             } else if (parent === 'addToCart') {
+                if (res) {
+                    toast.success('Successful', {
+                        autoClose: 1100
+                    });
+                } else {
+                    toast.error("Something Went Wrong!", {
+                        autoClose: 1100
+                    });
+                }
+            } else if (parent == 'changePassword') {
                 if (res) {
                     toast.success('Successful', {
                         autoClose: 1100
@@ -341,12 +354,14 @@ const GenericApiProvider = ({ children }) => {
             } else if (type == 'paymentMethod') {
                 setPaymentMethod(res)
             } else if (type == 'logout') {
-                if(res.data){
+                if (res.data) {
                     toast.success('Successfully Logged Out', {
                         autoClose: 1100
                     });
                     setCustomerData(null)
+                    setPostResultData(null)
                     setLogout(res)
+                    setCartCount(0)
                 }
             }
         }).catch((err) => {
@@ -480,6 +495,7 @@ const GenericApiProvider = ({ children }) => {
         orderDetails,
         orderList,
         logout,
+        setLoading,
         setCartCount
     }
 
