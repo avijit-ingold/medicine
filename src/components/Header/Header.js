@@ -103,7 +103,6 @@ const Header = () => {
 
   const handleAfterLogin = (param) => {
     setCustName(getInitials(param.firstname, param.lastname));
-    // setProfileImage(param.user.avatar_original);
   }
 
   const getCustomerDetails = async () => {
@@ -179,21 +178,17 @@ const Header = () => {
 
   }, [])
 
-  // useEffect(() => {
-  //   if (context.getHeaderdata) {
-  //     setHeaderData(context.getHeaderdata.data.data.find(item => item.type === "header_menu_labels"));
-  //   }
-  // }, [context.getHeaderdata])
-
   useEffect(() => {
     if (context.customerData) {
       setCustomerDetails(context.customerData.data)
     }
+    console.log(context.customerData, 'context.customerData')
   }, [context.customerData])
 
 
   useEffect(() => {
     if (customerDetails) {
+      console.log(customerDetails, 'customerDetails')
       sessionStorage.setItem('loginDetails', JSON.stringify(customerDetails))
       handleAfterLogin(customerDetails);
     }

@@ -345,6 +345,7 @@ const GenericApiProvider = ({ children }) => {
                     toast.success('Successfully Logged Out', {
                         autoClose: 1100
                     });
+                    setCustomerData(null)
                     setLogout(res)
                 }
             }
