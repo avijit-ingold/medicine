@@ -9,7 +9,7 @@ import Profile from "./pages/Profile";
 import ProductDetailsPage from "./pages/ProductDetailPage";
 import Category from "./pages/Category";
 import Checkout from "./pages/Checkout";
-import AboutUs from "./pages/AboutUS";
+import AboutUs from "./pages/AboutUS.js";
 import Blogs from "./pages/Blogs";
 import PaymentSuccesful from "./pages/PaymentSuccesful";
 
