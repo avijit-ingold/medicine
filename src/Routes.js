@@ -11,6 +11,7 @@ import Category from "./pages/Category";
 import Checkout from "./pages/Checkout";
 import Blogs from "./pages/Blogs";
 import PaymentSuccesful from "./pages/PaymentSuccesful";
+import AboutUs from "./pages/AboutUS";
 
 
 const AppRoutes = () => {
@@ -43,6 +44,9 @@ const AppRoutes = () => {
                 } />
                 <Route path="/blogs" element={
                     <Blogs />
+                } />
+                <Route path="/blogs" element={
+                    <AboutUs />
                 } />
                 <Route path="/success/:orderId" element={
                     <PaymentSuccesful />
