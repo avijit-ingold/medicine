@@ -4,6 +4,7 @@ import axios from "axios";
 import { Spinner } from 'react-bootstrap';
 import GenericLoader from "../components/GenericLoader/GenericLoader";
 import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const GenericApiProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
@@ -40,11 +41,13 @@ const GenericApiProvider = ({ children }) => {
     const [paymentMethod, setPaymentMethod] = useState(null);
     const [orderDetails, setOrderDetails] = useState(null);
     const [orderList, setOrderList] = useState(null);
+    const [logout, setLogout] = useState(null);
+
 
     const getAdminPostData = async (url, requestBody, parent) => {
         setLoading(true);
         getAdminToken();
-
+        console.log(url)
         const headers = {
             "Content-Type": "application/json",
             "System-Key": "12345",
@@ -53,7 +56,7 @@ const GenericApiProvider = ({ children }) => {
 
         axios({
             method: 'POST',
-            url: process.env.REACT_APP_API_URL + url,
+            url: url,
             data: JSON.stringify(requestBody),
             headers: headers
         }).then((res) => {
@@ -136,7 +139,7 @@ const GenericApiProvider = ({ children }) => {
 
         axios({
             method: 'POST',
-            url: process.env.REACT_APP_API_URL + 'integration/admin/token',
+            url:'integration/admin/token',
             data: JSON.stringify(requestBody),
             headers: headers
         }).then((res) => {
@@ -215,7 +218,6 @@ const GenericApiProvider = ({ children }) => {
         let headers;
         checkIfLoggedIn();
 
-        // if (loggedinData) {
         headers = {
             "Content-Type": "application/json",
             "X-Requested-With": "XMLHttpRequest",
@@ -283,10 +285,10 @@ const GenericApiProvider = ({ children }) => {
             else if (type === 'return') {
                 setReturnData(res)
             }
-            else if(type === 'orderDetails'){
+            else if (type === 'orderDetails') {
                 setOrderDetails(res)
             }
-            else if(type === 'orderList'){
+            else if (type === 'orderList') {
                 setOrderList(res)
             }
         }).finally(() => {
@@ -298,10 +300,13 @@ const GenericApiProvider = ({ children }) => {
             };
         });
 
+
+
     }
 
 
     const getPostDataQuick = async (url, type, reqBody) => {
+        setLoading(true);
         checkIfLoggedIn();
         const headers = {
             "Content-Type": "application/json",
@@ -313,7 +318,7 @@ const GenericApiProvider = ({ children }) => {
             method: 'POST',
             url: process.env.REACT_APP_API_URL + url,
             headers: headers,
-            data: JSON.stringify(reqBody)
+            data: reqBody ? JSON.stringify(reqBody) : ''
         }).then((res) => {
             if (type === 'sad') {
                 toast.error(`Removed From WishList` + "! 😔", {
@@ -335,11 +340,19 @@ const GenericApiProvider = ({ children }) => {
                 }
             } else if (type == 'paymentMethod') {
                 setPaymentMethod(res)
+            } else if (type == 'logout') {
+                if(res.data){
+                    toast.success('Successfully Logged Out', {
+                        autoClose: 1100
+                    });
+                    setLogout(res)
+                }
             }
         }).catch((err) => {
             toast.error(`Error: ${err.message || "Something went wrong!"}`);
             console.error(err);
         }).finally(() => {
+            setLoading(false);
         });
     }
 
@@ -465,6 +478,7 @@ const GenericApiProvider = ({ children }) => {
         paymentMethod,
         orderDetails,
         orderList,
+        logout,
         setCartCount
     }
 

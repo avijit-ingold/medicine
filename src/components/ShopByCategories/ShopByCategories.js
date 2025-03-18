@@ -11,7 +11,7 @@ const ShopByCategories = () => {
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [categories, setCategories] = useState([]);
   const [categoryEncryptedArray, setCategoryEncryptedArray] = useState([]);
-  
+
   const context = useContext(GenericApiContext)
   const navigate = useNavigate();
 
@@ -31,8 +31,10 @@ const ShopByCategories = () => {
 
       context.getGetData(url, 'categories');
     }
+    setTimeout(() => {
+      categoriesImage();
+    }, 1000)
 
-    categoriesImage();
   }, [])
 
   useEffect(() => {

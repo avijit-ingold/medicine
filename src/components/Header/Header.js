@@ -3,10 +3,11 @@ import styles from './Header.module.css';
 import { Facebook, Instagram, TwitterX, Youtube, GeoAlt, Envelope, Search, Cart, ChevronDown } from 'react-bootstrap-icons';
 import logo from '../../../src/assets/images/Medical/logo 1.png'
 import { GenericApiContext } from '../../context/GenericApiContext';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { encryptData, decryptData } from "../../utils/CryptoUtils";
 import axios from 'axios';
 import { ToastContainer, toast } from "react-toastify";
+import RedirectModal from '../RedirectModal/RedirectModal';
 
 export const useClickOutside = (callback) => {
   const ref = useRef(null);
@@ -44,11 +45,26 @@ const Header = () => {
   const [brandEncryptedArray, setBrandEncryptedArray] = useState([]);
   const [userCartCount, setUserCartCount] = useState(0);
   const [profileImage, setProfileImage] = useState(null);
+  const [showModal, setShowModal] = useState(false)
 
 
   const context = useContext(GenericApiContext);
+  const locationSelf = useLocation()
+
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const categoriesImage = () => {
+      const url = 'getCategory'
+
+      context.getGetData(url, 'categories');
+    }
+    setTimeout(() => {
+      categoriesImage();
+    }, 1000)
+
+  }, [])
 
   const ref = useClickOutside(() => {
     setShowCategories(false)
@@ -148,7 +164,7 @@ const Header = () => {
     if (context.ifLoggedin) {
       navigate('/myProfile/cart')
     } else {
-      navigate('/login')
+      setShowModal(true)
     }
   }
 
@@ -358,6 +374,7 @@ const Header = () => {
         </header>
         <div></div>
       </div>
+      <RedirectModal show={showModal} location={locationSelf} />
     </>
   )
 };

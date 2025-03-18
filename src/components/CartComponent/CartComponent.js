@@ -350,7 +350,6 @@ const CartComponent = () => {
                         item.qty < item.upper_limit ? (
                           <button onClick={() => handleCartItem('add', item)}>+</button>
                         ) : (
-                          // <button onClick={() => handleCartExcess(item.upper_limit)}>+</button>
                           <button onClick={() => handleCartItem('add', item)}>+</button>
                         )
                       }
@@ -412,8 +411,8 @@ const CartComponent = () => {
                       }
                     </div>
                     <div className={styles.discount_container}>
-                      <Button className={styles.discount_button} variant="success" onClick={() => handleCoupon('apply')}>Apply</Button>
-                      <Button className={styles.discount_button} variant="danger" onClick={() => handleCoupon('remove')}>Remove</Button>
+                      <Button className={styles.discount_button} onClick={() => handleCoupon('apply')}>Apply</Button>
+                      <Button className={styles.discount_button} onClick={() => handleCoupon('remove')}>Remove</Button>
                     </div>
                     <h4>Order Total: €{parseFloat(cartSummary.grand_total).toFixed(2)}</h4>
                   </>

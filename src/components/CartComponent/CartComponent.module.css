@@ -15,11 +15,21 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 0;
-
+    gap: 10px;
 }
 
 .item_info {
     flex: 2;
+}
+
+.item_quantity {
+    display: flex;
+    padding: 10px;
+    gap: 10px;
+}
+
+.item_quantity input {
+    width: 70px;
 }
 
 .item_price,
@@ -32,13 +42,21 @@
 .item_quantity button {
     width: 30px;
     height: 30px;
+    border: none;
+    background: rgb(177, 212, 243);
+    display: flex;
+    justify-content: center;
+    border-radius: 20px;
 }
 
 .cart_summary {
-    flex: 1;
+    display: flex;
+    flex: 1 1;
     border: 1px solid #ccc;
     padding: 10px;
     background-color: #f9f9f9;
+    flex-direction: column;
+    justify-content: space-around;
 }
 
 .cart_summary h3,
@@ -49,7 +67,7 @@
 .checkoutButton {
     width: 100%;
     padding: 10px;
-    background-color: #ff6f61;
+    background-color: #0056b3;
     color: white;
     border: none;
     cursor: pointer;
@@ -112,6 +130,8 @@
     width: 48%;
     margin-top: 8px;
     margin-bottom: 8px;
+    background-color: #0056b3 !important;
+    border: none !important;
 }
 
 .discount_input::placeholder {
@@ -161,7 +181,7 @@
 
 .shopping_cart p {
     font-size: 16px;
-    margin-bottom: 20px;
+    margin-bottom: 0 !important;
     color: #555;
 }
 

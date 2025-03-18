@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import styles from './HeaderMobile.module.css';
 import { CaretDown, GeoAlt, Envelope, Search, Cart, Person, ChevronDown } from 'react-bootstrap-icons';
 import { GenericApiContext } from '../../context/GenericApiContext';
-import logo from '../../../src/assets/images/Medical/logo.jpg'
+import logo from '../../../src/assets/images/Medical/logo.jpg';
+import { encryptData, decryptData } from "../../utils/CryptoUtils";
+import { useNavigate } from 'react-router-dom';
 
 const HeaderMobile = () => {
 
@@ -11,9 +13,11 @@ const HeaderMobile = () => {
   const [submenuOpen, setSubmenuOpen] = useState(false);
   const [searchText, setSearchText] = useState(null);
   const [custName, setCustName] = useState();
-  const [headerData, setHeaderData] = useState();
+  const [categories, setCategories] = useState([]);
+  const [categoryEncryptedArray, setCategoryEncryptedArray] = useState([]);
 
   const context = useContext(GenericApiContext);
+  const navigate = useNavigate();
 
   var loginDetails = []
 
@@ -35,13 +39,9 @@ const HeaderMobile = () => {
     return `${firstName.charAt(0).toUpperCase()}${lastName.charAt(0).toUpperCase()}`;
   };
 
-
-  useEffect(() => {
-    if (context.getHeaderdata) {
-      setHeaderData(context.getHeaderdata.data.data.find(item => item.type === "header_menu_labels"));
-    }
-  }, [context.getHeaderdata])
-
+  const redirect = (id) => {
+    navigate(`/category/${categoryEncryptedArray[id]}`);
+  }
 
   useEffect(() => {
     loginDetails = JSON.parse(sessionStorage.getItem('loginDetails'));
@@ -49,6 +49,36 @@ const HeaderMobile = () => {
       handleAfterLogin(loginDetails);
     }
   }, [])
+
+  useEffect(() => {
+    const categoriesImage = () => {
+      const url = 'getCategory'
+
+      context.getGetData(url, 'categories');
+    }
+    setTimeout(() => {
+      categoriesImage();
+    }, 1000)
+
+  }, [])
+
+  useEffect(() => {
+    if (context.getCategoryData) {
+
+      var tempArray = []
+      if (context.getCategoryData.data) {
+        setCategories(context.getCategoryData.data)
+        if (context.getCategoryData.data.length > 0) {
+          context.getCategoryData.data.map((ele) => {
+            const encrypted = encryptData(ele.id);
+            tempArray.push(encrypted);
+          })
+        }
+      }
+      setCategoryEncryptedArray(tempArray);
+    }
+
+  }, [context.getCategoryData])
 
 
   return (
@@ -110,23 +140,28 @@ const HeaderMobile = () => {
               <a href="">Home</a>
             </li>
             <li className={styles.has_children} onClick={toggleSubmenu}>
-              <span className={styles.li_about} >About <span className={styles.icon_arrow + " " + (submenuOpen ? styles.open : "")}><CaretDown /></span></span>
+              <span className={styles.li_about} >Categories <span className={styles.icon_arrow + " " + (submenuOpen ? styles.open : "")}><CaretDown /></span></span>
               <ul className={styles.children + " " + (submenuOpen ? styles.active : "")}>
-                <li className='border-0'><a href="">Submenu #1</a></li>
-                <li className='border-0'><a href="">Submenu #2</a></li>
-                <li className='border-0'><a href="">Submenu #3</a></li>
+                {categories && categories.map((ele, id) => {
+                  return (
+                    <li className='border-0' key={id} onClick={() => redirect(id)}>{ele.name}</li>
+                  )
+                })}
               </ul>
             </li>
             <li>
-              <a href="">Blog</a>
+              <a href="">Blogs</a>
             </li>
             <li>
-              <a href="">Contact</a>
+              <a href="">About Us</a>
+            </li>
+            <li>
+              <a href="">Logout</a>
             </li>
           </ul>
-        </nav>
+        </nav >
         <div className={(menuActive ? styles.blurBackground : "d-none")} onClick={toggleMenu}></div>
-      </header>
+      </header >
     </>
   )
 };

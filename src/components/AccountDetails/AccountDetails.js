@@ -169,11 +169,6 @@ const AccountDetails = () => {
                     <a>Edit</a> | <a onClick={() => setShow(true)}>Change Password</a>
                   </div>
                 </div>
-                <div className={styles.profile_image_container_main}>
-                  <div className={styles.profile_image_container} onClick={() => setImageModalShow(true)}>
-                    <span className={styles.profile_change_image}><Camera color='white' /></span>
-                  </div>
-                </div>
               </div>
             )
           }

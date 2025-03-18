@@ -18,12 +18,32 @@ const Profile = () => {
 
     const { cart } = useParams();
 
-    const menuArray = ['My Account', 'My Wish List', 'My Cart', 'Address Book', 'Store Credit', 'Users', 'My Product Reviews']
+    const menuArray = ['My Account', 'My Wish List', 'My Cart', 'Address Book', 'Store Credit', 'My Product Reviews', 'Logout']
 
     const handleSideMenuClick = (index, value) => {
         setSelectedIndex(index);
         setSelectedMenu(value);
+        if (value == 'My Wish List') {
+            navigate('/myProfile/mywishList')
+        } else if (value == 'My Account') {
+            navigate('/myProfile')
+        } else if (value == 'My Cart') {
+            navigate('/myProfile/cart')
+        } else if (value == 'Address Book') {
+            navigate('/myProfile/addressBook')
+        } else if (value == 'Store Credit') {
+            navigate('/myProfile/storeCredit')
+        } else if( value == 'My Product Reviews'){
+            navigate('/myProfile/productReviews')
+        } else if(value == 'Logout'){
+            handleLogout()
+        }
     };
+
+    const handleLogout = () => {
+        const url = 'integration/customer/revoke-customer-token';
+        context.getPostDataQuick(url , 'logout')
+    }
 
 
     const context = useContext(GenericApiContext);
@@ -33,16 +53,35 @@ const Profile = () => {
     useEffect(() => {
         if (cart === 'cart') {
             setSelectedMenu('My Cart');
-            setSelectedIndex(3);
+            setSelectedIndex(2);
         } else if (cart === 'mywishList') {
             setSelectedMenu('My Wish List');
-            setSelectedIndex(2);
-        }
-        else {
+            setSelectedIndex(1);
+        } else if (cart === 'addressBook') {
+            setSelectedMenu('Address Book');
+            setSelectedIndex(3);
+        } else if (cart === 'storeCredit') {
+            setSelectedMenu('Store Credit');
+            setSelectedIndex(4);
+        }else if(cart === 'productReviews'){
+            setSelectedMenu('My Product Reviews');
+            setSelectedIndex(5);
+        } else {
             setSelectedIndex(0);
             setSelectedMenu('My Account');
         }
     }, [cart])
+
+    useEffect(() => {
+        if(context.logout){
+            if(context.logout.data){
+                sessionStorage.removeItem('CustomerToken');
+                sessionStorage.removeItem('QuoteID');
+                navigate('/')
+                sessionStorage.removeItem('loginDetails');
+            }
+        }
+    }, [context.logout])
 
 
 
@@ -75,10 +114,6 @@ const Profile = () => {
                                 ) : selectedMenu === 'Store Credit' ? (
                                     <>
                                         <StoreCredit />
-                                    </>
-                                ) : selectedMenu === 'Users' ? (
-                                    <>
-                                        <UsersComponent />
                                     </>
                                 ) : selectedMenu === 'My Product Reviews' ? (
                                     <>
