@@ -143,7 +143,7 @@ const GenericApiProvider = ({ children }) => {
 
         axios({
             method: 'POST',
-            url: '/rest/V1/integration/admin/token',
+            url: process.env.REACT_APP_API_URL +'rest/V1/integration/admin/token',
             data: JSON.stringify(requestBody),
             headers: headers
         }).then((res) => {
@@ -305,7 +305,7 @@ const GenericApiProvider = ({ children }) => {
             else if (type === 'orderList') {
                 setOrderList(res)
             }
-            else if(type === 'aboutus'){
+            else if (type === 'aboutus') {
                 setAboutUsContent(res)
             }
         }).finally(() => {
@@ -329,6 +329,7 @@ const GenericApiProvider = ({ children }) => {
             "Content-Type": "application/json",
             "X-Requested-With": "XMLHttpRequest",
             "Authorization": `Bearer ${sessionStorage.getItem('CustomerToken')}`,
+            "Accept": '*/*'
         };
 
         axios({
@@ -382,6 +383,7 @@ const GenericApiProvider = ({ children }) => {
             // if (ifLoggedin) {
             const headers = {
                 "Content-Type": "application/json",
+                "Accept": '*/*'
             };
 
             axios({
@@ -414,7 +416,8 @@ const GenericApiProvider = ({ children }) => {
         checkIfLoggedIn();
         const headers = {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${sessionStorage.getItem('CustomerToken')}`
+            "Authorization": `Bearer ${sessionStorage.getItem('CustomerToken')}`,
+            "Accept": '*/*'
         };
 
         axios({
