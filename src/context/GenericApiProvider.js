@@ -142,7 +142,7 @@ const GenericApiProvider = ({ children }) => {
 
         axios({
             method: 'POST',
-            url: '/integration/admin/token',
+            url: '/rest/V1/integration/admin/token',
             data: JSON.stringify(requestBody),
             headers: headers
         }).then((res) => {

@@ -2,7 +2,7 @@
   "name": "react-b2c",
   "version": "0.1.0",
   "private": true,
-  "proxy": "https://magentop3.ingold-dev.com/rest/V1",
+  "proxy": "https://magentop3.ingold-dev.com",
   "dependencies": {
     "@gsap/react": "^2.1.2",
     "@lottiefiles/dotlottie-react": "^0.13.2",

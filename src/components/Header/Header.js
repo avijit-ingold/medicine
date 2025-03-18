@@ -86,8 +86,8 @@ const Header = () => {
     else if (route === 'Blogs') {
       navigate('/blogs')
     }
-    else if (route === 'Flash Sale') {
-      navigate('/flashSales')
+    else if (route === 'About us') {
+      navigate('/aboutUs')
     }
     else {
       setShowCategories(false)
