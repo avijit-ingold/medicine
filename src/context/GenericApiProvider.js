@@ -50,7 +50,8 @@ const GenericApiProvider = ({ children }) => {
         getAdminToken();
         const headers = {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${sessionStorage.getItem('AdminToken')}`
+            "Authorization": `Bearer ${sessionStorage.getItem('AdminToken')}`,
+            "Content-Security-Policy": "default-src 'self'; img-src 'self' https://magentop3.ingold-dev.com https://health.ingold-dev.com; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';"
         };
 
         axios({
@@ -102,7 +103,8 @@ const GenericApiProvider = ({ children }) => {
         setLoading(true);
         const headers = {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${sessionStorage.getItem('CustomerToken')}`
+            "Authorization": `Bearer ${sessionStorage.getItem('CustomerToken')}`,
+            "Content-Security-Policy": "default-src 'self'; img-src 'self' https://magentop3.ingold-dev.com https://health.ingold-dev.com; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';"
         };
 
         axios({
@@ -132,7 +134,8 @@ const GenericApiProvider = ({ children }) => {
     const getAdminToken = async () => {
         const headers = {
             "Content-Type": "application/json",
-            "System-Key": "12345"
+            "System-Key": "12345",
+            "Content-Security-Policy": "default-src 'self'; img-src 'self' https://magentop3.ingold-dev.com https://health.ingold-dev.com; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';"
         };
 
         const requestBody = {
@@ -158,7 +161,8 @@ const GenericApiProvider = ({ children }) => {
         checkIfLoggedIn();
         const headers = {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${sessionStorage.getItem('CustomerToken')}`
+            "Authorization": `Bearer ${sessionStorage.getItem('CustomerToken')}`,
+            "Content-Security-Policy": "default-src 'self'; img-src 'self' https://magentop3.ingold-dev.com https://health.ingold-dev.com; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';"
         };
 
         axios({
@@ -236,6 +240,7 @@ const GenericApiProvider = ({ children }) => {
             "Content-Type": "application/json",
             "X-Requested-With": "XMLHttpRequest",
             "Authorization": `Bearer ${sessionStorage.getItem('AdminToken')}`,
+            "Content-Security-Policy": "default-src 'self'; img-src 'self' https://magentop3.ingold-dev.com https://health.ingold-dev.com; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';"
         };
 
         axios({
@@ -329,6 +334,7 @@ const GenericApiProvider = ({ children }) => {
             "Content-Type": "application/json",
             "X-Requested-With": "XMLHttpRequest",
             "Authorization": `Bearer ${sessionStorage.getItem('CustomerToken')}`,
+            "Content-Security-Policy": "default-src 'self'; img-src 'self' https://magentop3.ingold-dev.com https://health.ingold-dev.com; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';"
         };
 
         axios({
@@ -417,6 +423,7 @@ const GenericApiProvider = ({ children }) => {
         const headers = {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${sessionStorage.getItem('CustomerToken')}`,
+            "Content-Security-Policy": "default-src 'self'; img-src 'self' https://magentop3.ingold-dev.com https://health.ingold-dev.com; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';"
         };
 
         axios({
