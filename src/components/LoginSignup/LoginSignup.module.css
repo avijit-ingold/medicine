@@ -5,7 +5,7 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: linear-gradient(135deg, rgba(92, 92, 195, 0.8), rgba(92, 92, 195, 0.5));
+    background: linear-gradient(180deg, rgb(211 211 211 / 43%), #003399);
 
     p {
         color: gray;
@@ -126,7 +126,7 @@ input:focus {
         padding: 30px;
     }
 
-    .auth_container input{
+    .auth_container input {
         width: 100%;
     }
 }
