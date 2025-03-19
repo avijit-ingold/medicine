@@ -57,7 +57,8 @@ const GenericApiProvider = ({ children }) => {
             method: 'POST',
             url: process.env.REACT_APP_API_URL + url,
             data: JSON.stringify(requestBody),
-            headers: headers
+            headers: headers,
+            withCredentials: true
         }).then((res) => {
             if (parent == 'registration') {
                 toast.success('Successfully Registered!', {
@@ -107,7 +108,8 @@ const GenericApiProvider = ({ children }) => {
         axios({
             method: 'GET',
             url: process.env.REACT_APP_API_URL + url,
-            headers: headers
+            headers: headers,
+            withCredentials: true
         }).then((res) => {
             if (parent == 'wishList') {
                 setWishList(res)
@@ -142,7 +144,8 @@ const GenericApiProvider = ({ children }) => {
             method: 'POST',
             url: 'https://magentop3.ingold-dev.com/rest/V1/integration/admin/token',
             data: JSON.stringify(requestBody),
-            headers: headers
+            headers: headers,
+            withCredentials: true
         }).then((res) => {
             setAdminToken(res.data);
             sessionStorage.setItem('AdminToken', res.data);
@@ -162,7 +165,8 @@ const GenericApiProvider = ({ children }) => {
             method: parent == 'changePassword' ? 'PUT' : 'POST',
             url: process.env.REACT_APP_API_URL + url,
             data: JSON.stringify(requestBody),
-            headers: headers
+            headers: headers,
+            withCredentials: true
         }).then((res) => {
             if (parent === 'addAddress') {
                 if (res) {
@@ -237,7 +241,8 @@ const GenericApiProvider = ({ children }) => {
         axios({
             method: 'GET',
             url: process.env.REACT_APP_API_URL + url,
-            headers: headers
+            headers: headers,
+            withCredentials: true
         }).then((res) => {
             if (type === 'homeBanner') {
                 setGetHomeData(res)
@@ -330,7 +335,8 @@ const GenericApiProvider = ({ children }) => {
             method: 'POST',
             url: process.env.REACT_APP_API_URL + url,
             headers: headers,
-            data: reqBody ? JSON.stringify(reqBody) : ''
+            data: reqBody ? JSON.stringify(reqBody) : '',
+            withCredentials: true
         }).then((res) => {
             if (type === 'sad') {
                 toast.error(`Removed From WishList` + "! 😔", {
@@ -382,7 +388,8 @@ const GenericApiProvider = ({ children }) => {
             axios({
                 method: 'GET',
                 url: process.env.REACT_APP_API_URL + `b2c/cartlist?cartid=${sessionStorage.getItem('QuoteID')}&loggin=true`, // you got cart id dusring add to cart
-                headers: headers
+                headers: headers,
+                withCredentials: true
             }).then((res) => {
                 if (res.data[0]) {
                     setCartCount(parseInt(res.data[0].total_qty))
@@ -415,7 +422,8 @@ const GenericApiProvider = ({ children }) => {
         axios({
             method: 'DELETE',
             url: process.env.REACT_APP_API_URL + url,
-            headers: headers
+            headers: headers,
+            withCredentials: true
         }).then((res) => {
             handleCart();
             if (type === 'sad') {

@@ -112,14 +112,11 @@ const ProductDetailsComponent = ({ id, loading }) => {
 
   const handleClick = () => {
     handleAddCart()
+    handleCartClick()
   };
 
   const handleCartClick = () => {
-    if (cartSuccess) {
       setClicked(true)
-    } else {
-      setClicked(false)
-    }
   }
 
   const handleAddCart = () => {
@@ -178,9 +175,6 @@ const ProductDetailsComponent = ({ id, loading }) => {
     setCartSuccess(context.addToCartSuccess)
   }, [context.addToCartSuccess])
 
-  useEffect(() => {
-    handleCartClick()
-  }, [cartSuccess])
 
   useEffect(() => {
     if (productDetail) {
