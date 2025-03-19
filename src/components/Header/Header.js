@@ -232,30 +232,32 @@ const Header = () => {
   }, [])
 
 
-  useEffect(() => {
-    const headers = {
-      "Content-Type": "application/json",
-      "System-Key": "12345"
-    };
-    const reqBody = {
-      "name": "Soroj Jana",
-      "email_or_phone": "magento35@ingoldsolutions.com",
-      "password": "Ingold@123",
-      "passowrd_confirmation": "Ingold@123",
-      "register_by": "email"
-    }
+  // useEffect(() => {
+  //   const headers = {
+  //     "Content-Type": "application/json",
+  //     "System-Key": "12345",
+  //     'Accept': 'application/json',
+  //   };
+  //   const reqBody = {
+  //     "name": "Soroj Jana",
+  //     "email_or_phone": "magento35@ingoldsolutions.com",
+  //     "password": "Ingold@123",
+  //     "passowrd_confirmation": "Ingold@123",
+  //     "register_by": "email"
+  //   }
 
-    axios({
-      method: 'POST',
-      url: 'https://laravelb2c.ingold-dev.com/api/v2/auth/signup',
-      headers: headers,
-      data: JSON.stringify(reqBody)
-    }).then((res) => {
-      console.log(res)
-    }).finally(() => {
-    });
+  //   axios({
+  //     method: 'POST',
+  //     url: 'https://laravelb2c.ingold-dev.com/api/v2/auth/signup',
+  //     headers: headers,
+  //     data: JSON.stringify(reqBody),
+  //     withCredentials: true,
+  //   }).then((res) => {
+  //     console.log(res)
+  //   }).finally(() => {
+  //   });
 
-  }, [])
+  // }, [])
 
   return (
     <>

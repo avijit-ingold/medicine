@@ -140,7 +140,7 @@ const GenericApiProvider = ({ children }) => {
 
         axios({
             method: 'POST',
-            url: 'https://magentop3.ingold-dev.com/rest/V1/integration/admin/token',
+            url: 'https://cors-anywhere.herokuapp.com/https://magentop3.ingold-dev.com/rest/V1/integration/admin/token',
             data: JSON.stringify(requestBody),
             headers: headers
         }).then((res) => {
