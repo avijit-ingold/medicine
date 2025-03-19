@@ -5,9 +5,10 @@ import { CaretDown, GeoAlt, Envelope, Search, Cart, Person, ChevronDown } from '
 import { GenericApiContext } from '../../context/GenericApiContext';
 import logo from '../../assets/images/Medical/logo 1.png';
 import { encryptData, decryptData } from "../../utils/CryptoUtils";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import RedirectModal from '../RedirectModal/RedirectModal';
 
 const HeaderMobile = () => {
 
@@ -18,7 +19,9 @@ const HeaderMobile = () => {
   const [categories, setCategories] = useState([]);
   const [categoryEncryptedArray, setCategoryEncryptedArray] = useState([]);
   const [customerDetails, setCustomerDetails] = useState(null);
+  const [showModal, setShowModal] = useState(false)
 
+  const location = useLocation();
   const context = useContext(GenericApiContext);
   const navigate = useNavigate();
 
@@ -90,6 +93,14 @@ const HeaderMobile = () => {
       }
     }).finally(() => {
     });
+  }
+
+  const navigateCart = () => {
+    if (context.ifLoggedin) {
+      navigate('/myProfile/cart')
+    } else {
+      setShowModal(true)
+    }
   }
 
 
@@ -195,8 +206,9 @@ const HeaderMobile = () => {
                 <input type="search" placeholder="Search here" value={searchText} className={`${styles.navbar_searchbarinput_box} `} onChange={(e) => setSearchText(e.target.value)} />
                 <Search className={styles.navbar_search_icon} />
               </div>
-              <span className={styles.navbar_profile_icons}>
+              <span className={styles.navbar_profile_icons} onClick={() => navigateCart()}>
                 <Cart size={18} />
+                <span className={styles.navbar_cart_amount}>{context?.cartCount}</span>
               </span>
               {
                 sessionStorage.getItem('loginDetails') ? (
@@ -248,6 +260,7 @@ const HeaderMobile = () => {
         </nav >
         <div className={(menuActive ? styles.blurBackground : "d-none")} onClick={toggleMenu}></div>
       </header >
+      <RedirectModal show={showModal} location={location} />
     </>
   )
 };

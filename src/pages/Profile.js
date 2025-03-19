@@ -65,7 +65,7 @@ const Profile = () => {
             setSelectedIndex(4);
         } else if (cart === 'productReviews') {
             setSelectedMenu('My Product Reviews');
-            setSelectedIndex(5);
+            setSelectedIndex(4);
         } else {
             setSelectedIndex(0);
             setSelectedMenu('My Account');

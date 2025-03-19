@@ -107,3 +107,25 @@ input:focus {
     font-size: small;
     color: red;
 }
+
+.auth_container .childContainer {
+    background: none;
+    border-radius: 0;
+    padding: 0;
+}
+
+@media only screen and (max-width: 768px) {
+    .auth_container form {
+        width: 100% !important;
+    }
+
+    .auth_container .childContainer {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+    }
+
+    .auth_container input{
+        width: 100%;
+    }
+}

@@ -345,7 +345,7 @@ const CartComponent = () => {
                     <div className={styles.item_quantity}>
                       
                       <button onClick={() => handleCartItem('subtract', item)}>-</button>
-                      <input type="number" value={item.qty} readOnly />
+                      <label>{item.qty}</label>
                       {
                         item.qty < item.upper_limit ? (
                           <button onClick={() => handleCartItem('add', item)}>+</button>

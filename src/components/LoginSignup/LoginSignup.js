@@ -25,6 +25,8 @@ const LoginSignup = () => {
   const [showPassToast, setShowPassToast] = useState(false);
   const [showFailToast, setShowFailToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
+  const [isTabletView, setIsTabletView] = useState(window.innerWidth <= 768);
+
 
 
   const context = useContext(GenericApiContext);
@@ -213,6 +215,16 @@ const LoginSignup = () => {
     });
   }
 
+
+  const updateView = () => {
+    setIsTabletView(window.innerWidth <= 768);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", updateView);
+    return () => window.removeEventListener("resize", updateView);
+  }, []);
+
   useEffect(() => {
     if (context.postResultData) {
       setLoginResponseData(context.postResultData)
@@ -237,58 +249,82 @@ const LoginSignup = () => {
 
   return (
     <div className={styles.auth_container}>
-      <div className='container'>
-        <div className={styles.auth_box + ` ` + `${isLogin ? styles.show_login : styles.show_signup}`}>
-          <div className={styles.form_wrapper}>
-            {isLogin ? (
-              <form>
-                {isforgetPassword ? (
-                  <>
+      <div className={'container ' + styles.childContainer}>
+        {isTabletView ? (
+          <div className={styles.tablet_view}>
+            <h2>{isLogin ? "Login" : "Sign Up"}</h2>
+            <form>
+              <input type="email" placeholder="Email" value={loginEmail} onChange={handleLoginEmail} required />
+              {isLogin ? (
+                <>
+                  <input type="password" placeholder="Password" value={loginPassword} onChange={handleLoginPassWord} required />
+                  <button className={styles.button_style} onClick={loginUser}>{context.loading ? 'Loading...' : 'Login'}</button>
+                  <p onClick={() => setIsLogin(false)}>Don't have an account? Sign up</p>
+                </>
+              ) : (
+                <>
+                  <input type="text" placeholder="Full Name" value={signUpName} onChange={handleSignUpName} required />
+                  <input type="email" placeholder="Email" value={signUpEmail} onChange={handleSignUpEmail} required />
+                  <input type="password" placeholder="Password" value={signUpPassword} onChange={handlePasswordChange} required />
+                  <input type="password" placeholder="Re-enter Password" value={signUpReEnterPassword} onChange={handleReEnterPasswordChange} required />
+                  <button className={styles.button_style} onClick={signUpUser}>Sign Up</button>
+                  <p onClick={() => setIsLogin(true)}>Already have an account? Login</p>
+                </>
+              )}
+            </form>
+          </div>
+        ) : (
+          <div className={styles.auth_box + ` ` + `${isLogin ? styles.show_login : styles.show_signup}`}>
+            <div className={styles.form_wrapper}>
+              {isLogin ? (
+                <form>
+                  {isforgetPassword ? (
+                    <>
+                      <div className={styles.login_form}>
+                        <h2>Forgot Password</h2>
+                        <input type="email" placeholder="Email" value={loginEmail} onChange={handleLoginEmail} required />
+                        <button className={styles.button_style} onClick={(e) => forgotPassword(e)}>{context.loading ? 'Loading...' : 'Send Email'}</button>
+                        <p onClick={() => setIsForgetPassword(false)}>Login ?</p>
+                        <p onClick={toggleForm}>Don't have an account? Sign up</p>
+                      </div>
+                    </>
+                  ) : (
                     <div className={styles.login_form}>
-                      <h2>Forgot Password</h2>
+                      <h2>Login</h2>
                       <input type="email" placeholder="Email" value={loginEmail} onChange={handleLoginEmail} required />
-                      <button className={styles.button_style} onClick={(e) => forgotPassword(e)}>{context.loading ? 'Loading...' : 'Send Email'}</button>
-                      <p onClick={() => setIsForgetPassword(false)}>Login ?</p>
+                      <input type="password" placeholder="Password" value={loginPassword} onChange={handleLoginPassWord} required />
+                      <button className={styles.button_style} onClick={loginUser}>{context.loading ? 'Loading...' : 'Login'}</button>
+                      <p onClick={() => setIsForgetPassword(true)}>Forgot Password?</p>
                       <p onClick={toggleForm}>Don't have an account? Sign up</p>
                     </div>
-                  </>
-                ) : (
-                  <div className={styles.login_form}>
-                    <h2>Login</h2>
-                    <input type="email" placeholder="Email" value={loginEmail} onChange={handleLoginEmail} required />
-                    <input type="password" placeholder="Password" value={loginPassword} onChange={handleLoginPassWord} required />
-                    <button className={styles.button_style} onClick={loginUser}>{context.loading ? 'Loading...' : 'Login'}</button>
-                    <p onClick={() => setIsForgetPassword(true)}>Forgot Password?</p>
-                    <p onClick={toggleForm}>Don't have an account? Sign up</p>
-                  </div>
-                )}
-
-              </form>
-            ) : (
-              <>
-                <form >
-                  <div className={styles.login_form + ' ' + styles.signup_form}>
-                    <h2>Sign Up</h2>
-                    <input type="text" placeholder="Full Name" value={signUpName} onChange={handleSignUpName} required />
-                    <input type="email" placeholder="Email" value={signUpEmail} onChange={handleSignUpEmail} required />
-                    <input type="password" placeholder="Password" value={signUpPassword} onChange={handlePasswordChange} required />
-                    <input type="password" placeholder="Re-enter Password" value={signUpReEnterPassword} onChange={handleReEnterPasswordChange} required />
-                    {
-                      error && (<span className={styles.password_warning}>
-                        * Enter Same Password *
-                      </span>)
-                    }
-
-                    <button className={styles.button_style} onClick={signUpUser}>Sign Up</button>
-                    <p onClick={toggleForm}>Already have an account? Login</p>
-                  </div>
+                  )}
 
                 </form>
+              ) : (
+                <>
+                  <form >
+                    <div className={styles.login_form + ' ' + styles.signup_form}>
+                      <h2>Sign Up</h2>
+                      <input type="text" placeholder="Full Name" value={signUpName} onChange={handleSignUpName} required />
+                      <input type="email" placeholder="Email" value={signUpEmail} onChange={handleSignUpEmail} required />
+                      <input type="password" placeholder="Password" value={signUpPassword} onChange={handlePasswordChange} required />
+                      <input type="password" placeholder="Re-enter Password" value={signUpReEnterPassword} onChange={handleReEnterPasswordChange} required />
+                      {
+                        error && (<span className={styles.password_warning}>
+                          * Enter Same Password *
+                        </span>)
+                      }
 
-              </>
-            )}
-          </div>
-        </div>
+                      <button className={styles.button_style} onClick={signUpUser}>Sign Up</button>
+                      <p onClick={toggleForm}>Already have an account? Login</p>
+                    </div>
+
+                  </form>
+
+                </>
+              )}
+            </div>
+          </div>)}
       </div>
       <ToastContainer position="top-end">
         <Toast

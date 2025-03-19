@@ -232,22 +232,30 @@ const Header = () => {
   }, [])
 
 
-  // useEffect(() => {
-  //   const headers = {
-  //     "Content-Type": "application/json",
-  //     "Authorization": `Bearer f2ohuy54j266lcibjqev7xgrpny7ooev`
-  //   };
+  useEffect(() => {
+    const headers = {
+      "Content-Type": "application/json",
+      "System-Key": "12345"
+    };
+    const reqBody = {
+      "name": "Soroj Jana",
+      "email_or_phone": "magento35@ingoldsolutions.com",
+      "password": "Ingold@123",
+      "passowrd_confirmation": "Ingold@123",
+      "register_by": "email"
+    }
 
-  //   axios({
-  //     method: 'GET',
-  //     url: 'https://www.hyundai-merchandising.com/rest/V1/orders?searchCriteria[pageSize]=300&searchCriteria[currentPage]=1&searchCriteria[filterGroups][0][filters][0][field]=Status&searchCriteria[filterGroups][0][filters][0][value]=pending&searchCriteria[filterGroups][0][filters][0][condition_type]=eq&searchCriteria[filterGroups][1][filters][0][field]=updated_at&searchCriteria[filterGroups][1][filters][0][value]=2025-02-27T09:18:01&searchCriteria[filterGroups][1][filters][0][condition_type]=gt&searchCriteria[filterGroups][0][filters][0][field]=Status&searchCriteria[filterGroups][0][filters][0][value]=processing&searchCriteria[filterGroups][0][filters][0][condition_type]=eq',
-  //     headers: headers
-  //   }).then((res) => {
-  //     console.log(res)
-  //   }).finally(() => {
-  //   });
+    axios({
+      method: 'POST',
+      url: 'https://laravelb2c.ingold-dev.com/api/v2/auth/signup',
+      headers: headers,
+      data: JSON.stringify(reqBody)
+    }).then((res) => {
+      console.log(res)
+    }).finally(() => {
+    });
 
-  // }, [])
+  }, [])
 
   return (
     <>
