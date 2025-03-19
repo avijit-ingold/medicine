@@ -6,6 +6,8 @@ import { GenericApiContext } from '../../context/GenericApiContext';
 import logo from '../../assets/images/Medical/logo 1.png';
 import { encryptData, decryptData } from "../../utils/CryptoUtils";
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const HeaderMobile = () => {
 
@@ -15,6 +17,7 @@ const HeaderMobile = () => {
   const [custName, setCustName] = useState();
   const [categories, setCategories] = useState([]);
   const [categoryEncryptedArray, setCategoryEncryptedArray] = useState([]);
+  const [customerDetails, setCustomerDetails] = useState(null);
 
   const context = useContext(GenericApiContext);
   const navigate = useNavigate();
@@ -49,16 +52,74 @@ const HeaderMobile = () => {
   }
 
 
+  const getCustomerDetails = async () => {
+    const url = 'customers/me'
+    if (sessionStorage.getItem('CustomerToken')) {
+      context.getCustomerData(url);
+      getQuoteID();
+    }
+  }
+
+  const getQuoteID = async () => {
+    const headers = {
+      "Content-Type": "application/json",
+      "System-Key": "12345",
+      "Authorization": `Bearer ${sessionStorage.getItem('CustomerToken')}`
+    };
+    axios({
+      method: 'POST',
+      url: process.env.REACT_APP_API_URL + 'carts/mine/',
+      headers: headers
+    }).then((res) => {
+      sessionStorage.setItem('QuoteID', res.data)
+    }).catch((err) => {
+      if (err.response) {
+        if (err.response.status === 400) {
+          toast.error(`Bad Request: ${err.response.data.message || 'Invalid request'}`, {
+            autoClose: 1100
+          });
+        } else {
+          toast.error(`Error ${err.response.status}: ${err.response.data.message || 'Something went wrong'}`, {
+            autoClose: 1100
+          });
+        }
+      } else {
+        toast.error(`Network Error: ${err.message}`, {
+          autoClose: 1100
+        });
+      }
+    }).finally(() => {
+    });
+  }
+
+
   useEffect(() => {
     loginDetails = JSON.parse(sessionStorage.getItem('loginDetails'));
     if (loginDetails) {
       handleAfterLogin(loginDetails);
+    } else {
+      getCustomerDetails()
     }
   }, [])
 
+
+  useEffect(() => {
+    if (context.customerData) {
+      setCustomerDetails(context.customerData.data)
+    }
+  }, [context.customerData])
+
+
+  useEffect(() => {
+    if (customerDetails) {
+      sessionStorage.setItem('loginDetails', JSON.stringify(customerDetails))
+      handleAfterLogin(customerDetails);
+    }
+  }, [customerDetails])
+
   useEffect(() => {
     const categoriesImage = () => {
-      const url = 'getCategory'
+      const url = 'b2c/getCategory'
 
       context.getGetData(url, 'categories');
     }
@@ -92,9 +153,12 @@ const HeaderMobile = () => {
       sessionStorage.removeItem('QuoteID');
       sessionStorage.removeItem('loginDetails');
       navigate('/')
+      window.location.reload()
       setMenuActive(false)
     }
   }, [context.logout])
+
+
 
 
   return (
@@ -134,17 +198,19 @@ const HeaderMobile = () => {
               <span className={styles.navbar_profile_icons}>
                 <Cart size={18} />
               </span>
-              <span className={`${styles.navbar_profile_icons} ` + `${styles.navbar_profile_container}`}>
-                <Person size={18} />
-              </span>
-              <span className={styles.navbar_profile_icons}>
-                <span className={styles.navbar_profile_name}>{context.ifLoggedin ? custName + ' ' : 'Login'}</span>
-                {
-                  context.ifLoggedin && (
-                    <span><ChevronDown size={13} /></span>
-                  )
-                }
-              </span>
+              {
+                sessionStorage.getItem('loginDetails') ? (
+                  <span className={`${styles.navbar_profile_icons} ` + `${styles.navbar_profile_container}`} onClick={() => navigate('/myProfile')}>
+                    <Person size={18} />
+                  </span>
+                ) : (
+                  <span className={styles.navbar_profile_icons}>
+                    <span className={styles.navbar_profile_name} onClick={() => navigate('/login')}>{context.ifLoggedin ? custName + ' ' : 'Login'}</span>
+                  </span>
+                )
+              }
+
+
             </div>
           </div>
         </div>

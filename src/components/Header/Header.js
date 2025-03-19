@@ -8,6 +8,7 @@ import { encryptData, decryptData } from "../../utils/CryptoUtils";
 import axios from 'axios';
 import { ToastContainer, toast } from "react-toastify";
 import RedirectModal from '../RedirectModal/RedirectModal';
+import ProfileDropDown from '../ProfileDropDown/ProfileDropDown';
 
 export const useClickOutside = (callback) => {
   const ref = useRef(null);
@@ -35,7 +36,7 @@ const Header = () => {
   const [searchText, setSearchText] = useState('')
   const [custName, setCustName] = useState();
   const [customerDetails, setCustomerDetails] = useState(null);
-  const [ headerData, setHeaderData] = useState(data);
+  const [headerData, setHeaderData] = useState(data);
   const [showCategories, setShowCategories] = useState(false);
   const [categories, setCategories] = useState([]);
   const [brandData, setBrandData] = useState(null);
@@ -45,6 +46,7 @@ const Header = () => {
   const [userCartCount, setUserCartCount] = useState(0);
   const [profileImage, setProfileImage] = useState(null);
   const [showModal, setShowModal] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false);
 
 
   const context = useContext(GenericApiContext);
@@ -55,7 +57,7 @@ const Header = () => {
 
   useEffect(() => {
     const categoriesImage = () => {
-      const url = 'getCategory'
+      const url = 'b2c/getCategory'
 
       context.getGetData(url, 'categories');
     }
@@ -145,7 +147,7 @@ const Header = () => {
   }
 
   const handleProfile = () => {
-    navigate('/myProfile')
+    setMenuOpen(!menuOpen)
   }
 
   const redirect = (id) => {
@@ -181,13 +183,11 @@ const Header = () => {
     if (context.customerData) {
       setCustomerDetails(context.customerData.data)
     }
-    console.log(context.customerData, 'context.customerData')
   }, [context.customerData])
 
 
   useEffect(() => {
     if (customerDetails) {
-      console.log(customerDetails, 'customerDetails')
       sessionStorage.setItem('loginDetails', JSON.stringify(customerDetails))
       handleAfterLogin(customerDetails);
     }
@@ -230,6 +230,24 @@ const Header = () => {
   useEffect(() => {
     getCustomerDetails();
   }, [])
+
+
+  // useEffect(() => {
+  //   const headers = {
+  //     "Content-Type": "application/json",
+  //     "Authorization": `Bearer f2ohuy54j266lcibjqev7xgrpny7ooev`
+  //   };
+
+  //   axios({
+  //     method: 'GET',
+  //     url: 'https://www.hyundai-merchandising.com/rest/V1/orders?searchCriteria[pageSize]=300&searchCriteria[currentPage]=1&searchCriteria[filterGroups][0][filters][0][field]=Status&searchCriteria[filterGroups][0][filters][0][value]=pending&searchCriteria[filterGroups][0][filters][0][condition_type]=eq&searchCriteria[filterGroups][1][filters][0][field]=updated_at&searchCriteria[filterGroups][1][filters][0][value]=2025-02-27T09:18:01&searchCriteria[filterGroups][1][filters][0][condition_type]=gt&searchCriteria[filterGroups][0][filters][0][field]=Status&searchCriteria[filterGroups][0][filters][0][value]=processing&searchCriteria[filterGroups][0][filters][0][condition_type]=eq',
+  //     headers: headers
+  //   }).then((res) => {
+  //     console.log(res)
+  //   }).finally(() => {
+  //   });
+
+  // }, [])
 
   return (
     <>
@@ -365,6 +383,7 @@ const Header = () => {
         <div></div>
       </div>
       <RedirectModal show={showModal} location={locationSelf} />
+      <ProfileDropDown open={menuOpen} setOpen={setMenuOpen} />
     </>
   )
 };

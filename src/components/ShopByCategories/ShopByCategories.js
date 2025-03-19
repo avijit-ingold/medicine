@@ -27,7 +27,7 @@ const ShopByCategories = () => {
 
   useEffect(() => {
     const categoriesImage = () => {
-      const url = 'getCategory'
+      const url = 'b2c/getCategory'
 
       context.getGetData(url, 'categories');
     }

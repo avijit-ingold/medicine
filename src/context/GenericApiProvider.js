@@ -48,16 +48,14 @@ const GenericApiProvider = ({ children }) => {
     const getAdminPostData = async (url, requestBody, parent) => {
         setLoading(true);
         getAdminToken();
-        console.log(url)
         const headers = {
             "Content-Type": "application/json",
-            "System-Key": "12345",
             "Authorization": `Bearer ${sessionStorage.getItem('AdminToken')}`
         };
 
         axios({
             method: 'POST',
-            url: url,
+            url: process.env.REACT_APP_API_URL + url,
             data: JSON.stringify(requestBody),
             headers: headers
         }).then((res) => {
@@ -103,7 +101,6 @@ const GenericApiProvider = ({ children }) => {
         setLoading(true);
         const headers = {
             "Content-Type": "application/json",
-            "System-Key": "12345",
             "Authorization": `Bearer ${sessionStorage.getItem('CustomerToken')}`
         };
 
@@ -143,7 +140,7 @@ const GenericApiProvider = ({ children }) => {
 
         axios({
             method: 'POST',
-            url: process.env.REACT_APP_API_URL +'rest/V1/integration/admin/token',
+            url: 'https://magentop3.ingold-dev.com/rest/V1/integration/admin/token',
             data: JSON.stringify(requestBody),
             headers: headers
         }).then((res) => {
@@ -158,7 +155,6 @@ const GenericApiProvider = ({ children }) => {
         checkIfLoggedIn();
         const headers = {
             "Content-Type": "application/json",
-            "System-Key": "12345",
             "Authorization": `Bearer ${sessionStorage.getItem('CustomerToken')}`
         };
 
@@ -235,7 +231,6 @@ const GenericApiProvider = ({ children }) => {
         headers = {
             "Content-Type": "application/json",
             "X-Requested-With": "XMLHttpRequest",
-            "System-Key": "12345",
             "Authorization": `Bearer ${sessionStorage.getItem('AdminToken')}`,
         };
 
@@ -329,7 +324,6 @@ const GenericApiProvider = ({ children }) => {
             "Content-Type": "application/json",
             "X-Requested-With": "XMLHttpRequest",
             "Authorization": `Bearer ${sessionStorage.getItem('CustomerToken')}`,
-            "Accept": '*/*'
         };
 
         axios({
@@ -383,7 +377,6 @@ const GenericApiProvider = ({ children }) => {
             // if (ifLoggedin) {
             const headers = {
                 "Content-Type": "application/json",
-                "Accept": '*/*'
             };
 
             axios({
@@ -417,7 +410,6 @@ const GenericApiProvider = ({ children }) => {
         const headers = {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${sessionStorage.getItem('CustomerToken')}`,
-            "Accept": '*/*'
         };
 
         axios({
