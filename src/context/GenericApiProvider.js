@@ -231,10 +231,34 @@ const GenericApiProvider = ({ children }) => {
 
     }
 
+
+    const fetchData = async () => {
+        try {
+          const response = await fetch("https://apiv4.ordering.co/v400/en/kitchensforyou/business/ayeyofinest_somali_cuisine");
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const result = await response.json();
+          //console.log('aa',result.categories[0].products)
+         // alert(result.result.categories[0].products.length)
+          //setData(result);
+          setGetCategoryData(result.result.categories[0].products)
+        } catch (error) {
+          //setError(error.message);
+        } finally {
+          //setLoading(false);
+        }
+      };
+
     const getGetData = async (url, type) => {
         setLoading(true);
         let headers;
         checkIfLoggedIn();
+        
+        fetchData()
+
+
+
 
         headers = {
             "Content-Type": "application/json",
@@ -253,7 +277,7 @@ const GenericApiProvider = ({ children }) => {
                 setGetHomeData(res)
             }
             else if (type === 'categories') {
-                setGetCategoryData(res)
+               // setGetCategoryData(res)
             }
             else if (type === 'headerMenu') {
                 setGetHeaderData(res)
