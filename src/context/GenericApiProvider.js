@@ -180,9 +180,13 @@ const GenericApiProvider = ({ children }) => {
                 }
             } else if (parent === 'addToCart') {
                 if (res) {
+                    setTimeout(() => {
+                        handleCart();
+                    }, 1000);
                     toast.success('Successful', {
                         autoClose: 1100
                     });
+                    
                 } else {
                     toast.error("Something Went Wrong!", {
                         autoClose: 1100

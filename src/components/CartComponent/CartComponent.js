@@ -9,14 +9,6 @@ import { ToastContainer, toast } from "react-toastify";
 import { XCircle, Trash } from 'react-bootstrap-icons';
 import CartImage from '../../assets/images/Medical/shopping.png';
 import axios from "axios";
-import Layer1 from '../../assets/images/Medical/Layer 2.png'
-import Layer2 from '../../assets/images/Medical/Layer 5.png'
-import Layer3 from '../../assets/images/Medical/Layer 6.png'
-import Layer4 from '../../assets/images/Medical/Layer 7.png'
-import Layer5 from '../../assets/images/Medical/Layer 8.png'
-import Layer6 from '../../assets/images/Medical/Layer 10.png'
-import Layer7 from '../../assets/images/Medical/Layer 12.png'
-
 
 const CartComponent = () => {
   const navigate = useNavigate()
@@ -34,8 +26,6 @@ const CartComponent = () => {
     setItemToRemove(item);
     setShowModal(true);
   };
-
-  const image = [Layer1, Layer2, Layer3, Layer4, Layer5, Layer6, Layer7]
 
   const handleCartValue = (cartId, cartQuantity, ownerId, itemObject) => {
     context.checkIfLoggedIn();
@@ -330,7 +320,7 @@ const CartComponent = () => {
 
   return (
     <>
-      {cartData && cartData.length > 0 && cartData[0].cart_items.length > 0 ? (
+      {cartData && cartData.length > 0 && cartData[0].cart_items.length > 0 && (
         <div className={styles.shopping_cart}>
           <div className={styles.cart_items}>
             {!context.loading
@@ -338,20 +328,11 @@ const CartComponent = () => {
                 <div className={styles.cart_items_container} key={item.id}>
                   <div className={styles.cart_item}>
                     <div className={styles.item_info}>
-                      {
-                        item.name == 'Product1' ? (<>
-                          <img src={Layer1} className={styles.cart_item_image} /></>) : item.name == 'Product2' ? (<>
-                            <img src={Layer2} className={styles.cart_item_image} /></>) : item.name == 'Product3' ? (<>
-                              <img src={Layer3} className={styles.cart_item_image} /></>) : item.name == 'Product4' ? (<>
-                                <img src={Layer4} className={styles.cart_item_image} /></>) : item.name == 'Product5' ? (<>
-                                  <img src={Layer5} className={styles.cart_item_image} /></>) : item.name == 'Product6' ? (<>
-                                    <img src={Layer6} className={styles.cart_item_image} /></>) : ''
-                      }
-                      {/* <img
+                      <img
                         src={item.image_url}
                         className={styles.cart_item_image}
                         alt={item.name}
-                      /> */}
+                      />
                     </div>
                     <div className={styles.item_info}>
                       <p className={styles.item_name}>{item.name}</p>
@@ -515,7 +496,9 @@ const CartComponent = () => {
 
           <ToastContainer />
         </div>
-      ) : (
+      )}
+
+      {cartData && (cartData.length == 0 || cartData[0].cart_items.length == 0) && (
         <>
           <div className={styles.empty_cart_container}>
             <div className={styles.empty_cart_content}>
@@ -530,8 +513,17 @@ const CartComponent = () => {
             </div>
           </div>
         </>
-      )
-      }
+      )}
+
+      {spinnerLoading && (
+        <>
+          <div className={styles.empty_cart_container}>
+            <div className={styles.empty_cart_content}>
+              <span style={{fontSize:'40px',color: '#0000ff' }}>Please wait</span>
+            </div>
+          </div>
+        </>
+      )}
     </>
 
   )
