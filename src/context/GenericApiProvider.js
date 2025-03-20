@@ -90,7 +90,7 @@ const GenericApiProvider = ({ children }) => {
         }).finally(() => {
             const timer = setTimeout(() => {
                 setLoading(false);
-            }, 1500);
+            }, 500);
             return () => {
                 clearTimeout(timer)
             };
@@ -121,7 +121,7 @@ const GenericApiProvider = ({ children }) => {
         }).finally(() => {
             const timer = setTimeout(() => {
                 setLoading(false);
-            }, 1500);
+            }, 500);
             return () => {
                 clearTimeout(timer)
             };
@@ -311,7 +311,7 @@ const GenericApiProvider = ({ children }) => {
         }).finally(() => {
             const timer = setTimeout(() => {
                 setLoading(false);
-            }, 1500);
+            }, 500);
             return () => {
                 clearTimeout(timer)
             };
@@ -526,12 +526,12 @@ const GenericApiProvider = ({ children }) => {
                         position: 'fixed',
                         height: '100vh',
                         width: '100%',
-                        background: '#0000006b',
+                        // background: '#0000006b',
                         zIndex: '99999',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        backgroundImage: 'radial-gradient(circle farthest-corner at center, #3C4B57 0%, #1c262b82 100%)'
+                        // backgroundImage: 'radial-gradient(circle farthest-corner at center, #3C4B57 0%, #1c262b82 100%)'
                     }}>
                         <GenericLoader />
                     </div>)
