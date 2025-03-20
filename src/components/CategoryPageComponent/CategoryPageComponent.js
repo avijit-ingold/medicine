@@ -173,11 +173,11 @@ const CategoryPageComponent = ({ id, loading, parent }) => {
           }
         </div>
       </div>
-      <div className='d-flex justify-content-center'>
+      {/* <div className='d-flex justify-content-center'>
         <div className={styles.showMore_container}>
           Show More
         </div>
-      </div>
+      </div> */}
     </div>
   )
 };

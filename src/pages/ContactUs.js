@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import Layout from "./Layout";
 import { GenericApiContext } from "../context/GenericApiContext";
 import { toast } from "react-toastify";
+import { hover } from "framer-motion";
 
 const ContactUs = () => {
     const context = useContext(GenericApiContext);
@@ -10,7 +11,7 @@ const ContactUs = () => {
     const handleSubmit = (event) => {
 
         event.preventDefault();
-        
+
         const formData = new FormData(event.target);
         const data = Object.fromEntries(formData);
 
@@ -124,7 +125,7 @@ const styles = {
         width: "100%",
         padding: "8px",
         border: "1px solid #ccc",
-        borderRadius: "3px",
+        borderRadius: '20px'
     },
     textarea: {
         width: "100%",
@@ -132,15 +133,16 @@ const styles = {
         padding: "8px",
         border: "1px solid #ccc",
         borderRadius: "3px",
+        borderRadius: '20px'
     },
     submitBtn: {
         width: "100%",
-        backgroundColor: "#6060d7",
+        background: 'rgb(58, 70, 179)',
         color: "white",
         padding: "10px",
         border: "none",
-        borderRadius: "3px",
         cursor: "pointer",
+        borderRadius: '20px'
     },
     error: {
         color: "red",
