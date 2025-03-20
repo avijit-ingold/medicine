@@ -538,11 +538,7 @@ const CartComponent = () => {
         <>
           <div className={styles.empty_cart_container}>
             <div className={styles.empty_cart_content}>
-              <DotLottieReact
-                src="https://lottie.host/7709e40d-4f8e-4b8e-8d27-e56239852a55/pAXbP7lKOn.lottie"
-                loop
-                autoplay
-              />
+              <span style={{ fontSize: '40px', color: '#0000ff' }}>Please wait</span>
             </div>
           </div>
         </>
