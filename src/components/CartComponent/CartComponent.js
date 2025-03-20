@@ -9,6 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { XCircle, Trash } from 'react-bootstrap-icons';
 import CartImage from '../../assets/images/Medical/shopping.png';
 import axios from "axios";
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 const CartComponent = () => {
   const navigate = useNavigate()
@@ -519,7 +520,11 @@ const CartComponent = () => {
         <>
           <div className={styles.empty_cart_container}>
             <div className={styles.empty_cart_content}>
-              <span style={{fontSize:'40px',color: '#0000ff' }}>Please wait</span>
+               <DotLottieReact
+                    src="https://lottie.host/7709e40d-4f8e-4b8e-8d27-e56239852a55/pAXbP7lKOn.lottie"
+                    loop
+                    autoplay
+                  />
             </div>
           </div>
         </>
