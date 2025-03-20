@@ -8,7 +8,7 @@ import { GenericApiContext } from '../../context/GenericApiContext';
 import styles from './RelatedProductComponent.module.css';
 import ProductSecond from '../ProductSecond/ProductSecond';
 
-const RelatedProductComponent = ({ id, parent, productParent }) => {
+const RelatedProductComponent = ({ id, parent, productParent, images }) => {
   const [products, setProducts] = useState(null);
 
   const context = useContext(GenericApiContext);
@@ -214,7 +214,7 @@ const RelatedProductComponent = ({ id, parent, productParent }) => {
                 return (
                   <div key={index}>
                     {/* <ProductSecond productObject={product} parent="newArrival" /> */}
-                    <ProductSecond productObject={product} parent={'related'} />
+                    <ProductSecond productObject={product} parent={'related'} images={images[index]} />
                   </div>
                 );
               })}
@@ -229,7 +229,7 @@ const RelatedProductComponent = ({ id, parent, productParent }) => {
                 return (
                   <div key={index}>
                     {/* <ProductSecond productObject={product} parent="newArrival" /> */}
-                    <ProductSecond productObject={product} parent={'related'} />
+                    <ProductSecond productObject={product} parent={'related'} images={images[index]}/>
                   </div>
                 );
               })}
@@ -244,7 +244,7 @@ const RelatedProductComponent = ({ id, parent, productParent }) => {
                 return (
                   <div key={index}>
                     {/* <ProductSecond productObject={product} parent="newArrival" /> */}
-                    <ProductSecond productObject={product} parent={'related'} />
+                    <ProductSecond productObject={product} parent={'related'}  />
                   </div>
                 );
               })}

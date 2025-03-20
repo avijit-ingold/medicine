@@ -63,6 +63,7 @@
     background-color: #f9f9f9;
     flex-direction: column;
     justify-content: space-around;
+    height: 500px;
 }
 
 .cart_summary h3,
@@ -82,7 +83,7 @@
 }
 
 .cart_item_image {
-    width: 170px;
+    width: 90px;
 }
 
 .cart_items_container {

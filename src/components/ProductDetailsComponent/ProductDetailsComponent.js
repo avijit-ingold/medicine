@@ -36,6 +36,13 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import RedirectModal from '../RedirectModal/RedirectModal';
+import Layer1 from '../../assets/images/Medical/Layer 2.png'
+import Layer2 from '../../assets/images/Medical/Layer 5.png'
+import Layer3 from '../../assets/images/Medical/Layer 6.png'
+import Layer4 from '../../assets/images/Medical/Layer 7.png'
+import Layer5 from '../../assets/images/Medical/Layer 8.png'
+import Layer6 from '../../assets/images/Medical/Layer 10.png'
+import Layer7 from '../../assets/images/Medical/Layer 12.png'
 
 
 gsap.registerPlugin(ScrollTrigger);
@@ -55,6 +62,8 @@ const ProductDetailsComponent = ({ id, loading }) => {
 
   const variantArray = [ProductVariant1, ProductVariant2, ProductVariant3, ProductVariant4];
   const locationSelf = useLocation()
+
+  const image = [Layer1, Layer2, Layer3, Layer4, Layer5, Layer6, Layer7]
 
   const categories = [
     {
@@ -116,7 +125,7 @@ const ProductDetailsComponent = ({ id, loading }) => {
   };
 
   const handleCartClick = () => {
-      setClicked(true)
+    setClicked(true)
   }
 
   const handleAddCart = () => {
@@ -176,11 +185,11 @@ const ProductDetailsComponent = ({ id, loading }) => {
   }, [context.addToCartSuccess])
 
 
-  useEffect(() => {
-    if (productDetail) {
-      setSelectedImage(productDetail.thumbnail_image)
-    }
-  }, [productDetail])
+  // useEffect(() => {
+  //   if (productDetail) {
+  //     setSelectedImage(productDetail.thumbnail_image)
+  //   }
+  // }, [productDetail])
 
   useGSAP(() => {
     if (!leftRef.current || !rightRef.current || !leftTopRef.current || !rightTopRef.current) {
@@ -327,20 +336,37 @@ const ProductDetailsComponent = ({ id, loading }) => {
                 <div className={styles.productSpecs_container + ' row'}>
                   <div className={styles.product_spec_cont + ' col-md-7 col-12'}>
                     <div className={styles.product_demoContainer}>
-                      <img src={productDetail.image_url} className={`${styles.variant_image} ${selectedImage === productDetail.thumbnail_image ? styles.selected : ''}`} onClick={() => setSelectedImage(productDetail.image_url)} />
+                      {
+                        productDetail.name == 'Product1' ? (<>
+                          <img src={Layer1} className={`${styles.variant_image} ${selectedImage === productDetail.thumbnail_image ? styles.selected : ''}`} onClick={() => setSelectedImage(Layer1)} /></>) : productDetail.name == 'Product2' ? (<>
+                            <img src={Layer2} className={`${styles.variant_image} ${selectedImage === productDetail.thumbnail_image ? styles.selected : ''}`} onClick={() => setSelectedImage(Layer2)} /></>) : productDetail.name == 'Product3' ? (<>
+                              <img src={Layer3} className={`${styles.variant_image} ${selectedImage === productDetail.thumbnail_image ? styles.selected : ''}`} onClick={() => setSelectedImage(Layer3)} /></>) : productDetail.name == 'Product4' ? (<>
+                                <img src={Layer4} className={`${styles.variant_image} ${selectedImage === productDetail.thumbnail_image ? styles.selected : ''}`} onClick={() => setSelectedImage(Layer4)} /></>) : productDetail.name == 'Product5' ? (<>
+                                  <img src={Layer5} className={`${styles.variant_image} ${selectedImage === productDetail.thumbnail_image ? styles.selected : ''}`} onClick={() => setSelectedImage(Layer5)} /></>) : productDetail.name == 'Product6' ? (<>
+                                    <img src={Layer6} className={`${styles.variant_image} ${selectedImage === productDetail.thumbnail_image ? styles.selected : ''}`} onClick={() => setSelectedImage(Layer6)} /></>) : ''
+                      }
+
                       {
                         productDetail.all_images && productDetail.all_images.map((ele, id) => {
                           return (
-                            <img key={id} src={ele.url} className={`${styles.variant_image} ${selectedImage === ele ? styles.selected : ''}`} onClick={() => setSelectedImage(ele.url)} />)
+                            <img key={id} src={variantArray[id]} className={`${styles.variant_image} ${selectedImage === ele ? styles.selected : ''}`} onClick={() => setSelectedImage(variantArray[id])} />)
                         })
                       }
                     </div>
                     <div className={styles.product_main_image_container}>
                       {selectedImage == '' ? (
-                        <img src={selectedImage} className={styles.product_main_image} />
+                        productDetail.name == 'Product1' ? (<>
+                          <img src={Layer1} className={styles.product_main_image} onClick={() => setSelectedImage(Layer1)} /></>) : productDetail.name == 'Product2' ? (<>
+                            <img src={Layer2} className={styles.product_main_image} onClick={() => setSelectedImage(Layer2)} /></>) : productDetail.name == 'Product3' ? (<>
+                              <img src={Layer3} className={styles.product_main_image} onClick={() => setSelectedImage(Layer3)} /></>) : productDetail.name == 'Product4' ? (<>
+                                <img src={Layer4} className={styles.product_main_image} onClick={() => setSelectedImage(Layer4)} /></>) : productDetail.name == 'Product5' ? (<>
+                                  <img src={Layer5} className={styles.product_main_image} onClick={() => setSelectedImage(Layer5)} /></>) : productDetail.name == 'Product6' ? (<>
+                                    <img src={Layer6} className={styles.product_main_image} onClick={() => setSelectedImage(Layer6)} /></>) : ''
                       ) : (
-                        <img src={productDetail.image_url} className={styles.product_main_image} />
-                      )}
+                        <img src={selectedImage} className={styles.product_main_image} />
+                      )
+
+                      }
                     </div>
                   </div>
                   <div className={styles.productDescription_container + ' col-md-5 col-12'}>
@@ -395,7 +421,7 @@ const ProductDetailsComponent = ({ id, loading }) => {
                             </>
                           ) : (
                             <>
-                              <button className={styles.cart_button + ' d-none d-lg-block '} onClick={() =>  setShowModal(true)}>
+                              <button className={styles.cart_button + ' d-none d-lg-block '} onClick={() => setShowModal(true)}>
                                 <span className={styles.add_to_cart}>ADD TO CART</span>
                               </button>
                             </>
@@ -482,7 +508,7 @@ const ProductDetailsComponent = ({ id, loading }) => {
                   productDetail.related_products.length > 0 && (
                     <>
                       <div className={styles.divider}>Faucibus adipiscing ligula cursus</div>
-                      <RelatedProductComponent parent={'productRelatedProduct'} productParent={productDetail.related_products} />
+                      <RelatedProductComponent parent={'productRelatedProduct'} productParent={productDetail.related_products} images={image}/>
                     </>
                   )
                 }
@@ -565,7 +591,7 @@ const ProductDetailsComponent = ({ id, loading }) => {
                   productDetail.upsell_products.length > 0 && (
                     <>
                       <div className='container fw-bold'><h5> Dictum mi pretium porttitor suscipit phasellus laoreet</h5></div>
-                      <RelatedProductComponent parent={'newArrivals'} productParent={productDetail.upsell_products} />
+                      <RelatedProductComponent parent={'newArrivals'} productParent={productDetail.upsell_products} images={image}/>
                     </>
                   )
                 }

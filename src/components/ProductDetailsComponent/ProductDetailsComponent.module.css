@@ -411,6 +411,7 @@
     width: 5%;
     display: flex;
     flex-direction: column;
+    height: max-content;
 }
 
 .variant_image {
@@ -432,12 +433,14 @@
 .product_main_image_container {
     width: 50%;
     border-radius: 12px;
+    height: 551px;
+    margin-bottom: 50px;
 }
 
 .product_main_image {
     width: 100%;
     object-fit: contain;
-    height: auto;
+    height: 100%;
     margin-bottom: 10px;
 }
 
@@ -587,7 +590,7 @@
         border-radius: 12px;
     }
 
-    .productFAQ_container{
+    .productFAQ_container {
         width: 100%;
     }
 }
@@ -596,6 +599,7 @@
     .specsCard_container {
         grid-template-columns: repeat(1, 1fr);
     }
+
     .product_main_image_container {
         width: 75%;
         border-radius: 12px;

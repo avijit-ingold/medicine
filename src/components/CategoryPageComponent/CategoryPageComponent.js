@@ -9,6 +9,14 @@ import { ChevronDown, ChevronExpand, Sliders, } from 'react-bootstrap-icons';
 import FilterCollapsible from '../FilterCollapsible/FilterCollapsible';
 import ProductSecond from '../ProductSecond/ProductSecond';
 import { Link } from 'react-router-dom';
+import Layer1 from '../../assets/images/Medical/Layer 2.png'
+import Layer2 from '../../assets/images/Medical/Layer 5.png'
+import Layer3 from '../../assets/images/Medical/Layer 6.png'
+import Layer4 from '../../assets/images/Medical/Layer 7.png'
+import Layer5 from '../../assets/images/Medical/Layer 8.png'
+import Layer6 from '../../assets/images/Medical/Layer 10.png'
+import Layer7 from '../../assets/images/Medical/Layer 12.png'
+
 
 const CategoryPageComponent = ({ id, loading, parent }) => {
   const [categoryDetails, setCategoryDetails] = useState();
@@ -59,6 +67,8 @@ const CategoryPageComponent = ({ id, loading, parent }) => {
       ]
     }
   ]
+
+  const image = [Layer1, Layer2, Layer3, Layer4, Layer5, Layer6, Layer7]
 
   useEffect(() => {
     if (parent === 'category') {
@@ -157,7 +167,7 @@ const CategoryPageComponent = ({ id, loading, parent }) => {
           {
             categoryDetails && categoryDetails.map((ele, id) => {
               return (
-                <ProductSecond key={id} productObject={ele} parent={'CategoryPage'} />
+                <ProductSecond key={id} productObject={ele} parent={'CategoryPage'} images={image[id]}/>
               )
             })
           }
