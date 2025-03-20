@@ -28,7 +28,7 @@ export const useClickOutside = (callback) => {
   return ref;
 };
 
-const data = ['Home', 'About us', 'Blogs', 'All Categories']
+const data = ['Home', 'About us', 'Contact us', 'Blogs', 'All Categories']
 
 const Header = () => {
 
@@ -90,6 +90,9 @@ const Header = () => {
     }
     else if (route === 'About us') {
       navigate('/aboutUs')
+    }
+    else if (route === 'Contact us') {
+      navigate('/contactus')
     }
     else {
       setShowCategories(false)

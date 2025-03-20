@@ -12,6 +12,7 @@ import Checkout from "./pages/Checkout";
 import Blogs from "./pages/Blogs";
 import PaymentSuccesful from "./pages/PaymentSuccesful";
 import AboutUs from "./pages/AboutUs";
+import ContactUs from "./pages/ContactUs";
 
 
 const AppRoutes = () => {
@@ -47,6 +48,9 @@ const AppRoutes = () => {
                 } />
                 <Route path="/aboutUs" element={
                     <AboutUs />
+                } />
+                <Route path="/contactus" element={
+                    <ContactUs />
                 } />
                 <Route path="/success/:orderId" element={
                     <PaymentSuccesful />
