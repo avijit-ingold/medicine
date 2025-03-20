@@ -76,7 +76,7 @@ const ShopByCategories = () => {
               return (
                 <div className={styles.categories_grid_item_container} key={ind} onClick={() => handleCategoryClick(ind, category.id)}>
                   <div className={styles.categories_grid_image_container}>
-                    <LazyLoadImage effect="blur" src={category.image_url} wrapperProps={{
+                    <LazyLoadImage referrerPolicy='no-referrer' effect="blur" src={category.image_url} wrapperProps={{
                       style: { transitionDelay: "1s" },
                     }} alt='categories' loading="lazy"
                       className={styles.categories_img + ' ' + (category.scaleReq ? styles.categories_cale_property : '')}
