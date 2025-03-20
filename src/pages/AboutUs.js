@@ -12,7 +12,7 @@ const AboutUs = () => {
     const context = useContext(GenericApiContext)
 
     const handleAboutUs = () => {
-        const url = 'cmsPage/5'
+        const url = 'cmsPage/6'
 
         context.getGetData(url, 'aboutus');
     }
