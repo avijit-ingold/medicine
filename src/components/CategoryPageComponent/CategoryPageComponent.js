@@ -22,6 +22,8 @@ const CategoryPageComponent = ({ id, loading, parent }) => {
   const [categoryDetails, setCategoryDetails] = useState();
   const [filter, setFilters] = useState();
   const [selectedFilter, setSelectedFilter] = useState();
+  const [sortOption, setSortOption] = useState("position");
+
 
   const context = useContext(GenericApiContext);
 
@@ -69,6 +71,30 @@ const CategoryPageComponent = ({ id, loading, parent }) => {
   ]
 
   const image = [Layer1, Layer2, Layer3, Layer4, Layer5, Layer6, Layer7]
+
+  const handleSortChange = (event) => {
+    if (!event || !event.target) return; // Prevents errors
+    const selectedOption = event.target.value;
+    setSortOption(selectedOption);
+    
+    if (selectedOption == 'h_l') {
+      const sortedProducts = categoryDetails.sort((a, b) => (b.special_price? parseFloat(b.special_price) : parseFloat(b.price)) - (a.special_price? parseFloat(a.special_price) : parseFloat(a.price)));
+      setCategoryDetails(sortedProducts)
+    } else if (selectedOption == 'l_h') {
+      const sortedProducts = categoryDetails.sort((a, b) => (a.special_price? parseFloat(a.special_price) : parseFloat(a.price)) - (b.special_price? parseFloat(b.special_price) : parseFloat(b.price)));
+      setCategoryDetails(sortedProducts)
+    } else {
+      const sortedProducts = [...categoryDetails].sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
+
+
+      console.log(sortedProducts)
+      setCategoryDetails(sortedProducts)
+    }
+
+  };
+
 
   useEffect(() => {
     if (parent === 'category') {
@@ -141,7 +167,16 @@ const CategoryPageComponent = ({ id, loading, parent }) => {
         {/* <span className={styles.breadCrumb_section}>Lorem Ipsum &nbsp; &nbsp;  &gt; &nbsp; &nbsp; Lorem Ipsum  &nbsp; &nbsp; &gt; &nbsp; &nbsp;  Lorem Ipsum</span> */}
         <div className={styles.filter_icon_container + ' mt-3'}>
           <span><Sliders /> Filters <ChevronDown size={10} /></span>
-          <span><ChevronExpand /> Sort</span>
+          {/* <span><ChevronExpand /> Sort</span> */}
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            {/* <label>Sort By</label> */}
+            <select value={sortOption} onChange={handleSortChange}>
+              <option value="-1">Sort By</option>
+              <option value="h_l">Price - High to Low</option>
+              <option value="l_h">Price - Low to High</option>
+              <option value="name">Product Name</option>
+            </select>
+          </div>
         </div>
         <div className={styles.filter_container}>
           {
@@ -167,7 +202,7 @@ const CategoryPageComponent = ({ id, loading, parent }) => {
           {
             categoryDetails && categoryDetails.map((ele, id) => {
               return (
-                <ProductSecond key={id} productObject={ele} parent={'CategoryPage'} images={image[id]}/>
+                <ProductSecond key={id} productObject={ele} parent={'CategoryPage'} images={image[id]} />
               )
             })
           }
