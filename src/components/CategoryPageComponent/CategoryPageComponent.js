@@ -16,14 +16,16 @@ import Layer4 from '../../assets/images/Medical/Layer 7.png'
 import Layer5 from '../../assets/images/Medical/Layer 8.png'
 import Layer6 from '../../assets/images/Medical/Layer 10.png'
 import Layer7 from '../../assets/images/Medical/Layer 12.png'
-
+import { motion, AnimatePresence } from "framer-motion";
+// import { ChevronDown } from "lucide-react";
 
 const CategoryPageComponent = ({ id, loading, parent }) => {
   const [categoryDetails, setCategoryDetails] = useState();
   const [filter, setFilters] = useState();
   const [selectedFilter, setSelectedFilter] = useState();
-  const [sortOption, setSortOption] = useState("position");
-
+  const [sortOption, setSortOption] = useState("Product Name");
+  const [sortBy, setSortBy] = useState("name");
+  const [open, setOpen] = useState(false);
 
   const context = useContext(GenericApiContext);
 
@@ -72,16 +74,12 @@ const CategoryPageComponent = ({ id, loading, parent }) => {
 
   const image = [Layer1, Layer2, Layer3, Layer4, Layer5, Layer6, Layer7]
 
-  const handleSortChange = (event) => {
-    if (!event || !event.target) return; // Prevents errors
-    const selectedOption = event.target.value;
-    setSortOption(selectedOption);
-    
-    if (selectedOption == 'h_l') {
-      const sortedProducts = categoryDetails.sort((a, b) => (b.special_price? parseFloat(b.special_price) : parseFloat(b.price)) - (a.special_price? parseFloat(a.special_price) : parseFloat(a.price)));
+  const handleSortChange = (param) => {
+    if (param == 'h_l') {
+      const sortedProducts = categoryDetails.sort((a, b) => (b.special_price ? parseFloat(b.special_price) : parseFloat(b.price)) - (a.special_price ? parseFloat(a.special_price) : parseFloat(a.price)));
       setCategoryDetails(sortedProducts)
-    } else if (selectedOption == 'l_h') {
-      const sortedProducts = categoryDetails.sort((a, b) => (a.special_price? parseFloat(a.special_price) : parseFloat(a.price)) - (b.special_price? parseFloat(b.special_price) : parseFloat(b.price)));
+    } else if (param == 'l_h') {
+      const sortedProducts = categoryDetails.sort((a, b) => (a.special_price ? parseFloat(a.special_price) : parseFloat(a.price)) - (b.special_price ? parseFloat(b.special_price) : parseFloat(b.price)));
       setCategoryDetails(sortedProducts)
     } else {
       const sortedProducts = [...categoryDetails].sort((a, b) =>
@@ -167,15 +165,53 @@ const CategoryPageComponent = ({ id, loading, parent }) => {
         {/* <span className={styles.breadCrumb_section}>Lorem Ipsum &nbsp; &nbsp;  &gt; &nbsp; &nbsp; Lorem Ipsum  &nbsp; &nbsp; &gt; &nbsp; &nbsp;  Lorem Ipsum</span> */}
         <div className={styles.filter_icon_container + ' mt-3'}>
           <span><Sliders /> Filters <ChevronDown size={10} /></span>
-          {/* <span><ChevronExpand /> Sort</span> */}
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            {/* <label>Sort By</label> */}
+          {/* <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <select value={sortOption} onChange={handleSortChange}>
               <option value="-1">Sort By</option>
               <option value="h_l">Price - High to Low</option>
               <option value="l_h">Price - Low to High</option>
               <option value="name">Product Name</option>
             </select>
+          </div> */}
+          <div className="relative">
+            <button
+              onClick={() => setOpen(!open)}
+              className={"flex items-center gap-2 p-2 " + styles.sortButton}
+            >
+              Sort by: {sortOption ? sortOption : ''} <ChevronExpand className="w-4 h-4" />
+            </button>
+            <AnimatePresence>
+              {open && (
+                <motion.ul
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className={"absolute left-0 mt-2 w-40 bg-white border rounded-lg shadow-lg list-none " + styles.sortingContainer}
+                >
+                  <li
+                    onClick={() => { setSortOption("Price - High to Low"); setOpen(false); handleSortChange('h_l') }}
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                    style={{ cursor: 'pointer' }}
+                  >
+                    Price - High to Low
+                  </li>
+                  <li
+                    onClick={() => { setSortOption("Price - Low to High"); setOpen(false); handleSortChange("l_h") }}
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                    style={{ cursor: 'pointer' }}
+                  >
+                    Price - Low to High
+                  </li>
+                  <li
+                    onClick={() => { setSortOption("Product Name"); setOpen(false); handleSortChange("name") }}
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                    style={{ cursor: 'pointer' }}
+                  >
+                    Product Name
+                  </li>
+                </motion.ul>
+              )}
+            </AnimatePresence>
           </div>
         </div>
         <div className={styles.filter_container}>

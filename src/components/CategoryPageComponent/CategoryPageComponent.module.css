@@ -139,6 +139,21 @@
     background: transparent;
 }
 
+.sortingContainer {
+    width: 191px;
+    position: absolute;
+    z-index: 2;
+    border-radius: 20px;
+    list-style: none;
+    padding: 10px 20px;
+}
+
+.sortButton{
+    cursor: pointer;
+    border: 0;
+    background-color:transparent;
+}
+
 .custom_breadcrumb .breadcrumb_item+.breadcrumb_item::before {
     content: ">";
     color: black;
