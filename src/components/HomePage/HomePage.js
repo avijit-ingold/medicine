@@ -22,12 +22,14 @@ import NewsletterSection from '../NewsletterSection/NewsletterSection'
 import { GenericApiContext } from '../../context/GenericApiContext';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import banner from '../../assets/images/Medical/banner.png'
+import axios from 'axios';
 
 
 const HomePage = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [hovEffect, setHovEffect] = useState(false);
   const [bannerImage, setBannerImage] = useState([]);
+  const [products, setProducts] = useState([]);
 
   const context = useContext(GenericApiContext)
 
@@ -62,8 +64,16 @@ const HomePage = () => {
     setSelectedIndex(index);
   };
 
- 
+  useEffect(() => {
 
+    axios.get("https://fakestoreapi.com/products")
+      .then(response => {
+        setProducts(response.data);
+      })
+      .catch(error => {
+        console.error("Error fetching data: ", error);
+      });
+  }, [context.getHomeData])
   // useEffect(() => {
   //   const getBannerImage = () => {
   //     const url = 'sliders'
@@ -90,6 +100,22 @@ const HomePage = () => {
         {banner && (<LazyLoadImage src={banner} alt='home banner' className={styles.homePage_banner_container_image} loading='lazy' />)}
 
       </div>
+
+      <div>
+      <h1>Hello World</h1>
+      <h2>Product List</h2>
+      <ul>
+        {products && products.map(product => (
+          <li key={product.id}>
+            <h3>{product.title}</h3>
+            <p>{product.description}</p>
+            <p>Price: ${product.price}</p>
+            <img src={product.image} alt={product.title} width="100" />
+          </li>
+        ))}
+      </ul>
+    </div>
+
       <div className={`${styles.homePage_container_main}`}>
         <div className={`${styles.homePage_categories_container_main} container`}>
           <div className={`${styles.homePage_categories_container}`}>
